@@ -36,9 +36,8 @@ Then open the `/files` route URL in a browser to see, view & download filesize, 
 
 ## TODO
 
-- [ ] determine the `root` folder from `GoogleDriveService::getFolder()`
-- [ ] building folders treeview, sarting from the `root` typed folder
-- [ ] caching the one-hour-valid token ?
+See [TODO.md](TODO.md)
+
 
 ## License
 
