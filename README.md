@@ -1,4 +1,4 @@
-# SimpleDMS
+# Google Drive based DMS (atop Symfony2)
 
 A proof of concept for a Google Drive based document management system (DMS)  
 
@@ -6,11 +6,11 @@ Inspired from [genj/GenjGoogleDriveBundle)](https://github.com/genj/GenjGoogleDr
 
 ## Requirements
   
- * Symfony 2.5
- * GooglApiClient - https://github.com/google/google-api-php-client
- * a Google Drive API Project created from [Google Developers Console](https://console.developers.google.com/)
- * Google Drive API activated (status: ON) in [Google Developers Console](https://console.developers.google.com/) > API & auth > APIs
- * a *Service Account* application type OAuth Client ID in [Google Developers Console](https://console.developers.google.com/) > API & auth > Credentials 
+ * Symfony 2.5, see [composer.json](composer.json)
+ * GooglApiClient - https://github.com/google/google-api-php-client, see [composer.json](composer.json)
+ * a Google Drive API Project created from [Google Developers Console (GDC)](https://console.developers.google.com/)
+ * Google Drive API activated (status: ON) in [GDC](https://console.developers.google.com/) > API & auth > APIs
+ * a *Service Account* application type OAuth Client ID in [GDC](https://console.developers.google.com/) > API & auth > Credentials 
  * a new `.p12` ke file, generated & downloaded via the same API Credentials form, to be renamed as `ServiceAccountAPIKey.p12` 
  
 ## Configuration
