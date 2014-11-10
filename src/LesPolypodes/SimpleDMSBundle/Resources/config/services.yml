@@ -1,0 +1,8 @@
+services:
+    google_drive:
+        class: LesPolypodes\SimpleDMSBundle\Service\GoogleDriveService
+        arguments: ["@service_container"]
+    twig_dms_extension:
+          class: LesPolypodes\SimpleDMSBundle\Twig\DmsExtension
+          tags:
+              - { name: twig.extension }

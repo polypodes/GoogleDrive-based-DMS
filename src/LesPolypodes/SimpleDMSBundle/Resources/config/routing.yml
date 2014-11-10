@@ -1,0 +1,4 @@
+_folders:
+    path:     /files
+    defaults: { _controller: LesPolypodesSimpleDMSBundle:Files:index}
+

@@ -1,0 +1,3 @@
+les_polypodes_simple_dms:
+    resource: "@LesPolypodesSimpleDMSBundle/Resources/config/routing.yml"
+

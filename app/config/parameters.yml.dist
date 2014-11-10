@@ -23,5 +23,5 @@ parameters:
     debug_redirects:        false
     use_assetic_controller: true
 
-    genj_google_drive.service_account_key_file:     ServiceAccountAPIKey.p12
-    genj_google_drive.service_account_email:        yourGoogleDeclaredEmail@domain.com
+    dms.service_account_key_file:     ServiceAccountAPIKey.p12
+    dms.service_account_email:        aVeryLongUniqueEmail@developer.gserviceaccount.com
