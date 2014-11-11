@@ -15,7 +15,7 @@ Inspired from [genj/GenjGoogleDriveBundle)](https://github.com/genj/GenjGoogleDr
  
 ## Configuration
 
-You need to get the following information from the Google API Console ( https://code.google.com/apis/console ):
+You need to get the following information from the [Google API Console](https://code.google.com/apis/console):
 
 * Service account API key file: the `ServiceAccountAPIKey.p12`, generated above, pasted in the `app/config/` folder
 * Service account e-mail address: a long `...@developer.gserviceaccount.com` e-mail address, generated above by Google API Console while creating your OAuth Credentials Client ID.
