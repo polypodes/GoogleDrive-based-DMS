@@ -3,17 +3,18 @@ imports:
     - { resource: security.yml }
 
 framework:
-    #esi:             ~
-    #translator:      { fallback: "%locale%" }
+    #esi:            ~
+    translator:      { fallback: "%locale%" }
+    default_locale:  %locale%
     secret:          "%secret%"
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource:    "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
     templating:
-        engines: ['twig']
+        engines:     ['twig']
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{{ 'Error'|trans}}</title>
+    </head>
+    <body>
+        <h1>{{ 'Error'|trans}}</h1>
+        <h2>{{ exception.message|e|replace({"\n": '<br/ >'})|format_file_from_text }}</h2>
+        <h3>(code: <code>{{ status_code }}</code> {{ status_text }})</h3>
+    </body>
+</html>

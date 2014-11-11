@@ -2,9 +2,17 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
+             <trans-unit id="0">
+                <source>Error</source>
+                <target>Erreur</target>
+            </trans-unit>
             <trans-unit id="1">
-                <source>Symfony2 is great</source>
-                <target>J'aime Symfony2</target>
+                <source>Google Drive cannot authenticate our [email / .p12 key file]</source>
+                <target>Google ne peut vous authentifier avec votre configuration [email / fichier .p12]</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Please check the parameters.yml file</source>
+                <target>Veuillez vérifier le fichier parameters.yml</target>
             </trans-unit>
         </body>
     </file>
