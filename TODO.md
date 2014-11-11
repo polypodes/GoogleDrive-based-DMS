@@ -3,9 +3,8 @@
 ## v1.0
 
 - [X] No admin, no login required for end user: all is public & read-only by default
-- [ ] Branded, customized interface
-- [ ] Large file sharing
-- [ ] View + Downloads Stats via Google Analytics (need a proxy URL ?)
+- [X] Large file sharing
+- [X] View + Downloads Stats via Google Analytics
 - [ ] Full-text Search inside documents + simple results list
 - [ ] Determine the `root` folder from `GoogleDriveService::getFolder()`
 - [ ] Building browsable folders treeview, sarting from the `root` typed folder
@@ -14,7 +13,7 @@
 
 - [ ] Caching the one-hour-valid token ?
 - [ ] Special private folder
-- [ ] most downloaded docs
-- [ ] last uploaded docs
+- [ ] most downloaded docs using Google API
+- [ ] last uploaded docs using Google API
 - [ ] better search experience : "did you mean ?"
 - [ ] better search experience : facets results
