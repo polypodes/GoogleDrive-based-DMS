@@ -9,6 +9,7 @@
 
 {% if 0 < files|length %}
     <h2>Files:</h2>
+    {{ form(form) }}
     <ul>
         {% for file in files %}
             <li>{{ file.title }}

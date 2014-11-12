@@ -103,25 +103,34 @@ class GoogleDriveService
     }
 
     /**
+     * @param string $query search parameters query
+     *
+     * @link https://developers.google.com/drive/web/search-parameters
+     *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFiles()
+    public function getFiles($query = '')
     {
-        return $this->getFolders(false);
+        return $this->getFolders(false, $query);
     }
 
     /**
      * @param bool $isFolder = true
+     * @param string $query search parameters query
+     *
+     * @link https://developers.google.com/drive/web/search-parameters
      *
      * @throws HttpException
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFolders($isFolder = true)
+    public function getFolders($isFolder = true, $query = '')
     {
         $operator = ($isFolder) ? "=" : "!=";
+        $filter = sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
+        $query = empty($query) ? "" : sprintf(" and (%s)", $query);
         $params = [
-            'q' => sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"')
+            'q' => $filter . $query
         ];
 
         try {
