@@ -7,25 +7,6 @@
         </ul>
 {% endif %}
 
-{% if 0 < files|length %}
-    <h2>Files:</h2>
-    {{ form(form) }}
-    <ul>
-        {% for file in files %}
-            <li>{{ file.title }}
-                <ul>
-                    <li><a target="blank" class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">Download</a></li>
-                    <li><img src="{{ file.thumbnailLink }}" /></li>
-                    <li><a class="googleAnalyticsEvent" target="_blank" href="{{ file.alternateLink }}">view online</a></li>
-                    <li><a class="googleAnalyticsEvent" target="_blank" href="{{ file.webContentLink }}">download</a></li>
-                    <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|format_bytes }})</li>
-                    {{ dump(file) }}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
 {% if 0 < usages|length %}
     <h2>Usages:</h2>
     <dl>
@@ -35,6 +16,23 @@
     </dl>
 {% endif %}
 
+{% if 0 < files|length %}
+    <h2>Files:</h2>
+    {{ form(form) }}
+    <ul>
+        {% for file in files %}
+            <li>{{ file.title }}
+                <ul>
+                    <li><img src="{{ file.thumbnailLink }}" /></li>
+                    <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|format_bytes }})</li>
+                    <li><a target="blank" class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">download</a></li>
+                    {# dump(file) #}
+                    <hr />
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 {% javascripts '@LesPolypodesSimpleDMSBundle/Resources/public/js/*' output='js/vendors/main.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
