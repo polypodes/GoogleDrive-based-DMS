@@ -1,0 +1,14 @@
+<h1>{{ file.title|escape }}</h1>
+<ul>
+    <li><a class="googleAnalyticsEvent" href="{{ path('_file', {file}) }}">ID: {{ file.id }}</li>
+    <li><img src="{{ file.thumbnailLink }}" /></li>
+    <li><a class="googleAnalyticsEvent" target="_blank" href="{{ file.alternateLink }}">view online</a></li>
+    <li><a class="googleAnalyticsEvent" target="_blank" href="{{ file.webContentLink }}">download</a></li>
+    <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|format_bytes }})</li>
+    {{ dump(file) }}
+</ul>
+
+{% javascripts '@LesPolypodesSimpleDMSBundle/Resources/public/js/*' output='js/vendors/main.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+

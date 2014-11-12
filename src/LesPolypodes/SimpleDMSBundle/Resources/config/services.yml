@@ -1,7 +1,7 @@
 services:
     google_drive:
         class: LesPolypodes\SimpleDMSBundle\Service\GoogleDriveService
-        arguments: ["@service_container"]
+        arguments: ["@service_container", "@translator", "@logger"]
     twig_dms_extension:
           class: LesPolypodes\SimpleDMSBundle\Twig\DmsExtension
           tags:

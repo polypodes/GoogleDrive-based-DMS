@@ -5,7 +5,8 @@ namespace LesPolypodes\SimpleDMSBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Class FileController
@@ -15,75 +16,50 @@ class FilesController extends Controller
 {
 
     /**
-     * @Route("/hello/{name}")
+     * @Route("/", name="_files")
      * @Template()
      */
-    public function indexAction()
+    public function filesAction()
     {
         return array(
-            'folders' => $this->getFolders(),
-            'files' => $this->getFiles(),
-            'usages' => $this->getUsage()
+            'folders' => $this->getGoogleDrive()->getFolders(),
+            'files' => $this->getGoogleDrive()->getFiles(),
+            'usages' => $this->getGoogleDrive()->getUsage()
         );
+
     }
 
     /**
-     * @param bool $isFolder = true
-     *
-     * @return \Google_Service_Drive_FileList
+     * @return \LesPolypodes\SimpleDMSBundle\Service\GoogleDriveService
      */
-    private function getFolders($isFolder = true)
-    {
-        $operator = ($isFolder) ? "=" : "!=";
-        $googleDrive = $this->getGoogleDrive();
-        $params = [
-            'q' => sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"')
-        ];
-
-        try {
-            return $googleDrive->files->listFiles($params);
-        } catch (\Exception $ge) {
-            $translator = $this->get('translator');
-            $logger = $this->get('logger');
-            $errorMessage = sprintf(
-                "%s.\n%s.",
-                $translator->trans('Google Drive cannot authenticate our [email / .p12 key file]'),
-                $translator->trans('Please check the parameters.yml file')
-            );
-            $logger->error($errorMessage);
-
-            throw new HttpException(500, $errorMessage, $ge);
-        }
-    }
-
     protected function getGoogleDrive()
     {
-            return $this->get('google_drive')->get();
-
+        return $this->get('google_drive');
     }
 
     /**
-     * @return \Google_Service_Drive_FileList
+     * @Route("/{fileId}", name="_file")
+     * @Template()
+     *
+     * @param $fileId
+     *
+     * @return Response
      */
-    private function getFiles()
+    public function fileAction($fileId)
     {
-        return $this->getFolders(false);
-    }
+        $resource = $this->getGoogleDrive()->getFileMetadataAndContent($fileId);
+        $file = $resource['file'];
+        $content = $resource['content'];
+        $response = new Response($content, 200);
+        $response->headers->set('Cache-Control', '');
+        $response->headers->set('Content-Length', $file->fileSize);
+        $response->headers->set('Content-Type', $file->mimeType);
+        $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s'));
+        $contentDisposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file->originalFilename);
+        $response->headers->set('Content-Disposition', $contentDisposition);
+        $response->send();
 
-    /**
-     * @return array
-     */
-    private function getUsage()
-    {
-        $googleDrive = $this->getGoogleDrive();
-        $about       = $googleDrive->about->get();
-
-        return array(
-            "Current user name: "   => $about->getName(),
-            "Root folder ID: "      => $about->getRootFolderId(),
-            "Total quota (bytes): " => $about->getQuotaBytesTotal(),
-            "Used quota (bytes): "  => $about->getQuotaBytesUsed(),
-        );
+        return $response;
     }
 
 }

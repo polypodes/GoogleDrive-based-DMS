@@ -3,31 +3,50 @@
 namespace LesPolypodes\SimpleDMSBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class GoogleDriveService
  * @package LesPolypodes\SimpleDMSBundle\Service
  */
-class GoogleDriveService {
-
+class GoogleDriveService
+{
     /**
      * @var ContainerInterface
      */
     private $container;
 
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var \Google_Client
+     */
+    private $client;
 
     /**
      * @var \Google_Service_Drive
      */
     private $service;
 
-
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface  $container
+     * @param TranslatorInterface $translator
+     * @param LoggerInterface     $logger
      *
      * @throws \InvalidConfigurationException
      */
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container, TranslatorInterface $translator, LoggerInterface $logger)
+    {
         $this->container = $container;
         // Check if we have the API key
         $rootDir    = $this->container->getParameter('kernel.root_dir');
@@ -44,25 +63,120 @@ class GoogleDriveService {
             array('https://www.googleapis.com/auth/drive'),
             $apiKeyFileContents
         );
-        $client = new \Google_Client();
+        $this->client = new \Google_Client();
         if (isset($_SESSION['service_token'])) {
-            $client->setAccessToken($_SESSION['service_token']);
+            $this->client->setAccessToken($_SESSION['service_token']);
         }
-        $client->setAssertionCredentials($auth);
+        $this->client->setAssertionCredentials($auth);
         /*
-        if ($client->getAuth()->isAccessTokenExpired()) {
-            $client->getAuth()->refreshTokenWithAssertion($auth);
+        if ($this->client->getAuth()->isAccessTokenExpired()) {
+            $this->client->getAuth()->refreshTokenWithAssertion($auth);
         }
         */
-        $this->service = new \Google_Service_Drive($client);
+        $this->translator = $translator;
+        $this->logger = $logger;
+        $this->service = new \Google_Service_Drive($this->client);
     }
 
     /**
      * @return \Google_Service_Drive
      */
-    public function get() {
+    public function get()
+    {
         return $this->service;
     }
 
+
+    /**
+     * @param string $fileId
+     *
+     * @return \Google_Service_Drive_DriveFile $file metadata
+     */
+    public function getFile($fileId)
+    {
+        try {
+            return $this->service->files->get($fileId);
+        } catch (Exception $e) {
+            $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
+            throw new HttpException(500, $errorMessage, $e);
+        }
+    }
+
+    /**
+     * @return \Google_Service_Drive_FileList
+     */
+    public function getFiles()
+    {
+        return $this->getFolders(false);
+    }
+
+    /**
+     * @param bool $isFolder = true
+     *
+     * @throws HttpException
+     *
+     * @return \Google_Service_Drive_FileList
+     */
+    public function getFolders($isFolder = true)
+    {
+        $operator = ($isFolder) ? "=" : "!=";
+        $params = [
+            'q' => sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"')
+        ];
+
+        try {
+            return $this->service->files->listFiles($params);
+        } catch (\Exception $ge) {
+            $errorMessage = sprintf(
+                "%s.\n%s.",
+                $this->translator->trans('Google Drive cannot authenticate our [email / .p12 key file]'),
+                $this->translator->trans('Please check the parameters.yml file')
+            );
+            $this->logger->error($errorMessage);
+
+            throw new HttpException(500, $errorMessage, $ge);
+        }
+    }
+
+
+    /**
+     * get Drive File metadata & content
+     *
+     * @param  string|\Google_Service_Drive_DriveFile $resource downloadUrl or Drive File instance.
+     *
+     * @return array(\Google_Service_Drive_DriveFile resource, HTTP Response Body content)
+     */
+    public function getFileMetadataAndContent($resource) {
+        if (!($resource instanceof \Google_Service_Drive_DriveFile)) {
+            $resource = $this->getFile($resource);
+        }
+        $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
+        if (!empty($resource)) {
+            $request     = new \Google_Http_Request($resource->downloadUrl, 'GET', null, null);
+            $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
+            if ($httpRequest->getResponseHttpCode() == 200) {
+                return array(
+                    'file'  => $resource,
+                    'content'   => $httpRequest->getResponseBody()
+                );
+            }
+        }
+        throw new HttpException(500, $errorMessage);
+    }
+
+    /**
+     * @return array
+     */
+    public function getUsage()
+    {
+        $about       = $this->service->about->get();
+
+        return array(
+            "Current user name: "   => $about->getName(),
+            "Root folder ID: "      => $about->getRootFolderId(),
+            "Total quota (bytes): " => $about->getQuotaBytesTotal(),
+            "Used quota (bytes): "  => $about->getQuotaBytesUsed(),
+        );
+    }
 
 }

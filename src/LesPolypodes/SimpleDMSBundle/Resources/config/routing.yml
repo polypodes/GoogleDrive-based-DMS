@@ -1,4 +1,4 @@
-_folders:
-    path:     /files
-    defaults: { _controller: LesPolypodesSimpleDMSBundle:Files:index}
-
+_files:
+    resource: "@LesPolypodesSimpleDMSBundle/Controller/FilesController.php"
+    type:     annotation
+    prefix:   /files
