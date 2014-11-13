@@ -21,7 +21,14 @@
         "google/apiclient": "1.1.x-dev"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit":                          "~3.7",
+        "squizlabs/php_codesniffer":                "2.0.x-dev",
+        "sebastian/phpcpd":                         "*",
+        "phploc/phploc" :                           "*",
+        "phpmd/phpmd" :                             "2.0.*",
+        "pdepend/pdepend" :                         "2.0.*",
+        "fabpot/php-cs-fixer":                      "@stable"
     },
     "scripts": {
         "post-root-package-install": [

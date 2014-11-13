@@ -6,18 +6,16 @@
  */
 
 var links = document.getElementsByClassName('googleAnalyticsEvent');
-for(var i = 0; i < links.length; i++)
-{
+for (var i = 0; i < links.length; i++) {
     var elem = links.item(i);
     addListener(elem, 'click', function () {
-        if('undefined' != typeof ga
+        if ('undefined' != typeof ga
             && 'undefined' != typeof elem.title
             && 'undefined' != typeof elem.href) {
             ga('send', 'event', 'link', 'click', elem.title, elem.href);
         }
     });
-}
-/**
+} /**
  * Utility to wrap the different behaviors between W3C-compliant browsers
  * and IE when adding event handlers.
  *
@@ -27,6 +25,7 @@ for(var i = 0; i < links.length; i++)
  * @param {function()} callback The function that receives the notification.
  */
 function addListener(element, type, callback) {
-    if (element.addEventListener) element.addEventListener(type, callback);
-    else if (element.attachEvent) element.attachEvent('on' + type, callback);
+    if (element.addEventListener) {
+        element.addEventListener(type, callback); } else if (element.attachEvent) {
+        element.attachEvent('on' + type, callback); }
 }

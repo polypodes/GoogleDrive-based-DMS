@@ -8,9 +8,12 @@
 - [X] Stats via Google Analytics
 - [X] Full-text Search inside documents + simple results list
 - [X] Determine the `root` folder (see 'Root folder ID' in `->about()`)
+- [X] Simple Bootstrap Theme
+- [X] Tests with medias
 
 ## v1.1
 
+- [ ] Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
 - [ ] Building browsable folders treeview, sarting from the `root` typed folder
 - [ ] Caching the one-hour-valid token ?
 - [ ] Special private folder

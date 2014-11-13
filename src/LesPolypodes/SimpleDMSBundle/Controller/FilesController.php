@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  */
 class FilesController extends Controller
 {
-
-
     /**
      * @Route("/", name="_files")
      * @Template()
@@ -29,7 +27,6 @@ class FilesController extends Controller
     {
         $form = $this->createFormBuilder()
             ->add('q', 'text', array('label' => ' ', 'required' => false))
-            ->add('Find', 'submit', array('label' => 'Find'))
             ->getForm();
         $query = '';
         if ($request->isMethod('POST')) {
@@ -43,14 +40,12 @@ class FilesController extends Controller
             }
         }
 
-
         return array(
             'form'      => $form->createView(),
             'folders'   => $this->getGoogleDrive()->getFolders(),
             'files'     => $this->getGoogleDrive()->getFiles($query),
-            'usages'    => $this->getGoogleDrive()->getUsage()
+            'usages'    => $this->getGoogleDrive()->getUsage(),
         );
-
     }
 
     /**
@@ -85,5 +80,4 @@ class FilesController extends Controller
 
         return $response;
     }
-
 }

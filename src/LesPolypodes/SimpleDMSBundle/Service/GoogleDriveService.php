@@ -50,10 +50,10 @@ class GoogleDriveService
         $this->container = $container;
         // Check if we have the API key
         $rootDir    = $this->container->getParameter('kernel.root_dir');
-        $configDir  = $rootDir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
-        $apiKeyFile = $configDir . $this->container->getParameter('dms.service_account_key_file');
+        $configDir  = $rootDir.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR;
+        $apiKeyFile = $configDir.$this->container->getParameter('dms.service_account_key_file');
         if (!file_exists($apiKeyFile)) {
-            throw new \InvalidConfigurationException('Store your Google API key in ' . $apiKeyFile . ' - see https://code.google.com/apis/console');
+            throw new \InvalidConfigurationException('Store your Google API key in '.$apiKeyFile.' - see https://code.google.com/apis/console');
         }
         // Perform API authentication
         $apiKeyFileContents  = file_get_contents($apiKeyFile);
@@ -86,7 +86,6 @@ class GoogleDriveService
         return $this->service;
     }
 
-
     /**
      * @param string $fileId
      *
@@ -115,8 +114,8 @@ class GoogleDriveService
     }
 
     /**
-     * @param bool $isFolder = true
-     * @param string $query search parameters query
+     * @param bool   $isFolder = true
+     * @param string $query    search parameters query
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
@@ -130,7 +129,7 @@ class GoogleDriveService
         $filter = sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
         $query = empty($query) ? "" : sprintf(" and (%s)", $query);
         $params = [
-            'q' => $filter . $query
+            'q' => $filter.$query,
         ];
 
         try {
@@ -147,15 +146,15 @@ class GoogleDriveService
         }
     }
 
-
     /**
      * get Drive File metadata & content
      *
-     * @param  string|\Google_Service_Drive_DriveFile $resource downloadUrl or Drive File instance.
+     * @param string|\Google_Service_Drive_DriveFile $resource downloadUrl or Drive File instance.
      *
      * @return array(\Google_Service_Drive_DriveFile resource, HTTP Response Body content)
      */
-    public function getFileMetadataAndContent($resource) {
+    public function getFileMetadataAndContent($resource)
+    {
         if (!($resource instanceof \Google_Service_Drive_DriveFile)) {
             $resource = $this->getFile($resource);
         }
@@ -166,7 +165,7 @@ class GoogleDriveService
             if ($httpRequest->getResponseHttpCode() == 200) {
                 return array(
                     'file'  => $resource,
-                    'content'   => $httpRequest->getResponseBody()
+                    'content'   => $httpRequest->getResponseBody(),
                 );
             }
         }
@@ -187,5 +186,4 @@ class GoogleDriveService
             "Used quota (bytes): "  => $about->getQuotaBytesUsed(),
         );
     }
-
 }

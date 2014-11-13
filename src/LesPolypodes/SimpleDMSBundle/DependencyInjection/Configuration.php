@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('%dms.service_account_email')
                 ->end()
             ->end();
+
         return $treeBuilder;
 
         return $treeBuilder;

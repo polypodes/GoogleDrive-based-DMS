@@ -8,5 +8,6 @@
 !app/logs/.gitkeep
 /build/
 /vendor/
+/web/bower_components/
 /bin/
 /composer.phar

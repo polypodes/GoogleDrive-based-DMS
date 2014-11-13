@@ -1,40 +1,65 @@
-{% if 0 < folders|length %}
-    <h2>Folders:</h2>
-    <ul>
-    {% for folder in folders %}
-       <li>{{ folder.title }}</li>
-    {% endfor %}
-        </ul>
-{% endif %}
+{% extends 'LesPolypodesSimpleDMSBundle::layout.html.twig' %}
 
-{% if 0 < usages|length %}
-    <h2>Usages:</h2>
-    <dl>
-        {% for label, usage in usages %}
-            <dt>{{ label }}</dt><dd>{{ usage }}</dd>
-        {% endfor %}
-    </dl>
-{% endif %}
+
+{% block content %}
+<div class="row">
+    {% if 0 < folders|length %}
+        <div class="col-md-6">
+            <h3>Your folders:</h3>
+            <ul>
+                {% for folder in folders %}
+                    <li>{{ folder.title }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if 0 < usages|length %}
+        <div class="col-md-6">
+            <h3>Your Google Drive Usage Stats:</h3>
+            <ul>
+                {% for label, usage in usages %}
+                    <li><b>{{ label }}</b>{{ usage }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
 
 {% if 0 < files|length %}
-    <h2>Files:</h2>
-    {{ form(form) }}
-    <ul>
+    <div class="row">
+    <form class="form-inline" name="form" role="form" action="" method="post">
+        {{ form_errors(form) }}
+        <div class="form-group">
+            {{ form_label(form.q) }}
+            {{ form_widget(form.q, { 'attr': {'class': 'form-control', 'placeholder': 'search for...'} }) }}
+        </div>
+        {{ form_rest(form) }}
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">{{ 'Find' | trans }}</button>
+        </div>
+        <hr />
+        </form>
+
+    <div class="row">
         {% for file in files %}
-            <li>{{ file.title }}
+            <div class="col-md-4">
+                <h4>{{ file.title }}</h4>
+                <div class="pull-right">
+                    <img src="{{ file.thumbnailLink }}" />
+                </div>
                 <ul>
-                    <li><img src="{{ file.thumbnailLink }}" /></li>
                     <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|format_bytes }})</li>
                     <li><a target="blank" class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">download</a></li>
                     {# dump(file) #}
-                    <hr />
                 </ul>
-            </li>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endif %}
 
 {% javascripts '@LesPolypodesSimpleDMSBundle/Resources/public/js/*' output='js/vendors/main.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
+{% endblock %}
