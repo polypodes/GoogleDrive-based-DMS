@@ -8,24 +8,24 @@ Inspired from [genj/GenjGoogleDriveBundle](https://github.com/genj/GenjGoogleDri
 
 ## Requirements
   
- * Symfony 2.5, see [composer.json](composer.json)
- * GooglApiClient - https://github.com/google/google-api-php-client, see [composer.json](composer.json)
+- [Symfony 2.5](http://symfony.com/get-started), as declared in [composer.json](composer.json)
+- [GooglApiClient](https://github.com/google/google-api-php-client), as declared in [composer.json](composer.json)
  
 ## 1/3 Setup Google API Client App credentials
 
 To consume the Google Drive API, you need to follow this steps in [Google Developers Console (GDC)](https://console.developers.google.com/):
  
- * Create a Google Drive API Project on [Google Developers Console (GDC)](https://console.developers.google.com/)
- * Activate Google Drive API (status: ON) in [GDC](https://console.developers.google.com/) > API & auth > APIs
- * Generate a *Service Account* application type OAuth Client ID in [GDC](https://console.developers.google.com/) > API & auth > Credentials 
- * Download a `.p12` key file, via the same API Credentials form in GDC, to be then renamed as `ServiceAccountAPIKey.p12` 
+- Create a Google Drive API Project on [Google Developers Console (GDC)](https://console.developers.google.com/)
+- Activate Google Drive API (status: ON) in [GDC](https://console.developers.google.com/) > API & auth > APIs
+- Generate a *Service Account* application type OAuth Client ID in [GDC](https://console.developers.google.com/) > API & auth > Credentials 
+- Download a `.p12` key file, via the same API Credentials form in GDC, to be then renamed as `ServiceAccountAPIKey.p12` 
  
 ## 2/3 Symfony2 App configuration
 
 You need to configure your app using this informations you just obtained from [Google API Console](https://code.google.com/apis/console):
 
-* Service account API key file: the `ServiceAccountAPIKey.p12`, generated above, pasted in the `app/config/` folder
-* Service account e-mail address: a long `...@developer.gserviceaccount.com` e-mail address, generated above by Google API Console while creating your OAuth Credentials Client ID.
+- Service account API key file: the `ServiceAccountAPIKey.p12`, generated above, pasted in the `app/config/` folder
+- Service account e-mail address: a long `...@developer.gserviceaccount.com` e-mail address, generated above by Google API Console while creating your OAuth Credentials Client ID.
 
 Add these to your parameters.yml:
 
@@ -37,8 +37,10 @@ dms.service_account_email:
 ## 3/3 Installation:
 
 ```bash
-$ make
-$ make install
+$~: git clone https://github.com/polypodes/GoogleDrive-based-DMS.git
+$~: cd GoogleDrive-based-DMS
+$~: make
+$~: make install
 ```
 
 ## Usage:
