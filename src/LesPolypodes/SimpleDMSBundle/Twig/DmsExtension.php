@@ -14,7 +14,7 @@ class DmsExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('formatBytes', array($this, 'format_bytes')),
+            new \Twig_SimpleFilter('formatBytes', array($this, 'formatBytes')),
         );
     }
 

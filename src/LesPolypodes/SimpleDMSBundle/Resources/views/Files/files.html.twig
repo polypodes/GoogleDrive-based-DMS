@@ -49,7 +49,7 @@
                     <img src="{{ file.thumbnailLink }}" />
                 </div>
                 <ul>
-                    <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|format_bytes }})</li>
+                    <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|formatBytes }})</li>
                     <li><a target="blank" class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">download</a></li>
                     {# dump(file) #}
                 </ul>
