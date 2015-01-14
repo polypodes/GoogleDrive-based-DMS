@@ -13,10 +13,10 @@
 
 Le seul moyen de se connecter à l'application est d'utiliser l'authentification unique (_Single Sign On_) avec le site principal. Le principe consiste du Single Sign-On consiste
 
-# à s'identifier sur le site principal au moyen d'un login/mot de passe
-# à se rendre sur le site secondaire - ici l'application GED
-# à valider une demande de confirmation d'authentification, sans avoir à saisir à nouveau un login/mot de passe
-# l'internaute identifié sur le site principal est alors également identifié et autorisé à visiter le contenu de l'application GED. 
+1. à s'identifier sur le site principal au moyen d'un login/mot de passe
+2. à se rendre sur le site secondaire - ici l'application GED
+3. à valider une demande de confirmation d'authentification, sans avoir à saisir à nouveau un login/mot de passe
+4. l'internaute identifié sur le site principal est alors également identifié et autorisé à visiter le contenu de l'application GED. 
 
 L'authentification unique nécessite de mettre en place un serveur d'authentification sur le site principal
 et un client d'authentification dans l'application GED. Son mot de passe d'identification n'est pas stocké dans l'application GED mais reste géré dans le site principal.
