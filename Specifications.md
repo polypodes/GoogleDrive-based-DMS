@@ -29,7 +29,7 @@ L'administrateur s'identifier directement sur Google Drive pour ajouter/modifier
 
 ## Statistiques
 
-Les clicks de téléchargements et les recherche par mot-clef sont enregistrés dans Google Analytics
+Les clics de téléchargements et les recherche par mot-clef sont colelctés dans l'application GED et envoyés à Google Analytics pour être enregistrés et analysés. Les résultats de ces statistiques sont consultables sur le site de Google Analytics.
 
 ## Raccourcis à des listes liées aux statistiques
 
