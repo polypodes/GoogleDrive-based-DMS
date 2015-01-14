@@ -18,6 +18,8 @@ Le seul moyen de se connecter à l'application est d'utiliser l'authentification
 3. à valider une demande de confirmation d'authentification, sans avoir à saisir à nouveau un login/mot de passe
 4. l'internaute identifié sur le site principal est alors également identifié et autorisé à visiter le contenu de l'application GED. 
 
+Le Signel-Sign-On n'est pas une authentification "transparente" mais une autorisation qui ne nécessite pas de re-saisir un couple d'idientifiants (login / mot de passe). Il est toujours soumis à l'acceptation de l'internaute, qui consiste à valider une demande : un clic sur un bouton ou un lien proposé, comme pour les  boutons "s'identifier avec Google/Facebook/Twitter/Paypal".
+
 L'authentification unique nécessite de mettre en place un serveur d'authentification sur le site principal
 et un client d'authentification dans l'application GED. Son mot de passe d'identification n'est pas stocké dans l'application GED mais reste géré dans le site principal.
 
@@ -74,6 +76,17 @@ Il n'y a pas de page de détail dédiée à un chaque document : ils se présent
 
 Les fichiers sont affichées sous forme de liste de résultat, le pas de pagination est fixe à 100 fichiers par défaut
 Une pagination au clic (2 liens : précédent / suivant) permet de naviguer de pas en pas.
+
+## Téléchargements (URLs des documents) et Single-Sign-On
+
+Chaque document listé dans les résultats propose un lien de téléchargement. Ce lien n'est pas un lien direct vers Google Drive mais un lien interne à l'application GED. Ce lien ne fonctionne que si l'internaute qui tente de l'utiliser est bien identifié sur le site. Ce lien peut être utilisé en dehors du site.
+
+En cliquant sur le lien depuis un autre site :
+- Si le single Sign On n'a pas encore été accepté ou si la personne n'était pas identifiée sur le site, on lui demande de s'identifier ou d'accepter le Single-Sign-On 
+
+Peut-on faire pointer les URL de téléchargement des sites (sedap.com, dhd, lucid) vers les documents stockés sur le drive ?
+Afin d’éviter d’avoir 2 bases à gérer.
+
 
 ## Limites
 
