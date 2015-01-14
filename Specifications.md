@@ -35,8 +35,8 @@ Les clicks de téléchargements et les recherche par mot-clef sont enregistrés 
 
 Deux listes de documents sont proposés dans un menu latéral ou dans une page dédiée :
 
-# Les _n_ documents les plus téléchargés 
-# Les _n_ documents récemment mis à jour
+- Les _n_ documents les plus téléchargés 
+- Les _n_ documents récemment mis à jour
 
 ## Navigation
 
