@@ -11,3 +11,5 @@
 /web/bower_components/
 /bin/
 /composer.phar
+/src/LesPolypodes/SimpleDMSBundle/Resources/fake/
+

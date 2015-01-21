@@ -7,28 +7,30 @@
         "psr-0": { "": "src/", "SymfonyStandard": "app/" }
     },
     "require": {
-        "php": ">=5.3.3",
-        "symfony/symfony": "2.5.*",
-        "doctrine/orm": "~2.2,>=2.2.3",
-        "doctrine/doctrine-bundle": "~1.2",
-        "twig/extensions": "~1.0",
-        "symfony/assetic-bundle": "~2.3",
-        "symfony/swiftmailer-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~3.0",
-        "sensio/framework-extra-bundle": "~3.0",
+        "php":                                  ">=5.3.3",
+        "symfony/symfony":                      "2.5.*",
+        "doctrine/orm":                         "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle":             "~1.2",
+        "twig/extensions":                      "~1.0",
+        "symfony/assetic-bundle":               "~2.3",
+        "symfony/swiftmailer-bundle":           "~2.3",
+        "symfony/monolog-bundle":               "~2.4",
+        "sensio/distribution-bundle":           "~3.0",
+        "sensio/framework-extra-bundle":        "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "google/apiclient": "1.1.x-dev"
+        "google/apiclient":                     "1.1.x-dev"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3",
-        "phpunit/phpunit":                          "~3.7",
-        "squizlabs/php_codesniffer":                "2.0.x-dev",
-        "sebastian/phpcpd":                         "*",
-        "phploc/phploc" :                           "*",
-        "phpmd/phpmd" :                             "2.0.*",
-        "pdepend/pdepend" :                         "2.0.*",
-        "fabpot/php-cs-fixer":                      "@stable"
+        "sensio/generator-bundle":      "~2.3",
+        "phpunit/phpunit":              "~3.7",
+        "squizlabs/php_codesniffer":    "2.0.x-dev",
+        "sebastian/phpcpd":             "*",
+        "phploc/phploc" :               "*",
+        "phpmd/phpmd" :                 "2.0.*",
+        "pdepend/pdepend" :             "2.0.*",
+        "fabpot/php-cs-fixer":          "@stable",
+        "fzaninotto/faker":             "1.5.x-dev",
+        "phpoffice/phpword":            "dev-master"
     },
     "scripts": {
         "post-root-package-install": [
