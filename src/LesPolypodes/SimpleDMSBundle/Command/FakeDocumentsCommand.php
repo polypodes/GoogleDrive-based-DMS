@@ -9,15 +9,37 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Faker;
 use PhpOffice;
 
+/**
+ * Class FakeDocumentsCommand
+ * @package LesPolypodes\SimpleDMSBundle\Command
+ */
 class FakeDocumentsCommand extends ContainerAwareCommand
 {
 
+    /**
+     * @var array
+     */
     protected $availableFormats = ['docx', 'txt', 'md', 'jpg'];
+    /**
+     * @var array
+     */
     protected $randomFonts = ["Arial", "Comic Sans MS", "Courier New", "Georgia", "Times New Roman", "Trebuchet MS", "Verdana"];
+    /**
+     * @var int
+     */
     protected $maxQuantity = 50;
+    /**
+     * @var null
+     */
     protected $resources = null;
+    /**
+     * @var null
+     */
     protected $faker = null;
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -30,12 +52,34 @@ class FakeDocumentsCommand extends ContainerAwareCommand
         //$this->faker = Faker::cre
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $extension = $input->getArgument('extension');
+        $quantity = $input->getArgument('quantity');
+        $extension = (!empty($extension)) ? $extension : 'docx';
+        $quantity = (!empty($quantity)) ? $quantity : 1;
+        $files = $this->createDocument($extension, $quantity);
+        $output->writeln(sprintf("%d document(s) created in %s", $quantity, dirname($files[0])));
+    }
+
+    /**
+     * @param string $extension
+     * @param int    $quantity
+     *
+     * @return array|null
+     */
     protected function createDocument($extension = 'docx', $quantity = 1)
     {
         $fakeDir = $this->getContainer()->get('file_locator')->locate('@LesPolypodesSimpleDMSBundle/Resources/fake');
         $result = null;
         if ($quantity > $this->maxQuantity) {
-            throw new \InvalidArgumentException("Veuillez ne pas créer plus de 50 documents à la fois.");
+            throw new \InvalidArgumentException(sprintf("Please do not create more than %d document at once", $this->maxQuantity));
         }
         switch ($extension) {
             case "jpg":
@@ -80,15 +124,26 @@ class FakeDocumentsCommand extends ContainerAwareCommand
         return $result;
     }
 
+    /**
+     * @param $fakeDir
+     *
+     * @return string
+     */
     protected function createImage($fakeDir)
     {
+        $faker = Faker\Factory::create('fr_FR');
         $image = Faker\Provider\Image::image();
-        $result = sprintf("%s/%s", $fakeDir, basename($image));
+        $result = sprintf("%s/%s.jpg", $fakeDir, $faker->slug);
         rename($image, $result);
 
         return $result;
     }
 
+    /**
+     * @param $fakeDir
+     *
+     * @return string
+     */
     protected function createTxtFile($fakeDir)
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -110,6 +165,11 @@ class FakeDocumentsCommand extends ContainerAwareCommand
         return $result;
     }
 
+    /**
+     * @param $fakeDir
+     *
+     * @return string
+     */
     protected function createMarkdownFile($fakeDir)
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -132,11 +192,16 @@ class FakeDocumentsCommand extends ContainerAwareCommand
         return $result;
     }
 
+    /**
+     * @param $fakeDir
+     *
+     * @return mixed
+     */
     protected function createPdfFile($fakeDir)
     {
         $pandocLocation = exec('which pandoc');
         if (false == strpos($pandocLocation, 'pandoc')) {
-            throw new \InvalidArgumentException("le format PDF ne peut être généré: installer Pandoc: http://johnmacfarlane.net/pandoc/installing.html");
+            throw new \InvalidArgumentException("PDF document cannot be generated: Please install Pandoc: http://johnmacfarlane.net/pandoc/installing.html");
         }
 
         $markdown = $this->createMarkdownFile($fakeDir);
@@ -147,6 +212,12 @@ class FakeDocumentsCommand extends ContainerAwareCommand
         return $result;
     }
 
+    /**
+     * @param $fakeDir
+     *
+     * @return string
+     * @throws PhpOffice\PhpWord\Exception\Exception
+     */
     protected function createWordFile($fakeDir)
     {
         $randomFont = $this->randomFonts[array_rand($this->randomFonts)];
@@ -178,15 +249,5 @@ class FakeDocumentsCommand extends ContainerAwareCommand
         $objWriter->save($result);
 
         return $result;
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $extension = $input->getArgument('extension');
-        $quantity = $input->getArgument('quantity');
-        $extension = (!empty($extension)) ? $extension : 'docx';
-        $quantity = (!empty($quantity)) ? $quantity : 1;
-        $files = $this->createDocument($extension, $quantity);
-        $output->writeln(sprintf("%d document(s) created in %s", $quantity, dirname($files[0])));
     }
 }
