@@ -29,3 +29,15 @@
 - [ ] Special private folder
 - [ ] better search experience : "did you mean ?"
 - [ ] better search experience : facets results
+
+## Notable Google Drive API Features
+
+A selection of suitable feats for this project: See https://developers.google.com/drive/v2/reference/
+
+- Files::get - Gets a file's metadata by ID.
+- Files::list - Lists the user's files
+- About::get - Gets the information about the current user along with Drive API settings
+- Changes::list - Lists the changes for a user
+- Children::list - Lists a folder's children. To list all children of the root folder, use the alias root for the folderId value
+- Parents::list - Lists a (folder) file's parents
+- Properties:list - Lists a (folder) file's properties
