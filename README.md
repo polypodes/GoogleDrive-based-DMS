@@ -4,7 +4,7 @@ A proof of concept for a Google Drive based document management system (DMS)
 
 Inspired from [genj/GenjGoogleDriveBundle](https://github.com/genj/GenjGoogleDriveBundle)
 
-![snapshot](snapshot.png)
+![snapshot](https://raw.githubusercontent.com/polypodes/GoogleDrive-based-DMS/master/doc/design/view-list.png)
 
 ## Requirements
   
