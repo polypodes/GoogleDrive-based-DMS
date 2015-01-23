@@ -22,6 +22,7 @@
 - [ ] JSON: most downloaded docs using Google API
 - [ ] JSON: last uploaded docs using Google API
 - [ ] predictable API-like URLs, even for HTML front
+- [ ] Front-end design
 
  
 ## v1.2
