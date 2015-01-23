@@ -12,4 +12,5 @@
 /bin/
 /composer.phar
 /src/LesPolypodes/SimpleDMSBundle/Resources/fake/
+.DS_Store
 
