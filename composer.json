@@ -9,8 +9,6 @@
     "require": {
         "php":                                  ">=5.3.3",
         "symfony/symfony":                      "2.5.*",
-        "doctrine/orm":                         "~2.2,>=2.2.3",
-        "doctrine/doctrine-bundle":             "~1.2",
         "twig/extensions":                      "~1.0",
         "symfony/assetic-bundle":               "~2.3",
         "symfony/swiftmailer-bundle":           "~2.3",
@@ -18,10 +16,13 @@
         "sensio/distribution-bundle":           "~3.0",
         "sensio/framework-extra-bundle":        "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "google/apiclient":                     "1.1.x-dev"
+        "google/apiclient":                     "1.1.x-dev",
+        "hwi/oauth-bundle":                     "0.4.*@dev",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "sensio/generator-bundle":              "~2.3"
     },
     "require-dev": {
-        "sensio/generator-bundle":      "~2.3",
+        "heroku/heroku-buildpack-php":  "*",
         "phpunit/phpunit":              "~3.7",
         "squizlabs/php_codesniffer":    "2.0.x-dev",
         "sebastian/phpcpd":             "*",
@@ -59,11 +60,23 @@
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
         "branch-alias": {
             "dev-master": "2.5-dev"
+        },
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml",
+            "env-map": {
+                "github_client_id": "GITHUB_CLIENT_ID",
+                "github_client_secreet": "GITHUB_CLIENT_SECRET"
+            }
+        },
+        "heroku": {
+            "document-root": "web",
+            "php-config": [
+                "date.timezone=Europe/Amsterdam",
+                "display_errors=off",
+                "short_open_tag=off"
+            ]
         }
     }
 }

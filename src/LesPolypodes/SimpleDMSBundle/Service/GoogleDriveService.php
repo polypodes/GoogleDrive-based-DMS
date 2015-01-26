@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Class GoogleDriveService
@@ -43,7 +44,7 @@ class GoogleDriveService
      * @param TranslatorInterface $translator
      * @param LoggerInterface     $logger
      *
-     * @throws \InvalidConfigurationException
+     * @throws InvalidConfigurationException
      */
     public function __construct(ContainerInterface $container, TranslatorInterface $translator, LoggerInterface $logger)
     {
@@ -53,7 +54,7 @@ class GoogleDriveService
         $configDir  = $rootDir.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR;
         $apiKeyFile = $configDir.$this->container->getParameter('dms.service_account_key_file');
         if (!file_exists($apiKeyFile)) {
-            throw new \InvalidConfigurationException('Store your Google API key in '.$apiKeyFile.' - see https://code.google.com/apis/console');
+            throw new InvalidConfigurationException('Store your Google API key in '.$apiKeyFile.' - see https://code.google.com/apis/console');
         }
         // Perform API authentication
         $apiKeyFileContents  = file_get_contents($apiKeyFile);

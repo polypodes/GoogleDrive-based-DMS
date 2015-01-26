@@ -42,14 +42,24 @@ class FilesController extends Controller
             }
         }
 
-        $result = array(
-            'form'      => $form->createView(),
-            'folders'   => $this->getGoogleDrive()->getFolders(),
-            'files'     => $this->getGoogleDrive()->getFiles($query),
-            'usages'    => $this->getGoogleDrive()->getUsage(),
-        );
+        $result = $this->getList($query);
+        $result['form'] = $form->createView();
 
         return $result;
+    }
+
+    /**
+     * @param $query string
+     *
+     * @return array
+     */
+    protected function getList($query)
+    {
+        return array(
+            'folders' => $this->getGoogleDrive()->getFolders(),
+            'files'   => $this->getGoogleDrive()->getFiles($query),
+            'usages'  => $this->getGoogleDrive()->getUsage(),
+        );
     }
 
     /**

@@ -51,6 +51,58 @@ with the same email address used to fill `dms.service_account_email` above.
 
 Then open the `/files` route URL in a browser to see, view & download filesize, filetype & thubmnail of each file & folder.
 
+## Heroku deployment
+
+### One-click way:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+### Manual way:
+
+see https://devcenter.heroku.com/articles/getting-started-with-symfony2
+and http://symfony.com/doc/current/cookbook/deployment/heroku.html
+
+``
+heroku config:set SYMFONY_ENV=prod
+git push heroku master
+```
+
+
+### Set up Heroku parameters
+
+Method: [a Composer script handling your ignored parameter file](https://github.com/Incenteev/ParameterHandler#using-environment-variables-to-set-the-parameters)
+
+#### `ServiceAccounAPIKey.p12` file:
+
+Log in using `heroku run bash` and use curl to deploy manually the ServiceAccountAPIKey.p12 from a remote server
+
+[Alternative solution](http://bezhermoso.github.io/2014/08/19/handling-parameters-for-heroku-deploy-in-symfony2/#alternate-solution)
+
+### Heroku debug
+
+Heroku allows you to run commands in a one-off dyno with heroku run.
+Use this for scripts and applications that only need to be executed when needed,
+or to launch an interactive PHP shell attached to your local terminal for experimenting in your app’s environment:
+
+``
+$ heroku run "php -a"
+Running `php -a` attached to terminal... up, run.8081
+Interactive shell
+php > echo PHP_VERSION;
+5.5.11
+```
+
+For debugging purposes, e.g. to examine the state of your application after a deploy,
+you can use `heroku run bash` for a full shell into a one-off dyno.
+But remember that this will not connect you to one of the web dynos that may be running at the same time!
+
+([source](https://yitdeveloper.wordpress.com/2014/06/18/getting-started-with-php-on-heroku/))
+
+
+
+ex: [vast-temple-3501](https://vast-temple-3501.herokuapp.com)
+
+
 ## TODO
 
 There is a lot to do ! See [TODO.md](TODO.md)
