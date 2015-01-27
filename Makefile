@@ -226,7 +226,7 @@ tests: reinstall fixtures behavior unit codecoverage
 deploy: vendor/autoload.php
 	@$(MAKE) explain
 	@$(MAKE) pull
-	@$(MAKE) schemaDb
+#	@$(MAKE) schemaDb
 	@$(MAKE) clear
 	@$(MAKE) done
 
