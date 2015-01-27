@@ -42,7 +42,7 @@ VENDOR_PATH := $(PWD)/vendor
 BIN_PATH    := $(PWD)/bin
 WEB_PATH    := $(PWD)/web
 NOW         := $(shell date +%Y-%m-%d--%H-%M-%S)
-REPO        := "https://github.com/..."
+REPO        := "https://github.com/polypodes/GoogleDrive-based-DMS.git"
 BRANCH      := 'master'
 # Colors
 YELLOW      := $(shell tput bold ; tput setaf 3)
@@ -194,7 +194,6 @@ stats: quality build
 update: vendor/autoload.php
 	@$(MAKE) explain
 	@$(MAKE) pull
-	@$(MAKE) schemaDb
 	@$(MAKE) clear
 	@$(MAKE) done
 
@@ -223,6 +222,13 @@ install: prepareDb data assets clear done
 reinstall: dropDb install
 
 tests: reinstall fixtures behavior unit codecoverage
+
+deploy: vendor/autoload.php
+	@$(MAKE) explain
+	@$(MAKE) pull
+	@$(MAKE) schemaDb
+	@$(MAKE) clear
+	@$(MAKE) done
 
 ############################################################################
 # .PHONY tasks list
