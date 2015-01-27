@@ -75,19 +75,12 @@ security:
             #    realm: "Secured Demo Area"
         secured_area:
             anonymous:                  ~
-            logout:
-                path:                   /secure/logout
-                target:                 /secure/connect #where to go after logout
-            pattern:                    ^/secure
             oauth:
                 resource_owners:
-                    #facebook:          "/login/check-facebook"
-                    github:             "/secure/login/check-github"
-                    #my_custom_provider: "/login/check-custom"
-                    #my_github:          "/login/check-github"
-                login_path:        /secure/login
+                    github:             "/login/check-github"
+                login_path:        /login
                 use_forward:       false
-                failure_path:      /secure/login
+                failure_path:      /login
 
                 oauth_user_provider:
                     service: hwi_oauth.user.provider
@@ -97,8 +90,4 @@ security:
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/secure_area/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/secure_area/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/secure_area, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

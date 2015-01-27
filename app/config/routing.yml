@@ -1,14 +1,14 @@
 # To prevent strange issues, this route should be imported before your custom ones:
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-    prefix:   /secure/connect
+    prefix:   /connect
 
 hwi_oauth_login:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
-    prefix:   /secure/login
+    prefix:   /login
 
 github_login:
-    pattern: /secure/login/check-github
+    pattern: /login/check-github
 
 les_polypodes_simple_dms:
     resource: "@LesPolypodesSimpleDMSBundle/Resources/config/routing.yml"
