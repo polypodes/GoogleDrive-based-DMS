@@ -1,11 +1,14 @@
 hwi_oauth:
     # name of the firewall in which this bundle is active, this setting MUST be set
     firewall_name: secured_area
+    connect:
+        confirmation: true
     resource_owners:
         github:
             type:                github
             client_id:           %github_client_id%
             client_secret:       %github_client_secret%
+            scope:               "user:email"
 
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
@@ -71,16 +74,20 @@ security:
             #http_basic:
             #    realm: "Secured Demo Area"
         secured_area:
-            anonymous: ~
+            anonymous:    true
+            logout:
+                path:           /secure/logout
+                target:         /secure/connect #where to go after logout
+            pattern:    ^/secure
             oauth:
                 resource_owners:
                     #facebook:           "/login/check-facebook"
-                    github:             "/login/check-google"
+                    github:             "/secure/login/check-github"
                     #my_custom_provider: "/login/check-custom"
                     #my_github:          "/login/check-github"
-                login_path:        /login
+                login_path:        /secure/connect
                 use_forward:       false
-                failure_path:      /login
+                failure_path:      /secure/connect
 
                 oauth_user_provider:
                     service: hwi_oauth.user.provider
@@ -91,4 +98,7 @@ security:
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/secure_area/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/secure_area/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/secure_area, roles: ROLE_USER }
