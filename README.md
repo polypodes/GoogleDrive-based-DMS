@@ -51,6 +51,15 @@ with the same email address used to fill `dms.service_account_email` above.
 
 Then open the `/files` route URL in a browser to see, view & download filesize, filetype & thubmnail of each file & folder.
 
+## VPS deployement
+
+```bash
+ssh login@production
+cd current_release
+make deploy
+```
+
+
 ## Heroku deployment
 
 ### One-click way:
@@ -82,7 +91,7 @@ Log in using `heroku run bash` and use curl to deploy manually the ServiceAccoun
 
 Heroku allows you to run commands in a one-off dyno with heroku run.
 Use this for scripts and applications that only need to be executed when needed,
-or to launch an interactive PHP shell attached to your local terminal for experimenting in your app’s environment:
+or to launch an interactive PHP shell attached to your local terminal for experimenting in you app’s environment:
 
 ```
 $ heroku run "php -a"
