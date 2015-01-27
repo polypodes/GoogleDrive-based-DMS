@@ -3,15 +3,11 @@ hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /secure/connect
 
-hwi_oauth_connect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
-    prefix:   /secure/connect
-
 hwi_oauth_login:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
-    prefix:   /secure/connect
+    prefix:   /secure/login
 
-hwi_github_login:
+github_login:
     pattern: /secure/login/check-github
 
 les_polypodes_simple_dms:

@@ -74,20 +74,20 @@ security:
             #http_basic:
             #    realm: "Secured Demo Area"
         secured_area:
-            anonymous:    true
+            anonymous:                  ~
             logout:
-                path:           /secure/logout
-                target:         /secure/connect #where to go after logout
-            pattern:    ^/secure
+                path:                   /secure/logout
+                target:                 /secure/connect #where to go after logout
+            pattern:                    ^/secure
             oauth:
                 resource_owners:
-                    #facebook:           "/login/check-facebook"
+                    #facebook:          "/login/check-facebook"
                     github:             "/secure/login/check-github"
                     #my_custom_provider: "/login/check-custom"
                     #my_github:          "/login/check-github"
-                login_path:        /secure/connect
+                login_path:        /secure/login
                 use_forward:       false
-                failure_path:      /secure/connect
+                failure_path:      /secure/login
 
                 oauth_user_provider:
                     service: hwi_oauth.user.provider
