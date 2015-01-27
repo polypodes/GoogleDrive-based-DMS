@@ -70,7 +70,7 @@ git push heroku master
 
 ### Set up Heroku parameters
 
-Method: [a Composer script handling your ignored parameter file](https://github.com/Incenteev/ParameterHandler#using-environment-variables-to-set-the-parameters)
+Method: [a Composer script hadling your ignored parameter file](https://github.com/Incenteev/ParameterHandler#using-environment-variables-to-set-the-parameters)
 
 #### `ServiceAccounAPIKey.p12` file:
 
@@ -84,7 +84,7 @@ Heroku allows you to run commands in a one-off dyno with heroku run.
 Use this for scripts and applications that only need to be executed when needed,
 or to launch an interactive PHP shell attached to your local terminal for experimenting in your app’s environment:
 
-``
+```
 $ heroku run "php -a"
 Running `php -a` attached to terminal... up, run.8081
 Interactive shell
