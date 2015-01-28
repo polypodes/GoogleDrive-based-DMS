@@ -1,11 +1,23 @@
-_files:
-    resource: "@LesPolypodesSimpleDMSBundle/Controller/FilesController.php"
+_website:
+    resource: "@LesPolypodesSimpleDMSBundle/Controller/WebsiteController.php"
     type:     annotation
     prefix:   /files
 
-root:
+_api:
+    resource: "@LesPolypodesSimpleDMSBundle/Controller/ApiController.php"
+    type:     annotation
+    prefix:   /api
+
+_website_root:
     path: /
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
         path: /files
+        permanent: true
+
+_api_root:
+    path: /api
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /api/files
         permanent: true

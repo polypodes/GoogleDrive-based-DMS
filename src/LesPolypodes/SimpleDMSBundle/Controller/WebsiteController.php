@@ -2,11 +2,8 @@
 
 namespace LesPolypodes\SimpleDMSBundle\Controller;
 
-use Faker\Provider\cs_CZ\DateTime;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -15,7 +12,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  * Class FileController
  * @package LesPolypodes\SimpleDMSBundle\Controller
  */
-class FilesController extends Controller
+class WebsiteController extends BaseController
 {
 
     /**
@@ -46,61 +43,6 @@ class FilesController extends Controller
         $result['form'] = $form->createView();
 
         return $result;
-    }
-
-    /**
-     * @param $query string
-     *
-     * @return array
-     */
-    protected function getList($query)
-    {
-        return array(
-            'folders' => $this->getGoogleDrive()->getFolders(),
-            'files'   => $this->getGoogleDrive()->getFiles($query),
-            'usages'  => $this->getGoogleDrive()->getUsage(),
-        );
-    }
-
-    /**
-     * @return \LesPolypodes\SimpleDMSBundle\Service\GoogleDriveService
-     */
-    protected function getGoogleDrive()
-    {
-        return $this->get('google_drive');
-    }
-
-    /**
-     * @Route("/stats", name="_stats")
-     * @Template()
-     * @param Request $request
-     *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function statsAction(Request $request)
-    {
-        $date = new \DateTime();
-        $date->modify('+1 day');
-
-        $data = [
-            "total" =>  600, // documents
-            "etag" =>   new \DateTime(),
-            "stats" =>  [
-                "texts" =>  [ "count" => 300,   "percent" =>  50 ],
-                "videos" => [ "count" => 75,    "percent" =>   12.5 ],
-                "images" => [ "count" => 50,    "percent" =>   25 ],
-                "others" => [ "count" => 75,    "percent" =>   12.5 ],
-            ],
-        ];
-
-        $response = new JsonResponse($data);
-        $response->setExpires($date);
-        $response->setETag(md5($response->getContent()));
-        $response->setPublic();
-        $response->isNotModified($request);
-        $response->headers->set('X-Proudly-Crafted-By', "LesPolypodes.com"); // It's nerdy, I know that.
-
-        return $response;
     }
 
     /**

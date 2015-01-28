@@ -64,10 +64,11 @@ make deploy
 ## Hackin' & Slashin'
 
 You may want to temporary avoid the OAuth login/authorize process while you're developing new features:
-Just comment this line at the very end of `app/config/security.yml`
+Just comment these lines at the very end of `app/config/security.yml`
 
 ```
-#     Commenting linethis below = DISABLING login process & security controls
+#     Commenting these lines below = DISABLING login process & security controls
+#        - { path: ^/api, roles: ROLE_USER }
 #        - { path: ^/files, roles: ROLE_USER }
 
 ```

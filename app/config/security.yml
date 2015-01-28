@@ -75,7 +75,7 @@ security:
             pattern:   ^/
 #            form_login:
 #                always_use_default_target_path: true
-#                default_target_path: /files
+#                default_target_path: /list
             oauth:
                 resource_owners:
                     github:         /login/check-github
@@ -92,5 +92,6 @@ security:
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/files, roles: ROLE_USER }
+#        - { path: ^/api, roles: ROLE_USER }
+#        - { path: ^/files, roles: ROLE_USER }
 
