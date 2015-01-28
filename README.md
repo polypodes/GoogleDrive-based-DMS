@@ -43,6 +43,12 @@ $~: make
 $~: make install
 ```
 
+### Hacking, then deploying :
+
+```bash
+make deploy
+```
+
 ## Usage:
 
 - Use / Create a [Google Drive](https://www.google.com/drive/) User Account
