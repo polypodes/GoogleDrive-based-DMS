@@ -43,16 +43,12 @@ $~: make
 $~: make install
 ```
 
-### Hacking, then deploying :
 
-```bash
-make deploy
-```
 
 ## Usage:
 
 - Use / Create a [Google Drive](https://www.google.com/drive/) User Account
-- In the Google Drive web interface, (right-click) **share a file or an entire folder** 
+- In the Google Drive web interface, (right-click)**share a file or an entire folder** 
 with the same email address used to fill `dms.service_account_email` above.
 
 Then open the `/files` route URL in a browser to see, view & download filesize, filetype & thubmnail of each file & folder.
@@ -65,6 +61,16 @@ cd current_release
 make deploy
 ```
 
+## Hackin' & Slashin'
+
+You may want to temporary avoid the OAuth login/authorize process while you're developing new features:
+Just comment this line at the very end of `app/config/security.yml`
+
+```
+#      Commenting linethis below = DISABLING login process & security controls
+#        - { path: ^/files, roles: ROLE_USER }
+
+```
 
 ## Heroku deployment
 
