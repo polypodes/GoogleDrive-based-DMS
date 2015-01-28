@@ -41,11 +41,6 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
         hwi:
             id: hwi_oauth.user.provider
 
@@ -57,35 +52,39 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
         # the login page has to be accessible for everybody
-        demo_login:
-            pattern:  ^/demo/secured/login$
-            security: false
-
-        # secures part of the application
-        demo_secured_area:
-            pattern:    ^/demo/secured/
-            # it's important to notice that in this case _demo_security_check and _demo_login
-            # are route names and that they are specified in the AcmeDemoBundle
-            form_login:
-                check_path: _demo_security_check
-                login_path: _demo_login
-            logout:
-                path:   _demo_logout
-                target: _demo
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+#        demo_login:
+#            pattern:  ^/demo/secured/login$
+#            security: false
+#
+#        # secures part of the application
+#        demo_secured_area:
+#            pattern:    ^/demo/secured/
+#            # it's important to notice that in this case _demo_security_check and _demo_login
+#            # are route names and that they are specified in the AcmeDemoBundle
+#            form_login:
+#                check_path: _demo_security_check
+#                login_path: _demo_login
+#            logout:
+#                path:   _demo_logout
+#                target: _demo
+#            #anonymous: ~
+#            #http_basic:
+#            #    realm: "Secured Demo Area"
         secured_area:
-            anonymous:                  ~
+            anonymous: ~
+            pattern:   ^/
+#            form_login:
+#                always_use_default_target_path: true
+#                default_target_path: /files
             oauth:
                 resource_owners:
-                    github:             "/login/check-github"
-                login_path:        /login
-                use_forward:       false
-                failure_path:      /login
+                    github:         /login/check-github
+                login_path:         /login
+                use_forward:        false
+                failure_path:       /login
 
                 oauth_user_provider:
-                    service: hwi_oauth.user.provider
+                    service:        hwi_oauth.user.provider
 
 
     # with these settings you can restrict or allow access for different parts
@@ -93,4 +92,5 @@ security:
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/files, roles: ROLE_USER }
 

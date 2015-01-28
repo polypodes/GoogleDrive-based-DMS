@@ -2,3 +2,10 @@ _files:
     resource: "@LesPolypodesSimpleDMSBundle/Controller/FilesController.php"
     type:     annotation
     prefix:   /files
+
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /files
+        permanent: true
