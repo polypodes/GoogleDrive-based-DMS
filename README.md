@@ -67,7 +67,7 @@ You may want to temporary avoid the OAuth login/authorize process while you're d
 Just comment this line at the very end of `app/config/security.yml`
 
 ```
-#      Commenting linethis below = DISABLING login process & security controls
+#     Commenting linethis below = DISABLING login process & security controls
 #        - { path: ^/files, roles: ROLE_USER }
 
 ```
@@ -83,7 +83,7 @@ Just comment this line at the very end of `app/config/security.yml`
 see https://devcenter.heroku.com/articles/getting-started-with-symfony2
 and http://symfony.com/doc/current/cookbook/deployment/heroku.html
 
-``
+```bash
 heroku config:set SYMFONY_ENV=prod
 git push heroku master
 ```
