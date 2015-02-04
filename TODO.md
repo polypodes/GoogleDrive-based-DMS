@@ -24,8 +24,9 @@
 - [ ] predictable API-like URLs, even for HTML front
 - [ ] Front-end design
 
- 
+
 ## v1.2
+- [ ] [logstash + kibana to monitore search queries & results](https://coderwall.com/p/irhi_q/how-to-use-logstash-with-monolog)
 - [ ] Caching the one-hour-valid token ?
 - [ ] Special private folder
 - [ ] better search experience : "did you mean ?"
