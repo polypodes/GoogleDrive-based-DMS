@@ -2,6 +2,7 @@
 
 namespace LesPolypodes\SimpleDMSBundle\Controller;
 
+use LesPolypodes\SimpleDMSBundle\Service\GoogleDriveListParameters;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,9 @@ class WebsiteController extends BaseController
             }
         }
 
-        $result = $this->getList();
+        $optParams = new GoogleDriveListParameters($query);
+
+        $result = $this->getList($optParams);
         $result['form'] = $form->createView();
 
         return $result;

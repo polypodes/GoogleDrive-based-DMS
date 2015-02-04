@@ -8,39 +8,42 @@ namespace LesPolypodes\SimpleDMSBundle\Service;
  */
 class GoogleDriveListParameters
 {
-    /**
-     * @var string The body of items (files/documents) to which the query applies
-     *             "DEFAULT": The items that the user has accessed.
-     *             "DOMAIN": Items shared to the user's domain.
-     */
-    protected $corpus;
-    /**
-     * @var int Maximum number of files to return.
-     *          Acceptable values are 0 to 1000, inclusive. (Default: 100)
-     */
-    protected $maxResults;
-    /**
-     * @var string Page token for files
-     */
-    protected $pageToken;
-    /**
+     /**
      * @var string Query string for searching files
      * @link https://developers.google.com/drive/web/search-parameters
      */
     protected $query;
 
     /**
-     * @param string $corpus
+     * @var int Maximum number of files to return.
+     *          Acceptable values are 0 to 1000, inclusive. (Default: 100)
+     */
+    protected $maxResults;
+
+    /**
+     * @var string Page token for files
+     */
+    protected $pageToken;
+
+    /**
+     * @var string The body of items (files/documents) to which the query applies
+     *             "DEFAULT": The items that the user has accessed.
+     *             "DOMAIN": Items shared to the user's domain.
+     */
+    protected $corpus;
+
+    /**
+     * @param string $query
      * @param int    $maxResults
      * @param string $pageToken
-     * @param string $query
+     * @param string $corpus
      */
-    public function __construct($corpus = null, $maxResults = 100, $pageToken = null, $query = null)
+    public function __construct($query = null, $maxResults = 100, $pageToken = null, $corpus = null)
     {
-        $this->corpus     = $corpus;
+        $this->query      = $query;
         $this->maxResults = $maxResults;
         $this->pageToken  = $pageToken;
-        $this->query      = $query;
+        $this->corpus     = $corpus;
     }
 
     /**
@@ -51,27 +54,37 @@ class GoogleDriveListParameters
     public function getArray()
     {
         return array(
-            'corpus'     => $this->corpus,
+            'q'          => $this->query,
             'maxResults' => $this->maxResults,
             'pageToken'  => $this->pageToken,
-            'q'          => $this->query,
+            'corpus'     => $this->corpus,
         );
+    }
+
+    /**
+     * @see Google_Service_Drive_Files_Resource::listFiles()
+     *
+     * @return array
+     */
+    public function getJson()
+    {
+        return json_encode($this->getArray());
     }
 
     /**
      * @return string
      */
-    public function getCorpus()
+    public function getQuery()
     {
-        return $this->corpus;
+        return $this->query;
     }
 
     /**
-     * @param string $corpus
+     * @param string $query
      */
-    public function setCorpus($corpus)
+    public function setQuery($query)
     {
-        $this->corpus = $corpus;
+        $this->query = $query;
     }
 
     /**
@@ -106,19 +119,20 @@ class GoogleDriveListParameters
         $this->pageToken = $pageToken;
     }
 
+
     /**
      * @return string
      */
-    public function getQuery()
+    public function getCorpus()
     {
-        return $this->query;
+        return $this->corpus;
     }
 
     /**
-     * @param string $query
+     * @param string $corpus
      */
-    public function setQuery($query)
+    public function setCorpus($corpus)
     {
-        $this->query = $query;
+        $this->corpus = $corpus;
     }
 }
