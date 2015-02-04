@@ -118,7 +118,7 @@ class GoogleDriveService
         $filter = sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
 
         $optParams->setQuery(sprintf("%s%s", $filter, $optParams->getQuery()));
-        $this->logger->info($optParams->getJson(), array('json'));
+        $this->container->get('monolog.logger.queries')->info($optParams->getJson());
 
         try {
             return $this->service->files->listFiles($optParams->getArray());

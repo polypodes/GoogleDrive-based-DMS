@@ -53,17 +53,17 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-services:
-    json_formatter:
-        class: Monolog\Formatter\JsonFormatter
-        tags:
-            - { name: monolog.formatter, handler: json }
-
 monolog:
+    channels: [queries]
     handlers:
+        main:
+            type: fingers_crossed
+            action_level: warning
+            handler: file
         file:
             type: stream
-            level: info
-            formatter: json_formatter
+            level: debug
+        queries:
+            channels: [queries]
+            type: stream
             path: "%kernel.root_dir%/logs/queries.json.log"
-            channel: json
