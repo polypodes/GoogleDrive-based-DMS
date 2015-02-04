@@ -44,15 +44,7 @@
     <div class="row">
         {% for file in files %}
             <div class="col-md-4">
-                <h4>{{ file.title }}</h4>
-                <div class="pull-right">
-                    <img src="{{ file.thumbnailLink }}" />
-                </div>
-                <ul>
-                    <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|formatBytes }})</li>
-                    <li><a target="blank" class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">download</a></li>
-                    {# dump(file) #}
-                </ul>
+                {% include "@LesPolypodesSimpleDMS/Website/file.html.twig" with {"file": file} %}
             </div>
         {% endfor %}
     </div>
