@@ -8,7 +8,7 @@ namespace LesPolypodes\SimpleDMSBundle\Service;
  */
 class GoogleDriveListParameters
 {
-     /**
+    /**
      * @var string Query string for searching files
      * @link https://developers.google.com/drive/web/search-parameters
      */
@@ -118,7 +118,6 @@ class GoogleDriveListParameters
     {
         $this->pageToken = $pageToken;
     }
-
 
     /**
      * @return string
