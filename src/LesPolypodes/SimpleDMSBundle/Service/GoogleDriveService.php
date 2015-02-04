@@ -88,35 +88,20 @@ class GoogleDriveService
     }
 
     /**
-     * @param string $fileId
-     *
-     * @return \Google_Service_Drive_DriveFile $file metadata
-     */
-    public function getFile($fileId)
-    {
-        try {
-            return $this->service->files->get($fileId);
-        } catch (Exception $e) {
-            $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
-            throw new HttpException(500, $errorMessage, $e);
-        }
-    }
-
-    /**
-     * @param string $query search parameters query
+     * @param GoogleDriveListParameters $optParams)
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFiles($query = '')
+    public function getFiles(GoogleDriveListParameters $optParams = null)
     {
-        return $this->getFolders(false, $query);
+        return $this->getFolders(false, $optParams);
     }
 
     /**
-     * @param bool   $isFolder = true
-     * @param string $query    search parameters query
+     * @param bool                      $isFolder  = true
+     * @param GoogleDriveListParameters $optParams
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
@@ -124,17 +109,18 @@ class GoogleDriveService
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFolders($isFolder = true, $query = '')
+    public function getFolders($isFolder = true, GoogleDriveListParameters $optParams = null)
     {
+        $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
+        $optParams->setQuery(("" == $optParams->getQuery()) ? "" : sprintf(" and (%s)", $optParams->getQuery()));
+
         $operator = ($isFolder) ? "=" : "!=";
         $filter = sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
-        $query = empty($query) ? "" : sprintf(" and (%s)", $query);
-        $params = [
-            'q' => $filter.$query,
-        ];
+
+        $optParams->setQuery(sprintf("%s%s", $filter, $optParams->getQuery()));
 
         try {
-            return $this->service->files->listFiles($params);
+            return $this->service->files->listFiles($optParams->getArray());
         } catch (\Exception $ge) {
             $errorMessage = sprintf(
                 "%s.\n%s.",
@@ -171,6 +157,21 @@ class GoogleDriveService
             }
         }
         throw new HttpException(500, $errorMessage);
+    }
+
+    /**
+     * @param string $fileId
+     *
+     * @return \Google_Service_Drive_DriveFile $file metadata
+     */
+    public function getFile($fileId)
+    {
+        try {
+            return $this->service->files->get($fileId);
+        } catch (Exception $e) {
+            $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
+            throw new HttpException(500, $errorMessage, $e);
+        }
     }
 
     /**

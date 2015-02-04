@@ -89,6 +89,11 @@ heroku config:set SYMFONY_ENV=prod
 git push heroku master
 ```
 
+To push a branch other than master, use this syntax:
+
+```bash
+git push heroku yourbranch:master
+``
 
 ### Set up Heroku parameters
 

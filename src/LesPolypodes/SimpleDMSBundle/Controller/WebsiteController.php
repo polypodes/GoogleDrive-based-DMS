@@ -39,7 +39,7 @@ class WebsiteController extends BaseController
             }
         }
 
-        $result = $this->getList($query);
+        $result = $this->getList();
         $result['form'] = $form->createView();
 
         return $result;

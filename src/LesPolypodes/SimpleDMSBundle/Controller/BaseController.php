@@ -2,6 +2,7 @@
 
 namespace LesPolypodes\SimpleDMSBundle\Controller;
 
+use LesPolypodes\SimpleDMSBundle\Service\GoogleDriveListParameters;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -12,15 +13,15 @@ class BaseController extends Controller
 {
 
     /**
-     * @param $query string
+     * @param GoogleDriveListParameters $optParams
      *
      * @return array
      */
-    protected function getList($query = '')
+    protected function getList(GoogleDriveListParameters $optParams = null)
     {
         return array(
             'folders' => $this->getGoogleDrive()->getFolders(),
-            'files'   => $this->getGoogleDrive()->getFiles($query),
+            'files'   => $this->getGoogleDrive()->getFiles($optParams),
             'usages'  => $this->getGoogleDrive()->getUsage(),
         );
     }

@@ -14,14 +14,20 @@ class ApiController extends BaseController
 {
 
     /**
-     * @Route("/files", name="_api_files")
+     * @Route("/files/{token}", name="_api_files", defaults={"token" = null})
      * @param Request $request
+     *
+     * PRO MEMORIA: default file query is
+     * mimeType!="application/vnd.google-apps.folder"
      *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function apiListAction(Request $request)
+    public function apiListAction(Request $request, $token)
     {
-        $data = $this->getList();
+        $token = "3|0|f__-tPKVF_cwQjNqamhyM25GWjFKZFdrMmIweGhWVk5MV1ZFAA";
+        $data = $this->getList('', $token);
+        $data['files_count'] = count($data['files']['modelData']['items']);
+        $data['files_list'] = $data['files']['modelData']['items'];
 
         return $this->getJsonResponse($request, $data);
     }
