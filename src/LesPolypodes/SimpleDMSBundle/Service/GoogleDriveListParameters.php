@@ -8,6 +8,12 @@ namespace LesPolypodes\SimpleDMSBundle\Service;
  */
 class GoogleDriveListParameters
 {
+
+    /**
+     * query suffix helper
+     */
+    const NO_TRASH = " and trashed = false";
+
     /**
      * @var string Query string for searching files
      * @link https://developers.google.com/drive/web/search-parameters
@@ -15,15 +21,15 @@ class GoogleDriveListParameters
     protected $query;
 
     /**
+     * @var string Page token for files
+     */
+    protected $pageToken;
+
+    /**
      * @var int Maximum number of files to return.
      *          Acceptable values are 0 to 1000, inclusive. (Default: 100)
      */
     protected $maxResults;
-
-    /**
-     * @var string Page token for files
-     */
-    protected $pageToken;
 
     /**
      * @var string The body of items (files/documents) to which the query applies
@@ -38,11 +44,11 @@ class GoogleDriveListParameters
      * @param string $pageToken
      * @param string $corpus
      */
-    public function __construct($query = null, $maxResults = 100, $pageToken = null, $corpus = null)
+    public function __construct($query = null, $pageToken = null, $maxResults = 100, $corpus = null)
     {
         $this->query      = $query;
-        $this->maxResults = $maxResults;
         $this->pageToken  = $pageToken;
+        $this->maxResults = $maxResults;
         $this->corpus     = $corpus;
     }
 
@@ -88,22 +94,6 @@ class GoogleDriveListParameters
     }
 
     /**
-     * @return int
-     */
-    public function getMaxResults()
-    {
-        return $this->maxResults;
-    }
-
-    /**
-     * @param int $maxResults
-     */
-    public function setMaxResults($maxResults)
-    {
-        $this->maxResults = $maxResults;
-    }
-
-    /**
      * @return string
      */
     public function getPageToken()
@@ -117,6 +107,22 @@ class GoogleDriveListParameters
     public function setPageToken($pageToken)
     {
         $this->pageToken = $pageToken;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxResults()
+    {
+        return $this->maxResults;
+    }
+
+    /**
+     * @param int $maxResults
+     */
+    public function setMaxResults($maxResults)
+    {
+        $this->maxResults = $maxResults;
     }
 
     /**

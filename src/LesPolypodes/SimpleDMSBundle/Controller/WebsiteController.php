@@ -27,17 +27,15 @@ class WebsiteController extends BaseController
     {
         $form = $this->createFormBuilder()
             ->add('q', 'text', array('label' => ' ', 'required' => false))
+            ->setMethod('GET')
             ->getForm();
         $query = '';
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $data['q'] = str_replace("'", "\\'", $data['q']);
-                $query = sprintf("title contains '%s'", $data['q']);
-                $query .= sprintf(" or fullText contains '%s'", $data['q']);
-                $query .= " and trashed = false";
-            }
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $data['q'] = str_replace("'", "\\'", $data['q']);
+            $query = sprintf("title contains '%s'", $data['q']);
+            $query .= sprintf(" or fullText contains '%s'", $data['q']);
         }
 
         $optParams = new GoogleDriveListParameters($query);

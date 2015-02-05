@@ -19,10 +19,14 @@ class BaseController extends Controller
      */
     protected function getList(GoogleDriveListParameters $optParams = null)
     {
+        $files = $this->getGoogleDrive()->getFiles($optParams);
+
         return array(
-            'folders' => $this->getGoogleDrive()->getFolders(),
-            'files'   => $this->getGoogleDrive()->getFiles($optParams),
-            'usages'  => $this->getGoogleDrive()->getUsage(),
+            'query'         => $files['query'],
+            'has_pagination'    => !empty($files['result']['nextPageToken']),
+            'usages'        => $this->getGoogleDrive()->getUsage(),
+            'folders'       => $this->getGoogleDrive()->getFolders()['result'],
+            'files'         => $files['result'],
         );
     }
 

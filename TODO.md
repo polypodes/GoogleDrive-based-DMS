@@ -12,6 +12,7 @@
 - [X] Tests with medias
 
 ## v1.1
+- [x] GET request for search route
 - [ ] JSON Api using same URL with different extension, default remain HTML as it is now
 - [ ] give more info about images dimension - see Google Drive API doc
 - [ ] Give complete folders list tree as a JSON

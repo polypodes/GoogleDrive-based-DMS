@@ -28,7 +28,7 @@
 
 {% if 0 < files|length %}
     <div class="row">
-    <form class="form-inline" name="form" role="form" action="" method="post">
+    <form class="form-inline" name="form" role="form" action="" method="GET">
         {{ form_errors(form) }}
         <div class="form-group">
             {{ form_label(form.q) }}
@@ -41,7 +41,12 @@
         <hr />
         </form>
 
-    <div class="row">
+        {% if has_pagination %}
+            {% include "@LesPolypodesSimpleDMS/Website/paginator.html.twig" with {'has_pagination': has_pagination} %}
+        {% endif %}
+
+        </div>
+        <div class="row">
         {% for file in files %}
             <div class="col-md-4">
                 {% include "@LesPolypodesSimpleDMS/Website/file.html.twig" with {"file": file} %}

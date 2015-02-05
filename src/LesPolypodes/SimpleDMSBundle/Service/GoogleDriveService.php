@@ -92,6 +92,9 @@ class GoogleDriveService
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
+     * PRO MEMORIA: default file query is
+     * mimeType!="application/vnd.google-apps.folder"
+     *
      * @return \Google_Service_Drive_FileList
      */
     public function getFiles(GoogleDriveListParameters $optParams = null)
@@ -109,19 +112,24 @@ class GoogleDriveService
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFolders($isFolder = true, GoogleDriveListParameters $optParams = null)
+    public function getFolders($isFolder = true, GoogleDriveListParameters $optParams = null, $noTrash = true)
     {
+        $result = array();
         $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
         $optParams->setQuery(("" == $optParams->getQuery()) ? "" : sprintf(" and (%s)", $optParams->getQuery()));
 
         $operator = ($isFolder) ? "=" : "!=";
-        $filter = sprintf("%s%s%s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
+        $filter = sprintf("%s %s %s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
 
         $optParams->setQuery(sprintf("%s%s", $filter, $optParams->getQuery()));
+        if ($noTrash) {
+            $optParams->setQuery(sprintf("%s%s", $optParams->getQuery(), GoogleDriveListParameters::NO_TRASH));
+        }
         $this->container->get('monolog.logger.queries')->info($optParams->getJson());
 
         try {
-            return $this->service->files->listFiles($optParams->getArray());
+            $result['query']    = $optParams->getQuery();
+            $result['result']   = $this->service->files->listFiles($optParams->getArray());
         } catch (\Exception $ge) {
             $errorMessage = sprintf(
                 "%s.\n%s.",
@@ -132,6 +140,8 @@ class GoogleDriveService
 
             throw new HttpException(500, $errorMessage, $ge);
         }
+
+        return $result;
     }
 
     /**
