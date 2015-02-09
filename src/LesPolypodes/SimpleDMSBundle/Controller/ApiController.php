@@ -15,36 +15,32 @@ class ApiController extends BaseController
 {
 
     /**
-     * @Route("/files/{token}", name="_api_files", defaults={"token" = null})
+     * @Route("/files/{searchTerm}/{token}", name="_api_files", defaults={"searchTerm" = null, "token" = null})
      * @param Request $request
-     * @param string  $token   Google-side generated result page token
+     * @param string  $searchTerm full-text search parameter
+     * @param string  $token      Google-side generated result page token
      *
      *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function apiListAction(Request $request, $token)
+    public function apiListAction(Request $request, $searchTerm, $token)
     {
         $form = $this->createFormBuilder()
             ->add('q', 'text', array('label' => ' ', 'required' => false))
             ->setMethod('GET')
             ->getForm();
-        $query = $form_query = '';
+        $query = '';
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $data = $form->getData();
-            $form_query = $data['q'] = str_replace("'", "\\'", $data['q']);
-            $query = sprintf("title contains '%s'", $data['q']);
-            $query .= sprintf(" or fullText contains '%s'", $data['q']);
+        if (!empty($searchTerm)) {
+            $searchTerm = str_replace("'", "\\'", $searchTerm);
+            $query = sprintf("title contains '%s'", $searchTerm);
+            $query .= sprintf(" or fullText contains '%s'", $searchTerm);
         }
 
         $optParams = new GoogleDriveListParameters($query, $token);
         $data = $this->getList($optParams);
         // JSON rendering improvements
-        $data['form_query'] = $form_query;
-        $data['files_count'] = count($data['files']['modelData']['items']);
-        $data['files_list'] = $data['files']['modelData']['items'];
-        $data['folder_count'] = count($data['folders']['modelData']['items']);
-        $data['folder_list'] = $data['folders']['modelData']['items'];
+        $data['search_term'] = $searchTerm;
 
         return $this->getJsonResponse($request, $data);
     }

@@ -27,6 +27,10 @@ class BaseController extends Controller
             'usages'        => $this->getGoogleDrive()->getUsage(),
             'folders'       => $this->getGoogleDrive()->getFolders()['result'],
             'files'         => $files['result'],
+            'files_count'   => count($files['result']['modelData']['items']),
+            'files_list'    => $files['result']['modelData']['items'],
+            'folder_count'  => count($files['result']['folders']['modelData']['items']),
+            'folder_list'   => $files['result']['folders']['modelData']['items'],
         );
     }
 

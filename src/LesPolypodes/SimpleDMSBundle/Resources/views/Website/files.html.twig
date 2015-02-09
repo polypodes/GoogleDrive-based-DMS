@@ -33,23 +33,32 @@
         <div class="form-group">
             {{ form_label(form.q) }}
             {{ form_widget(form.q, { 'attr': {'class': 'form-control', 'placeholder': 'search for...'} }) }}
+            {{ form_widget(form.pageToken, { 'value': '' }) }} {# we reset it: submitting new form musn't take this token in account again#}
         </div>
         {{ form_rest(form) }}
         <div class="form-group">
             <button type="submit" class="btn btn-default">{{ 'Find' | trans }}</button>
+            <a class="btn btn-default" href="{{ url("_files") }}?q=">Reset</a>
+
         </div>
         <hr />
         </form>
 
         {% if has_pagination %}
-            {% include "@LesPolypodesSimpleDMS/Website/paginator.html.twig" with {'has_pagination': has_pagination} %}
+            {% include "@LesPolypodesSimpleDMS/Website/paginator.html.twig"
+                with {
+                    'has_pagination':   has_pagination,
+                    'pagination':       pagination,
+            }
+        %}
         {% endif %}
 
         </div>
         <div class="row">
         {% for file in files %}
             <div class="col-md-4">
-                {% include "@LesPolypodesSimpleDMS/Website/file.html.twig" with {"file": file} %}
+                {% include "@LesPolypodesSimpleDMS/Website/file.html.twig"
+                    with {"file": file} %}
             </div>
         {% endfor %}
     </div>
