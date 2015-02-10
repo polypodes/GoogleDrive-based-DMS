@@ -1,11 +1,22 @@
 <?php
-
+/**
+ * This file is part of the SimpleDMS package.
+ *
+ * (c) 2015 Les Polypodes
+ * Made in Nantes, France - http://lespolypodes.com
+ *
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ *
+ * File created by ronan@lespolypodes.com
+ */
 namespace LesPolypodes\SimpleDMSBundle\Controller;
 
 use LesPolypodes\SimpleDMSBundle\Service\GoogleDriveListParameters;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class FileController
@@ -21,9 +32,9 @@ class ApiController extends BaseController
      * @param string  $token      Google-side generated result page token
      *
      *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return array|RedirectResponse
      */
-    public function apiListAction(Request $request, $searchTerm, $token)
+    public function apiFilesListAction(Request $request, $searchTerm, $token)
     {
         $form = $this->createFormBuilder()
             ->add('q', 'text', array('label' => ' ', 'required' => false))
@@ -38,9 +49,23 @@ class ApiController extends BaseController
         }
 
         $optParams = new GoogleDriveListParameters($query, $token);
-        $data = $this->getList($optParams);
+        $data = $this->getFilesList($optParams);
         // JSON rendering improvements
         $data['search_term'] = $searchTerm;
+
+        return $this->getJsonResponse($request, $data);
+    }
+
+    /**
+     * @Route("/folders", name="_api_folders")
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiFoldersListAction(Request $request)
+    {
+        $optParams = new GoogleDriveListParameters();
+        $data = $this->getFoldersList($optParams);
 
         return $this->getJsonResponse($request, $data);
     }
@@ -49,7 +74,7 @@ class ApiController extends BaseController
      * @Route("/stats", name="_api_stats")
      * @param Request $request
      *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return array|RedirectResponse
      */
     public function apiStatsAction(Request $request)
     {

@@ -135,6 +135,11 @@ ex: [vast-temple-3501](https://vast-temple-3501.herokuapp.com)
 There is a lot to do ! See [TODO.md](TODO.md)
 
 
-## License
+## License & Copyright
 
-MIT
+(c) 2015 Les Polypodes
+
+Licence: MIT 
+
+Made in Nantes, France by [Les Polypodes](http://lespolypodes.com)
+
