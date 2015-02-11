@@ -1,0 +1,8 @@
+<div class="col-md-6">
+    <h3>Folders:</h3>
+    <ul>
+        {% for folder in folders.list %}
+            <li><a href="{{ url("_api_folder", {folderId: folder.id} ) }}">{{ folder.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

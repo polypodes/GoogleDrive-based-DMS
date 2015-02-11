@@ -180,8 +180,24 @@ class GoogleDriveService
             );
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
+            throw new HttpException(500, $errorMessage, $e);
+        }
+    }
+
+    public function getChildren($folderId)
+    {
+        try {
+            $children = $this->service->children->listChildren($folderId);
+            $result = array('children' => $children);
+            foreach ($children as $child) {
+                $result['list'][] = $this->service->files->get($child->id);
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            $errorMessage = $this->translator->trans('Given Folder ID do not match any be Google Folder you can access');
             throw new HttpException(500, $errorMessage, $e);
         }
     }

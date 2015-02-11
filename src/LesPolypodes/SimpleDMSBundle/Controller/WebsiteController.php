@@ -39,6 +39,24 @@ class WebsiteController extends Controller
     }
 
     /**
+     * @Route("/folders/{folderId}", name="_folder")
+     * @Template()
+     * @param Request $request
+     * @param string  $folderId
+     *
+     * @return array|RedirectResponse
+     */
+    public function folderAction(Request $request, $folderId)
+    {
+        $result = $this->get('google_drive')->getFile($folderId);
+        $result['children'] = $this->get('google_drive')->getChildren($folderId);
+
+       // die(var_dump($result['file']['parents'][0]['id']));
+
+        return $result;
+    }
+
+    /**
      * @Route("/files", name="_files")
      * @Template()
      * @param Request $request

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c630a015dc0700da9631f6b801f60f2",
+    "hash": "951bbe62930c8b942f1cfb6e4865a343",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -417,12 +417,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "c7c812122dbf2e34b15a3a9b83bfae737f676c99"
+                "reference": "b3853aa242dabf8f4b8e343d986f9368632c4eb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/c7c812122dbf2e34b15a3a9b83bfae737f676c99",
-                "reference": "c7c812122dbf2e34b15a3a9b83bfae737f676c99",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/b3853aa242dabf8f4b8e343d986f9368632c4eb6",
+                "reference": "b3853aa242dabf8f4b8e343d986f9368632c4eb6",
                 "shasum": ""
             },
             "require": {
@@ -451,7 +451,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2015-01-24 11:20:40"
+            "time": "2015-02-11 11:38:54"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -854,17 +854,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v3.0.15",
+            "version": "v3.0.16",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "0692cd6a8fcf645abce8ea45f7cbbd1942e2b23c"
+                "reference": "aa30f8cd3ee68144e043ca30713aa7d7df35c5fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/0692cd6a8fcf645abce8ea45f7cbbd1942e2b23c",
-                "reference": "0692cd6a8fcf645abce8ea45f7cbbd1942e2b23c",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/aa30f8cd3ee68144e043ca30713aa7d7df35c5fa",
+                "reference": "aa30f8cd3ee68144e043ca30713aa7d7df35c5fa",
                 "shasum": ""
             },
             "require": {
@@ -903,7 +903,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2015-01-07 07:13:43"
+            "time": "2015-02-01 05:42:21"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -962,17 +962,17 @@
         },
         {
             "name": "sensio/generator-bundle",
-            "version": "v2.5.1",
+            "version": "v2.5.2",
             "target-dir": "Sensio/Bundle/GeneratorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "9e23fc3de265ae013690d84aab98e7a84f46edcd"
+                "reference": "4b09746520a826a7bf34a466ba31c7d8740fef7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/9e23fc3de265ae013690d84aab98e7a84f46edcd",
-                "reference": "9e23fc3de265ae013690d84aab98e7a84f46edcd",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/4b09746520a826a7bf34a466ba31c7d8740fef7e",
+                "reference": "4b09746520a826a7bf34a466ba31c7d8740fef7e",
                 "shasum": ""
             },
             "require": {
@@ -1006,7 +1006,7 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2015-01-13 07:33:46"
+            "time": "2015-02-11 07:21:23"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -1288,16 +1288,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.5.9",
+            "version": "v2.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "e082a9f28edfd5a081b60e009889b30c04979924"
+                "reference": "6ffe6437a9e734eabd6d092387f065bebfefcd24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/e082a9f28edfd5a081b60e009889b30c04979924",
-                "reference": "e082a9f28edfd5a081b60e009889b30c04979924",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/6ffe6437a9e734eabd6d092387f065bebfefcd24",
+                "reference": "6ffe6437a9e734eabd6d092387f065bebfefcd24",
                 "shasum": ""
             },
             "require": {
@@ -1397,7 +1397,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-01-07 12:32:08"
+            "time": "2015-02-02 09:26:53"
         },
         {
             "name": "twig/extensions",
@@ -1512,16 +1512,16 @@
     "packages-dev": [
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.4",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "72a8c34210c0fbd8caa007fccea87a59f6f0a4d3"
+                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/72a8c34210c0fbd8caa007fccea87a59f6f0a4d3",
-                "reference": "72a8c34210c0fbd8caa007fccea87a59f6f0a4d3",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/3af00cf237289a406e7307e18e7ab0d92cf57038",
+                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038",
                 "shasum": ""
             },
             "require": {
@@ -1561,7 +1561,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-01-12 21:28:53"
+            "time": "2015-02-03 21:20:51"
         },
         {
             "name": "fzaninotto/faker",
@@ -1617,16 +1617,16 @@
         },
         {
             "name": "heroku/heroku-buildpack-php",
-            "version": "v57",
+            "version": "v63",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heroku/heroku-buildpack-php.git",
-                "reference": "166ad317a307082d037a6d201ddb602f3295af9a"
+                "reference": "62bddfebfd8c3e79b9710d11d558e07727356484"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/166ad317a307082d037a6d201ddb602f3295af9a",
-                "reference": "166ad317a307082d037a6d201ddb602f3295af9a",
+                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/62bddfebfd8c3e79b9710d11d558e07727356484",
+                "reference": "62bddfebfd8c3e79b9710d11d558e07727356484",
                 "shasum": ""
             },
             "bin": [
@@ -1657,7 +1657,7 @@
                 "nginx",
                 "php"
             ],
-            "time": "2015-01-19 23:21:04"
+            "time": "2015-02-10 23:24:07"
         },
         {
             "name": "pdepend/pdepend",
@@ -1792,7 +1792,7 @@
         },
         {
             "name": "phpoffice/phpword",
-            "version": "dev-master",
+            "version": "0.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPWord.git",
@@ -2477,16 +2477,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "dev-phpcs-fixer",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "676e90b8ccfddf89b9bf72e9b01072c4b3342b94"
+                "reference": "b301c98f19414d836fdaa678648745fcca5aeb4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/676e90b8ccfddf89b9bf72e9b01072c4b3342b94",
-                "reference": "676e90b8ccfddf89b9bf72e9b01072c4b3342b94",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/b301c98f19414d836fdaa678648745fcca5aeb4f",
+                "reference": "b301c98f19414d836fdaa678648745fcca5aeb4f",
                 "shasum": ""
             },
             "require": {
@@ -2498,11 +2498,6 @@
                 "scripts/phpcbf"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-phpcs-fixer": "2.0.x-dev"
-                }
-            },
             "autoload": {
                 "classmap": [
                     "CodeSniffer.php",
@@ -2540,13 +2535,13 @@
                     "role": "lead"
                 }
             ],
-            "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
             "homepage": "http://www.squizlabs.com/php-codesniffer",
             "keywords": [
                 "phpcs",
                 "standards"
             ],
-            "time": "2014-12-02 22:52:08"
+            "time": "2015-01-21 22:44:05"
         },
         {
             "name": "theseer/fdomdocument",
@@ -2589,20 +2584,22 @@
             "time": "2014-09-13 10:57:19"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "google/apiclient": 20,
         "hwi/oauth-bundle": 20,
-        "squizlabs/php_codesniffer": 20,
         "fabpot/php-cs-fixer": 0,
-        "fzaninotto/faker": 20,
-        "phpoffice/phpword": 20
+        "fzaninotto/faker": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }

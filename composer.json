@@ -24,14 +24,14 @@
     "require-dev": {
         "heroku/heroku-buildpack-php":  "*",
         "phpunit/phpunit":              "~3.7",
-        "squizlabs/php_codesniffer":    "2.0.x-dev",
+        "squizlabs/php_codesniffer":    "~2.2",
         "sebastian/phpcpd":             "*",
         "phploc/phploc" :               "*",
         "phpmd/phpmd" :                 "2.0.*",
         "pdepend/pdepend" :             "2.0.*",
         "fabpot/php-cs-fixer":          "@stable",
         "fzaninotto/faker":             "1.5.x-dev",
-        "phpoffice/phpword":            "dev-master"
+        "phpoffice/phpword":            "~0.12"
     },
     "scripts": {
         "post-root-package-install": [
