@@ -18,16 +18,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class FileController
  * @package LesPolypodes\SimpleDMSBundle\Controller
  */
-class WebsiteController extends BaseController
+class WebsiteController extends Controller
 {
 
     /**
-     * @Route("/", name="_files")
+     * @Route("/folders", name="_folders")
+     * @Template()
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function foldersAction(Request $request)
+    {
+    }
+
+    /**
+     * @Route("/files", name="_files")
      * @Template()
      * @param Request $request
      *
@@ -47,44 +59,42 @@ class WebsiteController extends BaseController
             ->add('pageToken', 'hidden', array('label' => ' ', 'required' => false));
         $form->setMethod('GET');
         $form = $form->getForm();
-        $searchTerm = $pageToken = $query = null;
+
+        $pageToken = null;
         $data = array("q" => "");
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
-            $data['q'] = $searchTerm = str_replace("'", "\\'", $data['q']);
             //var_dump('DUDE, YOUR FORM is VALID!');
         }
 
-        $query = sprintf("title contains '%s'", $data['q']);
-        $query .= sprintf(" or fullText contains '%s'", $data['q']);
         $pageToken = $request->get("pageToken"); // not a form field
-        $optParams = new GoogleDriveListParameters($query, $pageToken);
-
-        $result = $this->getFilesList($optParams);
+        $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        $result['folders'] = $this->get('google_drive')->getFilesList(true);
         //var_dump($optParams, $_GET, $result['files']['nextPageToken']);
         $result['form'] = $form->createView();
-        $result['pagination'] = $this->buildPagination($optParams, $searchTerm, $data, $result);
+        $result['pagination'] = $this->buildPagination($optParams, $result['items']['nextPageToken']);
         //die(var_dump($optParams, $_GET, $request->get('pageToken'), $data, $query, $searchTerm, $result['pagination'], $result['files']));
-
         return $result;
     }
 
     /**
      * @param GoogleDriveListParameters $optParams
-     * @param string                    $searchTerm
-     * @param array                     $formData
-     * @param array                     $apiResponse
+     * @param string                    $nextPageToken
      *
      * @return array
      */
-    protected function buildPagination($optParams, $searchTerm, $formData, $apiResponse)
+    protected function buildPagination($optParams, $nextPageToken)
     {
-        $nextUrl = sprintf(
-            "?q=%s&pageToken=%s",
-            $searchTerm,
-            $apiResponse['files']['nextPageToken'] // 'nextPageToken' value become next *current*
-        );
+        $nextUrl = '';
+        if (!empty($nextPageToken)) {
+            $nextUrl = sprintf(
+                "?q=%s&pageToken=%s",
+                $optParams->getSearchTerm(),
+                $nextPageToken
+            );
+        }
 
         return array(
             'nextUrl' => $nextUrl,
@@ -92,7 +102,7 @@ class WebsiteController extends BaseController
     }
 
     /**
-     * @Route("/{fileId}", name="_file")
+     * @Route("/files/{fileId}", name="_file")
      * @Template()
      *
      * It forces a download response

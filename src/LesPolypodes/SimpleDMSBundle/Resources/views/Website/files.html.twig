@@ -3,18 +3,18 @@
 
 {% block content %}
 <div class="row">
-    {% if 0 < folders|length %}
+    {% if folders is defined and 0 < folders|length %}
         <div class="col-md-6">
             <h3>Your folders:</h3>
             <ul>
-                {% for folder in folders %}
-                    <li>{{ folder.title }}</li>
+                {% for folder in folders.list %}
+                    <li><a href="{{ url("_api_folder", {folderId: folder.id} ) }}">{{ folder.title }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     {% endif %}
 
-    {% if 0 < usages|length %}
+    {% if usages is defined and 0 < usages|length %}
         <div class="col-md-6">
             <h3>Your Google Drive Usage Stats:</h3>
             <ul>
@@ -26,7 +26,7 @@
     {% endif %}
 </div>
 
-{% if 0 < files|length %}
+{% if items is defined and 0 < items|length %}
     <div class="row">
     <form class="form-inline" name="form" role="form" action="" method="GET">
         {{ form_errors(form) }}
@@ -55,7 +55,7 @@
 
         </div>
         <div class="row">
-        {% for file in files %}
+        {% for file in items %}
             <div class="col-md-4">
                 {% include "@LesPolypodesSimpleDMS/Website/file.html.twig"
                     with {"file": file} %}

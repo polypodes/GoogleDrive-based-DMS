@@ -98,21 +98,6 @@ class GoogleDriveService
     }
 
     /**
-     * @param GoogleDriveListParameters $optParams)
-     *
-     * @link https://developers.google.com/drive/web/search-parameters
-     *
-     * PRO MEMORIA: default file query is
-     * mimeType!="application/vnd.google-apps.folder"
-     *
-     * @return \Google_Service_Drive_FileList
-     */
-    public function getFiles(GoogleDriveListParameters $optParams = null)
-    {
-        return $this->getFolders(false, $optParams);
-    }
-
-    /**
      * @param bool                      $isFolder  = true
      * @param GoogleDriveListParameters $optParams
      *
@@ -122,7 +107,7 @@ class GoogleDriveService
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFolders($isFolder = true, GoogleDriveListParameters $optParams = null, $noTrash = true)
+    public function getFiles($isFolder = true, GoogleDriveListParameters $optParams = null, $noTrash = true)
     {
         $result = array();
         $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
@@ -188,7 +173,13 @@ class GoogleDriveService
     public function getFile($fileId)
     {
         try {
-            return $this->service->files->get($fileId);
+            $file = $this->service->files->get($fileId);
+            $result = array(
+                'modelData'         => $file['modelData'],
+                'file'              => $file,
+            );
+
+            return $result;
         } catch (Exception $e) {
             $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
             throw new HttpException(500, $errorMessage, $e);
@@ -208,5 +199,31 @@ class GoogleDriveService
             "Total quota (bytes): " => $about->getQuotaBytesTotal(),
             "Used quota (bytes): "  => $about->getQuotaBytesUsed(),
         );
+    }
+
+    /**
+     * @param bool                      $isFolder
+     * @param GoogleDriveListParameters $optParams
+     *
+     * @return array
+     */
+    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null)
+    {
+        $files = $this->getFiles($isFolder, $optParams);
+
+        $result = array(
+            'query'             => $files['query'],
+            'has_pagination'    => !empty($files['result']['nextPageToken']),
+            'usages'            => $this->getUsage(),
+            'items'             => $files['result'],
+            'count'             => count($files['result']['modelData']['items']),
+            'list'              => $files['result']['modelData']['items'],
+        );
+
+        if (!is_null($optParams)) {
+            $result['optParams'] = $optParams->getArray(true);
+        }
+
+        return $result;
     }
 }

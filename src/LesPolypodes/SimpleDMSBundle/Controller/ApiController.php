@@ -17,12 +17,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class FileController
  * @package LesPolypodes\SimpleDMSBundle\Controller
  */
-class ApiController extends BaseController
+class ApiController extends Controller
 {
 
     /**
@@ -40,18 +41,24 @@ class ApiController extends BaseController
             ->add('q', 'text', array('label' => ' ', 'required' => false))
             ->setMethod('GET')
             ->getForm();
-        $query = '';
         $form->handleRequest($request);
-        if (!empty($searchTerm)) {
-            $searchTerm = str_replace("'", "\\'", $searchTerm);
-            $query = sprintf("title contains '%s'", $searchTerm);
-            $query .= sprintf(" or fullText contains '%s'", $searchTerm);
-        }
 
-        $optParams = new GoogleDriveListParameters($query, $token);
-        $data = $this->getFilesList($optParams);
+        $optParams = new GoogleDriveListParameters($searchTerm, $token);
+        $data = $this->get('google_drive')->getFilesList(false, $optParams);
         // JSON rendering improvements
-        $data['search_term'] = $searchTerm;
+        return $this->getJsonResponse($request, $data);
+    }
+
+    /**
+     * @Route("/folders/{folderId}", name="_api_folder")
+     * @param Request $request
+     * @param string  $folderId
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiFolderAction(Request $request, $folderId)
+    {
+        $data = $this->get('google_drive')->getFile($folderId);
 
         return $this->getJsonResponse($request, $data);
     }
@@ -59,13 +66,14 @@ class ApiController extends BaseController
     /**
      * @Route("/folders", name="_api_folders")
      * @param Request $request
+     * @param string  $id      UUID for file/folder resource
      *
      * @return array|RedirectResponse
      */
     public function apiFoldersListAction(Request $request)
     {
         $optParams = new GoogleDriveListParameters();
-        $data = $this->getFoldersList($optParams);
+        $data = $this->get('google_drive')->getFilesList(true, $optParams);
 
         return $this->getJsonResponse($request, $data);
     }
@@ -92,7 +100,13 @@ class ApiController extends BaseController
         return $this->getJsonResponse($request, $data);
     }
 
-    protected function getJsonResponse(Request $request, $data = array())
+    /**
+     * @param Request $request
+     * @param mixed   $data
+     *
+     * @return JsonResponse
+     */
+    protected function getJsonResponse(Request $request, $data = null)
     {
         $date = new \DateTime();
         $date->modify('+1 day');

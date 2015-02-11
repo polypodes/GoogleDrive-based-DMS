@@ -49,6 +49,11 @@ class GoogleDriveListParameters
     protected $corpus;
 
     /**
+     * @var string The original searched term
+     */
+    protected $searchTerm;
+
+    /**
      * @param string $query
      * @param int    $maxResults
      * @param string $pageToken
@@ -56,25 +61,65 @@ class GoogleDriveListParameters
      */
     public function __construct($query = null, $pageToken = null, $maxResults = 100, $corpus = null)
     {
-        $this->query      = $query;
+        $this->query = $this->searchTerm = $query;
+        if (!empty($this->query)) {
+            $stripped = str_replace("'", "\\'", $this->query);
+            $this->query = sprintf("title contains '%s'", $stripped);
+            $this->query .= sprintf(" or fullText contains '%s'", $stripped);
+        }
+
         $this->pageToken  = $pageToken;
         $this->maxResults = $maxResults;
         $this->corpus     = $corpus;
     }
 
     /**
+     * @return string
+     */
+    public function buildFullTextSearchQuery()
+    {
+        $query = '';
+
+        return $query;
+    }
+
+    /**
      * @see Google_Service_Drive_Files_Resource::listFiles()
+     *
+     * @param bool $extended
      *
      * @return array
      */
-    public function getArray()
+    public function getArray($extended = false)
     {
-        return array(
+        $result = array(
             'q'          => $this->query,
             'maxResults' => $this->maxResults,
             'pageToken'  => $this->pageToken,
             'corpus'     => $this->corpus,
         );
+
+        if ($extended) {
+            $result['searchTerm'] = $this->searchTerm;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSearchTerm()
+    {
+        return $this->searchTerm;
+    }
+
+    /**
+     * @param string $searchTerm
+     */
+    public function setSearchTerm($searchTerm)
+    {
+        $this->searchTerm = $searchTerm;
     }
 
     /**
