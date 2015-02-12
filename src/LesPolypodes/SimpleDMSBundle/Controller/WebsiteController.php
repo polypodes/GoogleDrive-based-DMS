@@ -15,6 +15,7 @@ namespace LesPolypodes\SimpleDMSBundle\Controller;
 use LesPolypodes\SimpleDMSBundle\Service\GoogleDriveListParameters;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -48,10 +49,23 @@ class WebsiteController extends Controller
      */
     public function folderAction(Request $request, $folderId)
     {
-        $result = $this->get('google_drive')->getFile($folderId);
-        $result['children'] = $this->get('google_drive')->getChildren($folderId);
+        if ($folderId === $this->get('google_drive')->getRootFolderId()) {
+            return $this->redirect($this->generateUrl('_files'), 301);
+        }
+        $optParams = new GoogleDriveListParameters();
+        if ($request->query->has("pageToken")) {
+            $optParams->setPageToken($request->get("pageToken"));
+        }
 
-       // die(var_dump($result['file']['parents'][0]['id']));
+        var_dump($optParams);
+        $result = $this->get('google_drive')->getChildren($folderId);
+        //die(var_dump(array($_GET, $result)));
+
+        $result['pagination'] = $this->buildPagination(
+            $result['items']['nextPageToken'],
+            $optParams,
+            $this->generateUrl('_folder', array('folderId' => $folderId))
+        );
 
         return $result;
     }
@@ -78,7 +92,6 @@ class WebsiteController extends Controller
         $form->setMethod('GET');
         $form = $form->getForm();
 
-        $pageToken = null;
         $data = array("q" => "");
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -92,24 +105,27 @@ class WebsiteController extends Controller
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
         //var_dump($optParams, $_GET, $result['files']['nextPageToken']);
         $result['form'] = $form->createView();
-        $result['pagination'] = $this->buildPagination($optParams, $result['items']['nextPageToken']);
+        $result['pagination'] = $this->buildPagination($result['items']['nextPageToken'], $optParams);
         //die(var_dump($optParams, $_GET, $request->get('pageToken'), $data, $query, $searchTerm, $result['pagination'], $result['files']));
+        //die(var_dump($result['files']));
         return $result;
     }
 
     /**
-     * @param GoogleDriveListParameters $optParams
      * @param string                    $nextPageToken
+     * @param GoogleDriveListParameters $optParams
+     * @param string                    $prefixUrl     route Url
      *
      * @return array
      */
-    protected function buildPagination($optParams, $nextPageToken)
+    protected function buildPagination($nextPageToken, $optParams = null, $prefixUrl = null)
     {
-        $nextUrl = '';
+        $nextUrl = (!empty($prefixUrl)) ? $prefixUrl : null;
+        $searchTerm = (!is_null($optParams)) ? $optParams->getSearchTerm() : '';
         if (!empty($nextPageToken)) {
-            $nextUrl = sprintf(
+            $nextUrl .= sprintf(
                 "?q=%s&pageToken=%s",
-                $optParams->getSearchTerm(),
+                $searchTerm,
                 $nextPageToken
             );
         }

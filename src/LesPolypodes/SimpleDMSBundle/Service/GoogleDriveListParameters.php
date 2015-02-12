@@ -63,7 +63,7 @@ class GoogleDriveListParameters
     {
         $this->query = $this->searchTerm = $query;
         if (!empty($this->query)) {
-            $stripped = str_replace("'", "\\'", $this->query);
+            $stripped = $this->query;// str_replace("'", "\\'", $this->query);
             $this->query = sprintf("title contains '%s'", $stripped);
             $this->query .= sprintf(" or fullText contains '%s'", $stripped);
         }

@@ -26,29 +26,21 @@
     </div>
 
     <div class="row">
-        {% if file is defined %}
-            <h2>{{ file.title }}</h2>
-            {% if file.parents.0.id is defined %}
+        {% if folder.file is defined %}
+            <h2>{{ folder.file.title }}</h2>
+            {% if folder.file.parents.0.id is defined %}
             <h3>
-                [<a href="{{ url("_folder", {folderId: file.parents.0.id} ) }}">parent</a>]
+                [<a href="{{ url("_folder", {folderId: folder.file.parents.0.id} ) }}">parent</a>]
             </h3>
             {% endif %}
         {% endif %}
-        {% if children.list is defined and 0 < children.list|length %}
-            {% for file in children.list %}
+        {% if items is defined and 0 < items|length %}
+            {% for file in items %}
                 <div class="col-md-4">
-                    {% include "@LesPolypodesSimpleDMS/Website/file.html.twig"
+                    {% include "@LesPolypodesSimpleDMS/Website/common/file.html.twig"
                     with {"file": file} %}
                 </div>
             {% endfor %}
-        {% endif %}
-        {% if file is defined %}
-            {# for file in children %}
-                <div class="col-md-4">
-                    {% include "@LesPolypodesSimpleDMS/Website/file.html.twig"
-                        with {"file": file} %}
-                </div>
-            {% endfor #}
         {% endif %}
     </div>
 

@@ -29,7 +29,7 @@
         {% if items is defined and 0 < items|length %}
             {% for file in items %}
                 <div class="col-md-4">
-                    {% include "@LesPolypodesSimpleDMS/Website/file.html.twig"
+                    {% include "@LesPolypodesSimpleDMS/Website/common/file.html.twig"
                         with {"file": file} %}
                 </div>
             {% endfor %}

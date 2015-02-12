@@ -100,6 +100,7 @@ class GoogleDriveService
     /**
      * @param bool                      $isFolder  = true
      * @param GoogleDriveListParameters $optParams
+     * @param bool                      $noTrash   = true
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
@@ -137,6 +138,31 @@ class GoogleDriveService
         }
 
         return $result;
+    }
+
+    public function getChildren($folderId, $isFolder = false, GoogleDriveListParameters $optParams = null, $noTrash = true)
+    {
+        $result = array();
+        $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
+        $optParams->setQuery(sprintf("'%s' in parents", $folderId));
+
+        try {
+            $result = $this->getFilesList($isFolder, $optParams);
+            $result['folder'] = $this->getFile($folderId);
+            /*
+            $children = $this->service->children->listChildren($folderId);
+            $result = array('children' => $children);
+            foreach ($children as $child) {
+                $result['list'][] = $this->service->files->get($child->id);
+                break;
+            `
+            */
+
+            return $result;
+        } catch (\Exception $e) {
+            $errorMessage = $this->translator->trans('Given Folder ID do not match any be Google Folder you can access');
+            throw new HttpException(500, $errorMessage, $e);
+        }
     }
 
     /**
@@ -186,22 +212,6 @@ class GoogleDriveService
         }
     }
 
-    public function getChildren($folderId)
-    {
-        try {
-            $children = $this->service->children->listChildren($folderId);
-            $result = array('children' => $children);
-            foreach ($children as $child) {
-                $result['list'][] = $this->service->files->get($child->id);
-            }
-
-            return $result;
-        } catch (\Exception $e) {
-            $errorMessage = $this->translator->trans('Given Folder ID do not match any be Google Folder you can access');
-            throw new HttpException(500, $errorMessage, $e);
-        }
-    }
-
     /**
      * @return array
      */
@@ -217,6 +227,11 @@ class GoogleDriveService
         );
     }
 
+    public function getRootFolderId()
+    {
+        return $this->container->getParameter('dms.root_folder_id');
+    }
+
     /**
      * @param bool                      $isFolder
      * @param GoogleDriveListParameters $optParams
@@ -228,6 +243,7 @@ class GoogleDriveService
         $files = $this->getFiles($isFolder, $optParams);
 
         $result = array(
+            'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,
             'query'             => $files['query'],
             'has_pagination'    => !empty($files['result']['nextPageToken']),
             'usages'            => $this->getUsage(),
@@ -235,10 +251,6 @@ class GoogleDriveService
             'count'             => count($files['result']['modelData']['items']),
             'list'              => $files['result']['modelData']['items'],
         );
-
-        if (!is_null($optParams)) {
-            $result['optParams'] = $optParams->getArray(true);
-        }
 
         return $result;
     }
