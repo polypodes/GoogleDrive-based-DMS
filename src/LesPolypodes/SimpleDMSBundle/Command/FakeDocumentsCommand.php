@@ -143,7 +143,7 @@ class FakeDocumentsCommand extends ContainerAwareCommand
     {
         $faker = Faker\Factory::create('fr_FR');
         $image = Faker\Provider\Image::image();
-        $result = sprintf("%s/%s.jpg", $fakeDir, $faker->slug);
+        $result = sprintf("%s/image-%s.jpg", $fakeDir, $faker->slug(3));
         rename($image, $result);
 
         return $result;
@@ -166,21 +166,22 @@ class FakeDocumentsCommand extends ContainerAwareCommand
             $elements[] = $faker->paragraph(mt_rand(30, 50));
         }
 
-        $elements[] = " fake";
+        $elements[] = "This is a fake (RAW) TXT file.";
         $txt = implode("\n\r\n\r", $elements);
 
-        $result = sprintf("%s/%s.%s", $fakeDir, $faker->slug, 'txt');
+        $result = sprintf("%s/%s.%s", $fakeDir, $faker->slug(3), 'txt');
         file_put_contents($result, $txt);
 
         return $result;
     }
 
     /**
-     * @param $fakeDir
+     * @param string $fakeDir fakeDir path
+     * @param string $endType The generated document end type, other than natural markdown (ex: pdf, etc.)
      *
      * @return string
      */
-    protected function createMarkdownFile($fakeDir)
+    protected function createMarkdownFile($fakeDir, $endType = "MARKDOWN (md)")
     {
         $faker = Faker\Factory::create('fr_FR');
 
@@ -193,10 +194,10 @@ class FakeDocumentsCommand extends ContainerAwareCommand
             $elements[] = "##".$faker->sentence();
             $elements[] = "__".$faker->sentence()."__ ".$faker->paragraph(mt_rand(30, 50));
         }
-        $elements[] = " fake";
+        $elements[] = sprintf(" This is a fake %s file", $endType);
         $txt = implode("\n\r\n\r", $elements);
 
-        $result = sprintf("%s/%s.%s", $fakeDir, $faker->slug, 'md');
+        $result = sprintf("%s/%s.%s", $fakeDir, $faker->slug(3), 'md');
         file_put_contents($result, $txt);
 
         return $result;
@@ -214,7 +215,7 @@ class FakeDocumentsCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException("PDF document cannot be generated: Please install Pandoc: http://johnmacfarlane.net/pandoc/installing.html");
         }
 
-        $markdown = $this->createMarkdownFile($fakeDir);
+        $markdown = $this->createMarkdownFile($fakeDir, "Portable Document Format (PDF)");
         $result = str_replace('.md', '.pdf', $markdown);
         exec(sprintf("pandoc %s -o %s", $markdown, $result));
         unlink($markdown);
@@ -251,11 +252,11 @@ class FakeDocumentsCommand extends ContainerAwareCommand
                 )
             );
 
-            $section->addText(" fake");
+            $section->addText("This is a fake Microsoft Word file.");
             $section->addTextBreak();
         }
         $objWriter = PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $result = sprintf("%s/%s.%s", $fakeDir, $faker->slug, 'docx');
+        $result = sprintf("%s/%s.%s", $fakeDir, $faker->slug(3), 'docx');
         $objWriter->save($result);
 
         return $result;
