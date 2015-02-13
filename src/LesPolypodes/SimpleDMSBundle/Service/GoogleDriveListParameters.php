@@ -22,7 +22,9 @@ class GoogleDriveListParameters
     /**
      * query suffix helper
      */
-    const NO_TRASH = " and trashed = false";
+    const NO_TRASH = 'trashed = false';
+    const FOLDERS = 'mimeType = "application/vnd.google-apps.folder"';
+    const NO_FOLDERS = 'mimeType != "application/vnd.google-apps.folder"';
 
     /**
      * @var string Query string for searching files
@@ -146,6 +148,11 @@ class GoogleDriveListParameters
     public function setQuery($query)
     {
         $this->query = $query;
+    }
+
+    public function hasQuery()
+    {
+        return empty($this->query);
     }
 
     /**

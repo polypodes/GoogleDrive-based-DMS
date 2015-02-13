@@ -98,9 +98,9 @@ class GoogleDriveService
     }
 
     /**
-     * @param bool                      $isFolder  = true
+     * @param bool                      $isFolder       = true
      * @param GoogleDriveListParameters $optParams
-     * @param bool                      $noTrash   = true
+     * @param string                    $parentFolderId
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
@@ -108,24 +108,29 @@ class GoogleDriveService
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFiles($isFolder = true, GoogleDriveListParameters $optParams = null, $noTrash = true)
+    public function getFiles($isFolder = true, GoogleDriveListParameters $optParams = null, $parentFolderId = "")
     {
         $result = array();
         $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
-        $optParams->setQuery(("" == $optParams->getQuery()) ? "" : sprintf(" and (%s)", $optParams->getQuery()));
+        $optParams->setQuery(sprintf("%s and (%s)", GoogleDriveListParameters::NO_TRASH, $optParams->getQuery()));
 
-        $operator = ($isFolder) ? "=" : "!=";
-        $filter = sprintf("%s %s %s", 'mimeType', $operator, '"application/vnd.google-apps.folder"');
-
-        $optParams->setQuery(sprintf("%s%s", $filter, $optParams->getQuery()));
-        if ($noTrash) {
-            $optParams->setQuery(sprintf("%s%s", $optParams->getQuery(), GoogleDriveListParameters::NO_TRASH));
+        // Filters
+        $filters = array();
+        $filters['type'] = ($isFolder) ? GoogleDriveListParameters::FOLDERS : GoogleDriveListParameters::NO_FOLDERS;
+        if (!empty($parentFolderId)) {
+            $filters['parentFolder'] = sprintf('"%s" in parents', $parentFolderId);
         }
-        $this->container->get('monolog.logger.queries')->info($optParams->getJson());
 
+        foreach ($filters as $filter) {
+            $optParams->setQuery(sprintf("%s and (%s)", $optParams->getQuery(), $filter));
+        }
+
+        $this->container->get('monolog.logger.queries')->info($optParams->getJson());
         try {
-            $result['query']    = $optParams->getQuery();
-            $result['result']   = $this->service->files->listFiles($optParams->getArray());
+            $files = $this->service->files->listFiles($optParams->getArray());
+            $result['query']            = $optParams->getQuery();
+            $result['nextPageToken']    = $files->getNextPageToken();
+            $result['result']           = $files;
         } catch (\Exception $ge) {
             $errorMessage = sprintf(
                 "%s.\n%s.",
@@ -138,31 +143,6 @@ class GoogleDriveService
         }
 
         return $result;
-    }
-
-    public function getChildren($folderId, $isFolder = false, GoogleDriveListParameters $optParams = null, $noTrash = true)
-    {
-        $result = array();
-        $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
-        $optParams->setQuery(sprintf("'%s' in parents", $folderId));
-
-        try {
-            $result = $this->getFilesList($isFolder, $optParams);
-            $result['folder'] = $this->getFile($folderId);
-            /*
-            $children = $this->service->children->listChildren($folderId);
-            $result = array('children' => $children);
-            foreach ($children as $child) {
-                $result['list'][] = $this->service->files->get($child->id);
-                break;
-            `
-            */
-
-            return $result;
-        } catch (\Exception $e) {
-            $errorMessage = $this->translator->trans('Given Folder ID do not match any be Google Folder you can access');
-            throw new HttpException(500, $errorMessage, $e);
-        }
     }
 
     /**
@@ -235,12 +215,18 @@ class GoogleDriveService
     /**
      * @param bool                      $isFolder
      * @param GoogleDriveListParameters $optParams
+     * @param string                    $parentFolderId
      *
      * @return array
      */
-    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null)
+    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null, $parentFolderId = null)
     {
-        $files = $this->getFiles($isFolder, $optParams);
+        $files = $this->getFiles($isFolder, $optParams, $parentFolderId);
+        if (!empty($files)) {
+            var_dump(array($files['nextPageToken'], $files['query']));
+        }
+        //var_dump(array($optParams, $files['result']['nextPageToken'], $files->getNextPageToken()));
+
 
         $result = array(
             'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,

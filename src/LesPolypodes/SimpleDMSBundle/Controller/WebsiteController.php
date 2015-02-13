@@ -57,8 +57,7 @@ class WebsiteController extends Controller
             $optParams->setPageToken($request->get("pageToken"));
         }
 
-        var_dump($optParams);
-        $result = $this->get('google_drive')->getChildren($folderId);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
         //die(var_dump(array($_GET, $result)));
 
         $result['pagination'] = $this->buildPagination(
