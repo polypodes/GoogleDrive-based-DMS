@@ -152,7 +152,7 @@ class GoogleDriveListParameters
 
     public function hasQuery()
     {
-        return empty($this->query);
+        return !empty($this->query);
     }
 
     /**

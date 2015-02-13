@@ -101,10 +101,13 @@ class WebsiteController extends Controller
         $pageToken = $request->get("pageToken"); // not a form field
         $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        //$result = [];
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
         //var_dump($optParams, $_GET, $result['files']['nextPageToken']);
         $result['form'] = $form->createView();
-        $result['pagination'] = $this->buildPagination($result['items']['nextPageToken'], $optParams);
+        if (!empty($result['items'])) {
+            $result['pagination'] = $this->buildPagination($result['items']['nextPageToken'], $optParams);
+        }
         //die(var_dump($optParams, $_GET, $request->get('pageToken'), $data, $query, $searchTerm, $result['pagination'], $result['files']));
         //die(var_dump($result['files']));
         return $result;

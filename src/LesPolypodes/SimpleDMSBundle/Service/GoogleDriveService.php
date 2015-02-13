@@ -112,18 +112,23 @@ class GoogleDriveService
     {
         $result = array();
         $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
-        $optParams->setQuery(sprintf("%s and (%s)", GoogleDriveListParameters::NO_TRASH, $optParams->getQuery()));
 
         // Filters
         $filters = array();
         $filters['type'] = ($isFolder) ? GoogleDriveListParameters::FOLDERS : GoogleDriveListParameters::NO_FOLDERS;
+        $filters['noTrash'] = GoogleDriveListParameters::NO_TRASH;
         if (!empty($parentFolderId)) {
-            $filters['parentFolder'] = sprintf('"%s" in parents', $parentFolderId);
+            $filters['parentFolder'] =  sprintf('"%s" in parents', $parentFolderId);
         }
-
+        //var_dump($filters);
         foreach ($filters as $filter) {
-            $optParams->setQuery(sprintf("%s and (%s)", $optParams->getQuery(), $filter));
+            if ($optParams->hasQuery()) {
+                $optParams->setQuery(sprintf("%s and (%s)", $optParams->getQuery(), $filter));
+            } else {
+                $optParams->setQuery($filter);
+            }
         }
+       // die(var_dump($optParams));
 
         $this->container->get('monolog.logger.queries')->info($optParams->getJson());
         try {
