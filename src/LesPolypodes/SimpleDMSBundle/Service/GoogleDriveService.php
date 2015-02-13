@@ -233,11 +233,19 @@ class GoogleDriveService
             'query'             => $files['query'],
             'has_pagination'    => !empty($files['result']['nextPageToken']),
             'usages'            => $this->getUsage(),
-            'items'             => $files['result'],
             'count'             => count($files['result']['modelData']['items']),
-            'list'              => $files['result']['modelData']['items'],
+            'orderedList'       => $files['result']['modelData']['items'],
+            'nextPageToken'     => $files['result']['nextPageToken'],
         );
 
+        usort($result['orderedList'], array($this, "fileCompare"));
+        //die(var_dump($result['orderedList']));
+
         return $result;
+    }
+
+    protected function fileCompare($a, $b)
+    {
+        return strcmp($a['title'], $b['title']);
     }
 }

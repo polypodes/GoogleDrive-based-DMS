@@ -15,19 +15,22 @@
             {% include "@LesPolypodesSimpleDMS/Website/common/form.html.twig" with {'form': form } %}
         {% endif %}
 
-        {% if has_pagination is defined %}
+        <div>per-pagination count: {{ count }}</div>
+
+        {% if has_pagination is defined and has_pagination %}
             {% include "@LesPolypodesSimpleDMS/Website/common/paginator.html.twig"
                 with {
                     'has_pagination':   has_pagination,
                     'pagination':       pagination,
+                    'count':            count
                 }
             %}
         {% endif %}
     </div>
 
     <div class="row">
-        {% if items is defined and 0 < items|length %}
-            {% for file in items %}
+        {% if orderedList is defined and 0 < orderedList|length %}
+            {% for file in orderedList %}
                 <div class="col-md-4">
                     {% include "@LesPolypodesSimpleDMS/Website/common/file.html.twig"
                         with {"file": file} %}

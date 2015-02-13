@@ -58,13 +58,18 @@ class WebsiteController extends Controller
         }
 
         $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
-        //die(var_dump(array($_GET, $result)));
 
         $result['pagination'] = $this->buildPagination(
-            $result['items']['nextPageToken'],
+            $result['nextPageToken'],
             $optParams,
             $this->generateUrl('_folder', array('folderId' => $folderId))
         );
+
+        if ($request->query->has("pageToken")
+            && !empty($result['nextPageToken'])
+            && $request->query->get("pageToken") == $result['nextPageToken']) {
+            $result['has_pagination'] = false;
+        }
 
         return $result;
     }
@@ -95,18 +100,15 @@ class WebsiteController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
-            //var_dump('DUDE, YOUR FORM is VALID!');
         }
 
         $pageToken = $request->get("pageToken"); // not a form field
         $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
-        //var_dump($optParams, $_GET, $result['files']['nextPageToken']);
         $result['form'] = $form->createView();
-        $result['pagination'] = $this->buildPagination($result['items']['nextPageToken'], $optParams);
-        //die(var_dump($optParams, $_GET, $request->get('pageToken'), $data, $query, $searchTerm, $result['pagination'], $result['files']));
-        //die(var_dump($result['files']));
+        $result['pagination'] = $this->buildPagination($result['nextPageToken'], $optParams);
+
         return $result;
     }
 
