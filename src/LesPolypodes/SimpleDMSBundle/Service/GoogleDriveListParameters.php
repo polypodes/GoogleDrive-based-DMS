@@ -98,7 +98,7 @@ class GoogleDriveListParameters
             'q'          => $this->query,
             'maxResults' => $this->maxResults,
             'pageToken'  => $this->pageToken,
-            'corpus'     => $this->corpus,
+            //'corpus'     => $this->corpus,
         );
 
         if ($extended) {

@@ -64,6 +64,7 @@ class WebsiteController extends Controller
             $optParams,
             $this->generateUrl('_folder', array('folderId' => $folderId))
         );
+        $result['total'] = $this->get('google_drive')->getChildrenCount($folderId);
 
         if ($request->query->has("pageToken")
             && !empty($result['nextPageToken'])

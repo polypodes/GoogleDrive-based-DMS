@@ -15,7 +15,7 @@
             {% include "@LesPolypodesSimpleDMS/Website/common/form.html.twig" with {'form': form } %}
         {% endif %}
 
-        <div>per-pagination count: {{ count }}</div>
+        <div>In this page: {{ count }} files</div>
 
         {% if has_pagination is defined and has_pagination %}
             {% include "@LesPolypodesSimpleDMS/Website/common/paginator.html.twig"

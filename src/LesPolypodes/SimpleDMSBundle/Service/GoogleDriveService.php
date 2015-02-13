@@ -207,6 +207,41 @@ class GoogleDriveService
         );
     }
 
+    /**
+     * @param $folderId
+     *
+     * @slink http://stackoverflow.com/a/16299157/490589 (C# version)
+     * @link http://stackoverflow.com/a/17743049/490589 (Java version)
+     *
+     * @return int|null
+     * @throws \Exception
+     */
+    public function getChildrenCount($folderId)
+    {
+        if (is_null($folderId)) {
+            return;
+        }
+
+        $nextToken = null;
+        $total = $loop = 0;
+        $optParams = new GoogleDriveListParameters();
+        $optParams->setMaxResults(1000);
+        $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
+        var_dump(array($folderId, $optParams));
+        do {
+            $result = $this->service->children->listChildren($folderId, $optParams->getArray());
+            $total += count($result->getItems());
+            $nextToken = $result->getNextPageToken();
+            $optParams->setPageToken($nextToken);
+            $loop++;
+            if (100 <= $loop) {
+                throw new \Exception(sprintf("security advisory: max %d loops occurred", $loop));
+            }
+        } while (!empty($nextToken));
+
+        return $total;
+    }
+
     public function getRootFolderId()
     {
         return $this->container->getParameter('dms.root_folder_id');
@@ -227,7 +262,7 @@ class GoogleDriveService
         }
         //var_dump(array($optParams, $files['result']['nextPageToken'], $files->getNextPageToken()));
 
-
+        //die(var_dump($files['result']));
         $result = array(
             'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,
             'query'             => $files['query'],
