@@ -1,0 +1,16 @@
+{% extends 'LesPolypodesSimpleDMSBundle::layout.html.twig' %}
+
+{% block content %}
+   <div class="row">
+       <ul>
+       {% for folder in folders %}
+           <li><a href="{{ url("_folder", {folderId: folder.id} ) }}">{{ folder.title }}</a></li>
+       {% endfor %}
+       </ul>
+    </div>
+
+    {% javascripts '@LesPolypodesSimpleDMSBundle/Resources/public/js/*' output='js/vendors/main.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}

@@ -35,7 +35,7 @@ class WebsiteController extends Controller
      *
      * @return array
      */
-    public function foldersAction(Request $request)
+    public function foldersAction(Request $request, $id = null)
     {
     }
 
@@ -64,7 +64,9 @@ class WebsiteController extends Controller
             $optParams,
             $this->generateUrl('_folder', array('folderId' => $folderId))
         );
-        $result['total'] = $this->get('google_drive')->getChildrenCount($folderId);
+        $result['children'] = $this->get('google_drive')->getChildren($folderId);
+        $result['folders'] = $this->get('google_drive')->getFolders($folderId);
+        $result['total'] = count($result['children']);
 
         if ($request->query->has("pageToken")
             && !empty($result['nextPageToken'])
@@ -106,7 +108,7 @@ class WebsiteController extends Controller
         $pageToken = $request->get("pageToken"); // not a form field
         $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
-        $result['folders'] = $this->get('google_drive')->getFilesList(true);
+        $result['folders'] = $this->get('google_drive')->getFolders();
         $result['form'] = $form->createView();
         $result['pagination'] = $this->buildPagination($result['nextPageToken'], $optParams);
 

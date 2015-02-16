@@ -209,7 +209,8 @@ class GoogleDriveService
     }
 
     /**
-     * @param $folderId
+     * @param int  $folderId
+     * @param bool $isFolder
      *
      * @slink http://stackoverflow.com/a/16299157/490589 (C# version)
      * @link http://stackoverflow.com/a/17743049/490589 (Java version)
@@ -217,30 +218,34 @@ class GoogleDriveService
      * @return int|null
      * @throws \Exception
      */
-    public function getChildrenCount($folderId)
+    public function getChildren($folderId, $isFolder = false)
     {
         if (is_null($folderId)) {
             return;
         }
 
         $nextToken = null;
+        $result = array();
         $total = $loop = 0;
         $optParams = new GoogleDriveListParameters();
         $optParams->setMaxResults(1000);
         $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
-        var_dump(array($folderId, $optParams));
-        do {
-            $result = $this->service->children->listChildren($folderId, $optParams->getArray());
-            $total += count($result->getItems());
-            $nextToken = $result->getNextPageToken();
-            $optParams->setPageToken($nextToken);
-            $loop++;
-            if (100 <= $loop) {
-                throw new \Exception(sprintf("security advisory: max %d loops occurred", $loop));
-            }
-        } while (!empty($nextToken));
+        if ($isFolder) {
+            $optParams->setQuery(sprintf(
+                "%s and %s",
+                $optParams->getQuery(),
+                GoogleDriveListParameters::FOLDERS
+            ));
+        }
+        $optParams->setQuery(sprintf(
+            "%s and '%s' in parents",
+            $optParams->getQuery(),
+            $folderId
+        ));
 
-        return $total;
+        $this->container->get('monolog.logger.queries')->info($optParams->getJson());
+
+        return array_merge($result, $this->service->files->listFiles($optParams->getArray())->getItems());
     }
 
     public function getRootFolderId()
@@ -271,6 +276,18 @@ class GoogleDriveService
         //usort($result['orderedList'], array($this, "fileCompare"));
 
         return $result;
+    }
+
+    public function getFolders($folderId = null)
+    {
+        $folderId = !empty($folderId) ? $folderId :  $this->getRootFolderId();
+        $result = $this->getChildren($folderId, true);
+        $treeView = array();
+        foreach ($result as $index => $folder) {
+            $treeView[] = array('id' => $folder['id'], 'title' => $folder['title']);
+        }
+
+        return $treeView;
     }
 
     protected function fileCompare($a, $b)
