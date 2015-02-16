@@ -13,16 +13,16 @@
 
 ## v1.1
 - [x] GET request for search route
-- [ ] JSON Api using same URL with different extension, default remain HTML as it is now
+- [X] JSON Api using same URL with different extension, default remain HTML as it is now
 - [ ] give more info about images dimension - see Google Drive API doc
 - [ ] Give complete folders list tree as a JSON
-- [ ] OAuth2 client
-- [ ] Use Google paginated result & pagination token system
+- [X] OAuth2 client
+- [X] Use Google paginated result & pagination token system
 - [ ] Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
 - [ ] Building browsable folders treeview, sarting from the `root` typed folder
 - [ ] JSON: most downloaded docs using Google API
 - [ ] JSON: last uploaded docs using Google API
-- [ ] predictable API-like URLs, even for HTML front
+- [X] predictable API-like URLs, even for HTML front
 - [ ] Front-end design
 
 
