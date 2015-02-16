@@ -226,17 +226,18 @@ class GoogleDriveService
 
         $nextToken = null;
         $result = array();
-        $total = $loop = 0;
         $optParams = new GoogleDriveListParameters();
         $optParams->setMaxResults(1000);
         $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
+        $condition = GoogleDriveListParameters::NO_FOLDERS;
         if ($isFolder) {
-            $optParams->setQuery(sprintf(
-                "%s and %s",
-                $optParams->getQuery(),
-                GoogleDriveListParameters::FOLDERS
-            ));
+            $condition = GoogleDriveListParameters::FOLDERS;
         }
+        $optParams->setQuery(sprintf(
+            "%s and %s",
+            $optParams->getQuery(),
+            $condition
+        ));
         $optParams->setQuery(sprintf(
             "%s and '%s' in parents",
             $optParams->getQuery(),
@@ -288,6 +289,30 @@ class GoogleDriveService
         }
 
         return $treeView;
+    }
+
+    /**
+     * @param string                    $nextPageToken
+     * @param GoogleDriveListParameters $optParams
+     * @param string                    $prefixUrl     route Url
+     *
+     * @return array
+     */
+    public function buildPagination($nextPageToken, $optParams = null, $prefixUrl = null)
+    {
+        $nextUrl = (!empty($prefixUrl)) ? $prefixUrl : null;
+        $searchTerm = (!is_null($optParams)) ? $optParams->getSearchTerm() : '';
+        if (!empty($nextPageToken)) {
+            $nextUrl .= sprintf(
+                "?q=%s&pageToken=%s",
+                $searchTerm,
+                $nextPageToken
+            );
+        }
+
+        return array(
+            'nextUrl' => $nextUrl,
+        );
     }
 
     protected function fileCompare($a, $b)

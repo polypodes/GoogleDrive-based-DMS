@@ -65,6 +65,19 @@ class ApiController extends Controller
     }
 
     /**
+     * @Route("/folders", name="_folders")
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function apiFoldersAction(Request $request)
+    {
+        $result = $this->get('google_drive')->getFolders();
+
+        return $this->getJsonResponse($request, $result);
+    }
+
+    /**
      * @Route("/folders/{folderId}", name="_api_folder")
      * @param Request $request
      * @param string  $folderId
@@ -73,24 +86,33 @@ class ApiController extends Controller
      */
     public function apiFolderAction(Request $request, $folderId)
     {
-        $data = $this->get('google_drive')->getFile($folderId);
-
-        return $this->getJsonResponse($request, $data);
-    }
-
-    /**
-     * @Route("/folders", name="_api_folders")
-     * @param Request $request
-     * @param string  $id      UUID for file/folder resource
-     *
-     * @return array|RedirectResponse
-     */
-    public function apiFoldersListAction(Request $request)
-    {
+        if ($folderId === $this->get('google_drive')->getRootFolderId()) {
+            return $this->redirect($this->generateUrl('_files'), 301);
+        }
         $optParams = new GoogleDriveListParameters();
-        $data = $this->get('google_drive')->getFilesList(true, $optParams);
+        if ($request->query->has("pageToken")) {
+            $optParams->setPageToken($request->get("pageToken"));
+        }
 
-        return $this->getJsonResponse($request, $data);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
+
+        $result['pagination'] = $this->get('google_drive')->buildPagination(
+            $result['nextPageToken'],
+            $optParams,
+            $this->generateUrl('_folder', array('folderId' => $folderId))
+        );
+        $result['folder'] = $this->get('google_drive')->getFile($folderId);
+        $result['folders'] = $this->get('google_drive')->getFolders($folderId);
+        //$result['children'] = $this->get('google_drive')->getChildren($folderId);
+        $result['total'] = count($result['list']);
+
+        if ($request->query->has("pageToken")
+            && !empty($result['nextPageToken'])
+            && $request->query->get("pageToken") == $result['nextPageToken']) {
+            $result['has_pagination'] = false;
+        }
+
+        return $this->getJsonResponse($request, $result);
     }
 
     /**
