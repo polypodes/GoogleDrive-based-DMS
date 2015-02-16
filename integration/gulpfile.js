@@ -9,13 +9,16 @@ var reactify = require('reactify');
 var reload = browserSync.reload;
 var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
+var less = require('gulp-less');
+var prefixer = require('gulp-autoprefixer');
 
 gulp.task('browser-sync', function() {
     browserSync({
         server: {
             baseDir: './public'
         },
-        injectChanges: true
+        injectChanges: true,
+        open: false
     });
 });
 
@@ -23,6 +26,15 @@ gulp.task('template', function() {
     return gulp.src('./src/*.html')
         .pipe(gulp.dest('./public/'));
 });
+
+gulp.task('style', function () {
+    return gulp.src('./src/less/style.less')
+    .pipe(less({compress: true}))
+    .pipe(gulp.dest('./public/css'))
+    .pipe(prefixer('last 5 versions', 'ie 8'))
+    .pipe(browserSync.reload({stream:true}));
+    }
+);
 
 /**
  * Browserify poop
@@ -48,6 +60,7 @@ function bundle() {
     .pipe(reload({stream:true}));
 }
 
-gulp.task('default', ['script', 'template', 'browser-sync'], function() {
+gulp.task('default', ['script', 'style', 'template', 'browser-sync'], function() {
     gulp.watch('./src/*.html', ['template', browserSync.reload]);
+    gulp.watch('./src/less/**/*.less', ['style']);
 });

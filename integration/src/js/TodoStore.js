@@ -22,7 +22,7 @@ var TodoStore = Reflux.createStore({
 	loadTodos: function() {
 		var localStorage = window.localStorage;
 		localStorageKey = "todos";
-		
+
 		var todos = localStorage.getItem(localStorageKey);
 
 		if(todos) {
