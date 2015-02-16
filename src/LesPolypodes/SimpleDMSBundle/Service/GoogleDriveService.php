@@ -98,6 +98,154 @@ class GoogleDriveService
     }
 
     /**
+     * get Drive File metadata & content
+     *
+     * @param string|\Google_Service_Drive_DriveFile $resource downloadUrl or Drive File instance.
+     *
+     * @return array(\Google_Service_Drive_DriveFile resource, HTTP Response Body content)
+     */
+    public function getFileMetadataAndContent($resource)
+    {
+        if (!($resource instanceof \Google_Service_Drive_DriveFile)) {
+            $resource = $this->getFile($resource);
+        }
+        $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
+        if (!empty($resource)) {
+            $file = $resource['file'];
+            $request     = new \Google_Http_Request($file['downloadUrl'], 'GET', null, null);
+            $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
+            if ($httpRequest->getResponseHttpCode() == 200) {
+                return array(
+                    'file'  => $resource,
+                    'content'   => $httpRequest->getResponseBody(),
+                );
+            }
+        }
+        throw new HttpException(500, $errorMessage);
+    }
+
+    /**
+     * @param string $fileId
+     *
+     * @return \Google_Service_Drive_DriveFile $file metadata
+     */
+    public function getFile($fileId)
+    {
+        try {
+            $file = $this->service->files->get($fileId);
+            $result = array(
+                'modelData'         => $file['modelData'],
+                'file'              => $file,
+            );
+
+            return $result;
+        } catch (\Exception $e) {
+            $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
+            throw new HttpException(500, $errorMessage, $e);
+        }
+    }
+
+    public function getFolders($folderId = null)
+    {
+        $folderId = !empty($folderId) ? $folderId :  $this->getRootFolderId();
+        $result = $this->getChildren($folderId, true);
+        $treeView = array();
+        foreach ($result as $index => $folder) {
+            $treeView[] = array('id' => $folder['id'], 'title' => $folder['title']);
+        }
+
+        return $treeView;
+    }
+
+    public function getRootFolderId()
+    {
+        return $this->container->getParameter('dms.root_folder_id');
+    }
+
+    /**
+     * @param int  $folderId
+     * @param bool $isFolder
+     *
+     * @slink http://stackoverflow.com/a/16299157/490589 (C# version)
+     * @link http://stackoverflow.com/a/17743049/490589 (Java version)
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getChildren($folderId, $isFolder = false)
+    {
+        if (is_null($folderId)) {
+            return;
+        }
+
+        $nextToken = null;
+        $result = array();
+        $optParams = new GoogleDriveListParameters();
+        $optParams->setMaxResults(1000);
+        $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
+        $condition = GoogleDriveListParameters::NO_FOLDERS;
+        if ($isFolder) {
+            $condition = GoogleDriveListParameters::FOLDERS;
+        }
+        $optParams->setQuery(sprintf(
+            "%s and %s",
+            $optParams->getQuery(),
+            $condition
+        ));
+        $optParams->setQuery(sprintf(
+            "%s and '%s' in parents",
+            $optParams->getQuery(),
+            $folderId
+        ));
+
+        $this->container->get('monolog.logger.queries')->info($optParams->getJson());
+
+        return array_merge($result, $this->service->files->listFiles($optParams->getArray())->getItems());
+    }
+
+    /**
+     * @param string                    $relativeInterval
+     * @param GoogleDriveListParameters $optParams
+     *
+     * @link http://php.net/manual/en/datetime.formats.relative.php
+     *
+     * @return array
+     */
+    public function getLastModifiedFiles($relativeInterval = '-1 week', $optParams = null)
+    {
+        $now = new \DateTime($relativeInterval);
+        $condition = sprintf("modifiedDate > '%s'", $now->format(\DateTime::ISO8601));
+        $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
+        $optParams->setQuery(sprintf("%s and (%s)", $condition, $optParams->getQuery()));
+
+        return $this->getFilesList(false, $optParams);
+    }
+
+    /**
+     * @param bool                      $isFolder
+     * @param GoogleDriveListParameters $optParams
+     * @param string                    $parentFolderId
+     *
+     * @return array
+     */
+    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null, $parentFolderId = null)
+    {
+        $files = $this->getFiles($isFolder, $optParams, $parentFolderId);
+        $result = array(
+            'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,
+            'query'             => $files['query'],
+            'has_pagination'    => !empty($files['result']['nextPageToken']),
+            'usages'            => $this->getUsage(),
+            'count'             => count($files['result']['modelData']['items']),
+            'nextPageToken'     => $files['result']['nextPageToken'],
+            'list'       => $files['result']['modelData']['items'],
+        );
+
+        //usort($result['orderedList'], array($this, "fileCompare"));
+        return $result;
+    }
+
+    /**
      * @param bool                      $isFolder       = true
      * @param GoogleDriveListParameters $optParams
      * @param string                    $parentFolderId
@@ -146,54 +294,6 @@ class GoogleDriveService
     }
 
     /**
-     * get Drive File metadata & content
-     *
-     * @param string|\Google_Service_Drive_DriveFile $resource downloadUrl or Drive File instance.
-     *
-     * @return array(\Google_Service_Drive_DriveFile resource, HTTP Response Body content)
-     */
-    public function getFileMetadataAndContent($resource)
-    {
-        if (!($resource instanceof \Google_Service_Drive_DriveFile)) {
-            $resource = $this->getFile($resource);
-        }
-        $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
-        if (!empty($resource)) {
-            $file = $resource['file'];
-            $request     = new \Google_Http_Request($file['downloadUrl'], 'GET', null, null);
-            $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
-            if ($httpRequest->getResponseHttpCode() == 200) {
-                return array(
-                    'file'  => $resource,
-                    'content'   => $httpRequest->getResponseBody(),
-                );
-            }
-        }
-        throw new HttpException(500, $errorMessage);
-    }
-
-    /**
-     * @param string $fileId
-     *
-     * @return \Google_Service_Drive_DriveFile $file metadata
-     */
-    public function getFile($fileId)
-    {
-        try {
-            $file = $this->service->files->get($fileId);
-            $result = array(
-                'modelData'         => $file['modelData'],
-                'file'              => $file,
-            );
-
-            return $result;
-        } catch (\Exception $e) {
-            $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
-            throw new HttpException(500, $errorMessage, $e);
-        }
-    }
-
-    /**
      * @return array
      */
     public function getUsage()
@@ -208,87 +308,16 @@ class GoogleDriveService
         );
     }
 
-    /**
-     * @param int  $folderId
-     * @param bool $isFolder
-     *
-     * @slink http://stackoverflow.com/a/16299157/490589 (C# version)
-     * @link http://stackoverflow.com/a/17743049/490589 (Java version)
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public function getChildren($folderId, $isFolder = false)
+    // TODO
+    public function getFilesPerType($relativeInterval = '-1 week', $optParams = null)
     {
-        if (is_null($folderId)) {
-            return;
-        }
-
-        $nextToken = null;
-        $result = array();
-        $optParams = new GoogleDriveListParameters();
-        $optParams->setMaxResults(1000);
-        $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
-        $condition = GoogleDriveListParameters::NO_FOLDERS;
-        if ($isFolder) {
-            $condition = GoogleDriveListParameters::FOLDERS;
-        }
-        $optParams->setQuery(sprintf(
-            "%s and %s",
-            $optParams->getQuery(),
-            $condition
-        ));
-        $optParams->setQuery(sprintf(
-            "%s and '%s' in parents",
-            $optParams->getQuery(),
-            $folderId
-        ));
-
-        $this->container->get('monolog.logger.queries')->info($optParams->getJson());
-
-        return array_merge($result, $this->service->files->listFiles($optParams->getArray())->getItems());
+        return array();
     }
 
-    public function getRootFolderId()
+    // TODO
+    public function getFilesTypes($relativeInterval = '-1 week', $optParams = null)
     {
-        return $this->container->getParameter('dms.root_folder_id');
-    }
-
-    /**
-     * @param bool                      $isFolder
-     * @param GoogleDriveListParameters $optParams
-     * @param string                    $parentFolderId
-     *
-     * @return array
-     */
-    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null, $parentFolderId = null)
-    {
-        $files = $this->getFiles($isFolder, $optParams, $parentFolderId);
-        $result = array(
-            'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,
-            'query'             => $files['query'],
-            'has_pagination'    => !empty($files['result']['nextPageToken']),
-            'usages'            => $this->getUsage(),
-            'count'             => count($files['result']['modelData']['items']),
-            'nextPageToken'     => $files['result']['nextPageToken'],
-            'list'       => $files['result']['modelData']['items'],
-        );
-
-        //usort($result['orderedList'], array($this, "fileCompare"));
-
-        return $result;
-    }
-
-    public function getFolders($folderId = null)
-    {
-        $folderId = !empty($folderId) ? $folderId :  $this->getRootFolderId();
-        $result = $this->getChildren($folderId, true);
-        $treeView = array();
-        foreach ($result as $index => $folder) {
-            $treeView[] = array('id' => $folder['id'], 'title' => $folder['title']);
-        }
-
-        return $treeView;
+        return array();
     }
 
     /**

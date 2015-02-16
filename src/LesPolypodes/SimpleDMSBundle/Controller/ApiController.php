@@ -132,6 +132,19 @@ class ApiController extends Controller
     }
 
     /**
+     * @Route("/lastmodified", name="_api_last_modified")
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiLastModifiedAction(Request $request)
+    {
+        $data =  $this->get('google_drive')->getLastModifiedFiles();
+
+        return $this->getJsonResponse($request, $data);
+    }
+
+    /**
      * @Route("/stats", name="_api_stats")
      * @param Request $request
      *
