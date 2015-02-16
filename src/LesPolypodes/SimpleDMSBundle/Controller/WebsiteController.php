@@ -37,6 +37,9 @@ class WebsiteController extends Controller
      */
     public function foldersAction(Request $request, $id = null)
     {
+        $result['folders'] = $this->get('google_drive')->getFolders();
+
+        return $result;
     }
 
     /**
@@ -64,6 +67,7 @@ class WebsiteController extends Controller
             $optParams,
             $this->generateUrl('_folder', array('folderId' => $folderId))
         );
+        $result['folder'] = $this->get('google_drive')->getFile($folderId);
         $result['children'] = $this->get('google_drive')->getChildren($folderId);
         $result['folders'] = $this->get('google_drive')->getFolders($folderId);
         $result['total'] = count($result['children']);

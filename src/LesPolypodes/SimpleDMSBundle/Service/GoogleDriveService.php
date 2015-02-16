@@ -215,7 +215,7 @@ class GoogleDriveService
      * @slink http://stackoverflow.com/a/16299157/490589 (C# version)
      * @link http://stackoverflow.com/a/17743049/490589 (Java version)
      *
-     * @return int|null
+     * @return array
      * @throws \Exception
      */
     public function getChildren($folderId, $isFolder = false)
