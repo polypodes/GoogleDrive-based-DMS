@@ -37,16 +37,31 @@ class ApiController extends Controller
      */
     public function apiFilesListAction(Request $request, $searchTerm, $token)
     {
-        $form = $this->createFormBuilder()
+        $form = $this->get('form.factory')->createNamedBuilder(
+            '',
+            'form',
+            array('q' => null, 'pageToken' => null),
+            array(
+                'csrf_protection' => false,
+            )
+        )
             ->add('q', 'text', array('label' => ' ', 'required' => false))
-            ->setMethod('GET')
-            ->getForm();
-        $form->handleRequest($request);
+            ->add('pageToken', 'hidden', array('label' => ' ', 'required' => false));
+        $form->setMethod('GET');
+        $form = $form->getForm();
 
-        $optParams = new GoogleDriveListParameters($searchTerm, $token);
-        $data = $this->get('google_drive')->getFilesList(false, $optParams);
+        $data = array("q" => "");
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+        }
+
+        $pageToken = $request->get("pageToken"); // not a form field
+        $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
-        return $this->getJsonResponse($request, $data);
+        return $this->getJsonResponse($request, $result);
     }
 
     /**

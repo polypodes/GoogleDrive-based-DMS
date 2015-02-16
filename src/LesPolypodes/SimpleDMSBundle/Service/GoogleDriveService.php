@@ -257,24 +257,17 @@ class GoogleDriveService
     public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null, $parentFolderId = null)
     {
         $files = $this->getFiles($isFolder, $optParams, $parentFolderId);
-        if (!empty($files)) {
-            var_dump(array($files['nextPageToken'], $files['query']));
-        }
-        //var_dump(array($optParams, $files['result']['nextPageToken'], $files->getNextPageToken()));
-
-        //die(var_dump($files['result']));
         $result = array(
             'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,
             'query'             => $files['query'],
             'has_pagination'    => !empty($files['result']['nextPageToken']),
             'usages'            => $this->getUsage(),
             'count'             => count($files['result']['modelData']['items']),
-            'orderedList'       => $files['result']['modelData']['items'],
             'nextPageToken'     => $files['result']['nextPageToken'],
+            'orderedList'       => $files['result']['modelData']['items'],
         );
 
-        usort($result['orderedList'], array($this, "fileCompare"));
-        //die(var_dump($result['orderedList']));
+        //usort($result['orderedList'], array($this, "fileCompare"));
 
         return $result;
     }
