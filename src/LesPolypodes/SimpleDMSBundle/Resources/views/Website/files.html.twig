@@ -15,7 +15,11 @@
             {% include "@LesPolypodesSimpleDMS/Website/common/form.html.twig" with {'form': form } %}
         {% endif %}
 
+        {% if 'dev' == app.environment and optParams is defined and pagination is defined %}
+            {{ dump(optParams|merge(pagination)) }}
+        {% endif %}
         <div>In this page: {{ count }} files</div>
+        <div>per-pagination count: {{ count }}</div>
 
         {% if has_pagination is defined and has_pagination %}
             {% include "@LesPolypodesSimpleDMS/Website/common/paginator.html.twig"
