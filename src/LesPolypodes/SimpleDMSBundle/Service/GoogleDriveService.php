@@ -159,7 +159,8 @@ class GoogleDriveService
         }
         $errorMessage = $this->translator->trans('Given File ID do not match any be Google File you can access');
         if (!empty($resource)) {
-            $request     = new \Google_Http_Request($resource->downloadUrl, 'GET', null, null);
+            $file = $resource['file'];
+            $request     = new \Google_Http_Request($file['downloadUrl'], 'GET', null, null);
             $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
             if ($httpRequest->getResponseHttpCode() == 200) {
                 return array(

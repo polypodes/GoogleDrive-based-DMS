@@ -149,8 +149,8 @@ class WebsiteController extends Controller
      */
     public function fileAction($fileId)
     {
-        $resource = $this->getGoogleDrive()->getFileMetadataAndContent($fileId);
-        $file = $resource['file'];
+        $resource = $this->get('google_drive')->getFileMetadataAndContent($fileId);
+        $file = $resource['file']['file'];
         $content = $resource['content'];
         $response = new Response($content, 200);
         $response->headers->set('Cache-Control', '');

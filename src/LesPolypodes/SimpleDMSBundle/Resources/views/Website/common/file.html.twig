@@ -1,10 +1,11 @@
-<h4><a class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">{{ file.title }}</a></h4>
+<h4><a class="googleAnalyticsEvent" href="{{ url('_file', {fileId: file.id}) }}">{{ file.title }}</a></h4>
 <div class="pull-right">
     {%  if file.thumbnailLink is defined %}
-        <a class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}"><img src="{{ file.thumbnailLink }}" /></a>
+        <a class="googleAnalyticsEvent" href="{{ url('_file', {fileId: file.id}) }}"><img src="{{ file.thumbnailLink }}" /></a>
     {% endif %}
 </div>
 <ul>
     <li><img src="{{ file.iconLink }}" /> ({{ file.fileSize|formatBytes }})</li>
-    <li><a class="googleAnalyticsEvent" href="{{ path('_file', {fileId: file.id}) }}">download</a></li>
+    <li><a class="googleAnalyticsEvent" href="{{ url('_file', {fileId: file.id}) }}">Download</a></li>
+    <li><button class="copy-button" data-clipboard-text="{{ url('_file', {fileId: file.id}) }}">Copy to Clipboard</button></li>
 </ul>
