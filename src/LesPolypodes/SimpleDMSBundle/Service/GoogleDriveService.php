@@ -264,7 +264,7 @@ class GoogleDriveService
             'usages'            => $this->getUsage(),
             'count'             => count($files['result']['modelData']['items']),
             'nextPageToken'     => $files['result']['nextPageToken'],
-            'orderedList'       => $files['result']['modelData']['items'],
+            'list'       => $files['result']['modelData']['items'],
         );
 
         //usort($result['orderedList'], array($this, "fileCompare"));

@@ -38,8 +38,8 @@
             </h3>
             {% endif %}
         {% endif %}
-        {% if orderedList is defined and 0 < orderedList|length %}
-            {% for file in orderedList %}
+        {% if list is defined and 0 < list|length %}
+            {% for file in list %}
                 <div class="col-md-4">
                     {% include "@LesPolypodesSimpleDMS/Website/common/file.html.twig"
                     with {"file": file} %}
