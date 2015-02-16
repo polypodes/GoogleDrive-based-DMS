@@ -27,15 +27,32 @@ class ApiController extends Controller
 {
 
     /**
-     * @Route("/files/{searchTerm}/{token}", name="_api_files", defaults={"searchTerm" = null, "token" = null})
+     * @Route("/files/{pageToken}", name="_api_files", defaults={"searchTerm" = null, "pageToken" = null})
      * @param Request $request
-     * @param string  $searchTerm full-text search parameter
-     * @param string  $token      Google-side generated result page token
+     * @param string  $pageToken Google-side generated result page token
      *
      *
      * @return array|RedirectResponse
      */
-    public function apiFilesListAction(Request $request, $searchTerm, $token)
+    public function apiFilesListAction(Request $request, $pageToken)
+    {
+        $optParams = new GoogleDriveListParameters(null, $pageToken);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        $result['folders'] = $this->get('google_drive')->getFilesList(true);
+        // JSON rendering improvements
+        return $this->getJsonResponse($request, $result);
+    }
+
+    /**
+     * @Route("/files/search/{searchTerm}/{pageToken}", name="_api_files_search", defaults={"searchTerm" = null, "pageToken" = null})
+     * @param Request $request
+     * @param string  $searchTerm full-text search parameter
+     * @param string  $pageToken  Google-side generated result page token
+     *
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiFilesSearchAction(Request $request, $searchTerm, $pageToken)
     {
         $form = $this->get('form.factory')->createNamedBuilder(
             '',
@@ -50,13 +67,12 @@ class ApiController extends Controller
         $form->setMethod('GET');
         $form = $form->getForm();
 
-        $data = array("q" => "");
+        $data = array("q" => $searchTerm);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
         }
 
-        $pageToken = $request->get("pageToken"); // not a form field
         $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
