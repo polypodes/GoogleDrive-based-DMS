@@ -27,6 +27,16 @@ gulp.task('template', function() {
         .pipe(gulp.dest('./public/'));
 });
 
+gulp.task('fonts', function() {
+    return gulp.src('./src/fonts/**/*.*')
+        .pipe(gulp.dest('./public/fonts/'));
+});
+
+gulp.task('images', function() {
+    return gulp.src('./src/images/**/*.*')
+        .pipe(gulp.dest('./public/images/'));
+});
+
 gulp.task('style', function () {
     return gulp.src('./src/less/style.less')
     .pipe(less({compress: true}))
@@ -60,7 +70,8 @@ function bundle() {
     .pipe(reload({stream:true}));
 }
 
-gulp.task('default', ['script', 'style', 'template', 'browser-sync'], function() {
+gulp.task('default', ['script', 'images', 'fonts', 'style', 'template', 'browser-sync'], function() {
     gulp.watch('./src/*.html', ['template', browserSync.reload]);
     gulp.watch('./src/less/**/*.less', ['style']);
+    gulp.watch('./src/fonts/**/*.*', ['fonts']);
 });

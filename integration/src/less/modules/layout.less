@@ -1,0 +1,139 @@
+//
+// layout styles
+// =========================================================
+
+// Color debug
+// =====================================
+
+// html, body {
+//   background-color: red;
+// }
+
+// .header {
+//   background-color: orange;
+// }
+
+// .header-logo {
+//   background-color: orange;
+// }
+
+// .header-button {
+//   background-color: green;
+// }
+
+// .main {
+//   background-color: yellow;
+// }
+
+// .menu {
+//   background-color: blue;
+// }
+
+// .content {
+//   background-color: pink;
+// }
+
+// Mobile first
+// =====================================
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  height: (@bs * 8);
+}
+
+.header-logo {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: (@bs * 4);
+}
+
+.header-search {
+  position: absolute;
+  top: (@bs * 4);
+  left: 0;
+  right: (@bs * 4);
+  height: (@bs * 4);
+}
+
+.header-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: (@bs * 4);
+  height: (@bs * 4);
+}
+
+.main {
+  position: absolute;
+  top: (@bs * 8);
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  // class added to .main
+  // to open menu
+  &.menu-open {
+    .menu {
+      left: 0;
+    }
+
+    .content {
+      left: (@bs * 16);
+    }
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -(@bs * 16);
+  width: (@bs * 16);
+}
+
+.content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding-top: (@bs * 4);
+  padding-right: (@bs  * 3);
+  padding-left: (@bs  * 2);
+}
+
+// Tablet
+// =====================================
+@media (min-width: @screen-tablet) {
+  .header-logo {
+    position: absolute;
+    top: 0;
+    width: (@bs * 16);
+    height: (@bs * 4);
+  }
+
+  .header {
+    height: (@bs * 4);
+  }
+
+  .header-search {
+    position: absolute;
+    top: 0;
+    left: (@bs * 16);
+    right: (@bs * 4);
+    height: (@bs * 4);
+  }
+
+  .main {
+    top: (@bs * 4);
+  }
+}
+
+// Desktop
+// =====================================
+@media (min-width: @screen-desktop) {
+
+}

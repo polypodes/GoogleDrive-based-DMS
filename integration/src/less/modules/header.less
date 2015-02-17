@@ -1,0 +1,85 @@
+//
+// header styles
+// =========================================================
+
+
+// Mobile first
+// =====================================
+.header {
+  background-color: @col-2;
+
+  &-logo {
+    padding: 16px;
+    line-height: 11px;
+    background-color: @col-1;
+
+    &-1 {
+      float: left;
+      padding-right: @bs;
+    }
+
+    &-2 {
+      float: left;
+      width: 160px;
+      font-size: 14px;
+    }
+  }
+
+  &-input {
+    width: 100%;
+    height: (@bs * 4);
+    padding-left: (@bs * 3);
+    box-sizing: border-box !important;
+    border: 0;
+    background-color: transparent;
+    outline: none;
+  }
+
+  &-search {
+    &:before {
+      position: absolute;
+      left: @bs;
+      top: (@bs * 1.5);
+      .icon('\e801');
+      font-size: 20px;
+      color: @col-3;
+    }
+  }
+
+  &-button {
+    display: table;
+    padding: @bs;
+    line-height: 30px;
+    text-align: center;
+    background-color: @col-1;
+
+    &-item {
+      display: table-cell;
+      vertical-align: bottom;
+      height: (@bs * 2);
+      background-color: transparent;
+      border: 0;
+      outline: none;
+
+      &:before {
+        .icon('\e802');
+      }
+    }
+  }
+}
+
+// Tablet
+// =====================================
+@media (min-width: @screen-tablet) {
+  .header {
+
+  }
+}
+
+// Desktop
+// =====================================
+@media (min-width: @screen-desktop) {
+  .header {
+
+  }
+}

@@ -1,0 +1,46 @@
+//
+// Typo styles
+// =========================================================
+
+@font-size: 16px;
+
+// font icon
+// =====================================
+@font-face {
+  font-family: 'drive';
+  src: url('../fonts/drive/font/drive.eot?70928318');
+  src: url('../fonts/drive/font/drive.eot?70928318#iefix') format('embedded-opentype'),
+       url('../fonts/drive/font/drive.woff?70928318') format('woff'),
+       url('../fonts/drive/font/drive.ttf?70928318') format('truetype'),
+       url('../fonts/drive/font/drive.svg?70928318#drive') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon(@unicode) {
+  font-family: 'drive';
+  content: @unicode;
+}
+
+// Primary font
+// =====================================
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600);
+
+.primary-font-light(@size: @font-size) {
+  font-family: 'Source Sans Pro', arial, sans-serif;
+  font-weight: 300;
+  font-size: @size;
+}
+
+.primary-font-regular(@size: @font-size) {
+  font-family: 'Source Sans Pro', arial, sans-serif;
+  font-weight: 400;
+  font-size: @size;
+}
+
+.primary-font-bold(@size: @font-size) {
+  font-family: 'Source Sans Pro', arial, sans-serif;
+  font-weight: 600;
+  font-size: @size;
+}

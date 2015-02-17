@@ -2,8 +2,18 @@
 // Sedap drive Style
 // ==========================================================================
 
+// Variables
+// =====================================
+@bs: 20px;
+
 // Libs
 // =====================================
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 
 // Bootstrap
 // =========
@@ -64,4 +74,11 @@
 // Modules
 // =====================================
 
+@import "./modules/typo.less";
+@import "./modules/base.less";
 @import "./modules/common.less";
+@import "./modules/layout.less";
+@import "./modules/theme.less";
+@import "./modules/header.less";
+@import "./modules/menu.less";
+@import "./modules/content.less";

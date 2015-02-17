@@ -1,0 +1,88 @@
+//
+// menu styles
+// =========================================================
+
+
+// Mobile first
+// =====================================
+.menu {
+  background-color: @col-1;
+
+  &-result {
+    height: (@bs * 4);
+    padding-left: (@bs * 2) - 4;
+    line-height: (@bs * 4);
+    border-left: 4px solid @col-3;
+    background-color: @col-2;
+
+    &:before {
+      .icon('\e800');
+      padding-right: @bs;
+      color: @col-3;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul > li {
+    list-style-type: none;
+  }
+
+  nav > ul > li {
+    height: (@bs * 4);
+    padding-left: (@bs * 2);
+    line-height: (@bs * 4);
+
+    i {
+      font-style: normal;
+      font-family: 'drive';
+      padding-right: @bs;
+      color: @col-3;
+    }
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  &-sites {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: @bs (@bs * 2);
+    background-color: @col-2;
+
+    ul
+
+    li {
+      height: (@bs * 2);
+      line-height: (@bs * 2);
+
+      a:before {
+      .icon('\e805');
+        padding-right: @bs;
+        color: @col-3;
+      }
+    }
+  }
+}
+
+// Tablet
+// =====================================
+@media (min-width: @screen-tablet) {
+  .menu {
+
+  }
+}
+
+// Desktop
+// =====================================
+@media (min-width: @screen-desktop) {
+  .menu {
+
+  }
+}
