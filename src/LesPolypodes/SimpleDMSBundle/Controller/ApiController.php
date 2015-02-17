@@ -27,15 +27,53 @@ class ApiController extends Controller
 {
 
     /**
-     * @Route("/files/{searchTerm}/{token}", name="_api_files", defaults={"searchTerm" = null, "token" = null})
+     * @Route("/files/{pageToken}", name="_api_files", defaults={"searchTerm" = null, "pageToken" = null})
      * @param Request $request
-     * @param string  $searchTerm full-text search parameter
-     * @param string  $token      Google-side generated result page token
+     * @param string  $pageToken Google-side generated result page token
      *
      *
      * @return array|RedirectResponse
      */
-    public function apiFilesListAction(Request $request, $searchTerm, $token)
+    public function apiFilesListAction(Request $request, $pageToken)
+    {
+        $optParams = new GoogleDriveListParameters(null, $pageToken);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        $result['folders'] = $this->get('google_drive')->getFilesList(true);
+        // JSON rendering improvements
+        return $this->getJsonResponse($request, $result);
+    }
+
+    /**
+     * @param Request $request
+     * @param mixed   $data
+     *
+     * @return JsonResponse
+     */
+    protected function getJsonResponse(Request $request, $data = null)
+    {
+        $date = new \DateTime();
+        $date->modify('+1 day');
+
+        $response = new JsonResponse($data);
+        $response->setExpires($date);
+        $response->setETag(md5($response->getContent()));
+        $response->setPublic();
+        $response->isNotModified($request);
+        $response->headers->set('X-Proudly-Crafted-By', "LesPolypodes.com"); // It's nerdy, I know that.
+
+        return $response;
+    }
+
+    /**
+     * @Route("/files/search/{searchTerm}/{pageToken}", name="_api_files_search", defaults={"searchTerm" = null, "pageToken" = null})
+     * @param Request $request
+     * @param string  $searchTerm full-text search parameter
+     * @param string  $pageToken  Google-side generated result page token
+     *
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiFilesSearchAction(Request $request, $searchTerm, $pageToken)
     {
         $form = $this->get('form.factory')->createNamedBuilder(
             '',
@@ -50,17 +88,29 @@ class ApiController extends Controller
         $form->setMethod('GET');
         $form = $form->getForm();
 
-        $data = array("q" => "");
+        $data = array("q" => $searchTerm);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
         }
 
-        $pageToken = $request->get("pageToken"); // not a form field
         $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
+        return $this->getJsonResponse($request, $result);
+    }
+
+    /**
+     * @Route("/folders", name="_folders")
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function apiFoldersAction(Request $request)
+    {
+        $result = $this->get('google_drive')->getFolders();
+
         return $this->getJsonResponse($request, $result);
     }
 
@@ -73,22 +123,57 @@ class ApiController extends Controller
      */
     public function apiFolderAction(Request $request, $folderId)
     {
-        $data = $this->get('google_drive')->getFile($folderId);
+        if ($folderId === $this->get('google_drive')->getRootFolderId()) {
+            return $this->redirect($this->generateUrl('_files'), 301);
+        }
+        $optParams = new GoogleDriveListParameters();
+        if ($request->query->has("pageToken")) {
+            $optParams->setPageToken($request->get("pageToken"));
+        }
+
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
+
+        $result['pagination'] = $this->get('google_drive')->buildPagination(
+            $result['nextPageToken'],
+            $optParams,
+            $this->generateUrl('_folder', array('folderId' => $folderId))
+        );
+        $result['folder'] = $this->get('google_drive')->getFile($folderId);
+        $result['folders'] = $this->get('google_drive')->getFolders($folderId);
+        //$result['children'] = $this->get('google_drive')->getChildren($folderId);
+        $result['total'] = count($result['list']);
+
+        if ($request->query->has("pageToken")
+            && !empty($result['nextPageToken'])
+            && $request->query->get("pageToken") == $result['nextPageToken']) {
+            $result['has_pagination'] = false;
+        }
+
+        return $this->getJsonResponse($request, $result);
+    }
+
+    /**
+     * @Route("/lastmodified", name="_api_last_modified")
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiLastModifiedAction(Request $request)
+    {
+        $data =  $this->get('google_drive')->getLastModifiedFiles();
 
         return $this->getJsonResponse($request, $data);
     }
 
     /**
-     * @Route("/folders", name="_api_folders")
+     * @Route("/filetypes", name="_api_filetypes")
      * @param Request $request
-     * @param string  $id      UUID for file/folder resource
      *
      * @return array|RedirectResponse
      */
-    public function apiFoldersListAction(Request $request)
+    public function apiFileTypes(Request $request)
     {
-        $optParams = new GoogleDriveListParameters();
-        $data = $this->get('google_drive')->getFilesList(true, $optParams);
+        $data =  $this->get('google_drive')->getTypes();
 
         return $this->getJsonResponse($request, $data);
     }
@@ -113,26 +198,5 @@ class ApiController extends Controller
         ];
 
         return $this->getJsonResponse($request, $data);
-    }
-
-    /**
-     * @param Request $request
-     * @param mixed   $data
-     *
-     * @return JsonResponse
-     */
-    protected function getJsonResponse(Request $request, $data = null)
-    {
-        $date = new \DateTime();
-        $date->modify('+1 day');
-
-        $response = new JsonResponse($data);
-        $response->setExpires($date);
-        $response->setETag(md5($response->getContent()));
-        $response->setPublic();
-        $response->isNotModified($request);
-        $response->headers->set('X-Proudly-Crafted-By', "LesPolypodes.com"); // It's nerdy, I know that.
-
-        return $response;
     }
 }

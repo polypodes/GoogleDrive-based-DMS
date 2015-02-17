@@ -2,9 +2,6 @@
 
 {% block content %}
     <div class="row">
-        {% if folders is defined and 0 < folders|length %}
-            {% include "@LesPolypodesSimpleDMS/Website/common/folders.html.twig" with {'folders': folders } %}
-        {% endif %}
         {% if usages is defined and 0 < usages|length %}
             {% include "@LesPolypodesSimpleDMS/Website/common/usages.html.twig" with {'usages': usages } %}
         {% endif %}
@@ -37,6 +34,9 @@
                 [<a href="{{ url("_folder", {folderId: folder.file.parents.0.id} ) }}">parent</a>]
             </h3>
             {% endif %}
+        {% endif %}
+        {% if folders is defined and 0 < folders|length %}
+            {% include "@LesPolypodesSimpleDMS/Website/common/folders.html.twig" with {'folders': folders } %}
         {% endif %}
         {% if list is defined and 0 < list|length %}
             {% for file in list %}

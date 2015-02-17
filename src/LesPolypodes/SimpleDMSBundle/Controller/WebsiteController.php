@@ -31,12 +31,14 @@ class WebsiteController extends Controller
     /**
      * @Route("/folders", name="_folders")
      * @Template()
-     * @param Request $request
      *
      * @return array
      */
-    public function foldersAction(Request $request, $id = null)
+    public function foldersAction()
     {
+        $result['folders'] = $this->get('google_drive')->getFolders();
+
+        return $result;
     }
 
     /**
@@ -59,14 +61,15 @@ class WebsiteController extends Controller
 
         $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
 
-        $result['pagination'] = $this->buildPagination(
+        $result['pagination'] = $this->get('google_drive')->buildPagination(
             $result['nextPageToken'],
             $optParams,
             $this->generateUrl('_folder', array('folderId' => $folderId))
         );
-        $result['children'] = $this->get('google_drive')->getChildren($folderId);
+        $result['folder'] = $this->get('google_drive')->getFile($folderId);
+        //$result['children'] = $this->get('google_drive')->getChildren($folderId);
         $result['folders'] = $this->get('google_drive')->getFolders($folderId);
-        $result['total'] = count($result['children']);
+        $result['total'] = count($result['list']);
 
         if ($request->query->has("pageToken")
             && !empty($result['nextPageToken'])
@@ -110,33 +113,9 @@ class WebsiteController extends Controller
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
         $result['folders'] = $this->get('google_drive')->getFolders();
         $result['form'] = $form->createView();
-        $result['pagination'] = $this->buildPagination($result['nextPageToken'], $optParams);
+        $result['pagination'] = $this->get('google_drive')->buildPagination($result['nextPageToken'], $optParams);
 
         return $result;
-    }
-
-    /**
-     * @param string                    $nextPageToken
-     * @param GoogleDriveListParameters $optParams
-     * @param string                    $prefixUrl     route Url
-     *
-     * @return array
-     */
-    protected function buildPagination($nextPageToken, $optParams = null, $prefixUrl = null)
-    {
-        $nextUrl = (!empty($prefixUrl)) ? $prefixUrl : null;
-        $searchTerm = (!is_null($optParams)) ? $optParams->getSearchTerm() : '';
-        if (!empty($nextPageToken)) {
-            $nextUrl .= sprintf(
-                "?q=%s&pageToken=%s",
-                $searchTerm,
-                $nextPageToken
-            );
-        }
-
-        return array(
-            'nextUrl' => $nextUrl,
-        );
     }
 
     /**
