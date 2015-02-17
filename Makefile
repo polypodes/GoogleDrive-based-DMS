@@ -139,7 +139,7 @@ dry-fix:
 
 cs-fix:
 	@bin/phpcbf --standard=PSR2 src
-	@bin/php-cs-fixer fix . --config=sf23 -vgv
+	@bin/php-cs-fixer fix . --config=sf23 -vv
 
 #quality must remain quiet, as far as it's used in a pre-commit hook validation
 quality: sniff dry-fix
