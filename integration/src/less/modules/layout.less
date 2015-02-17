@@ -80,10 +80,12 @@ html, body {
   &.menu-open {
     .menu {
       left: 0;
+      transition: left 0.5s;
     }
 
     .content {
       left: (@bs * 16);
+      transition: left 0.5s;
     }
   }
 }
@@ -94,6 +96,7 @@ html, body {
   bottom: 0;
   left: -(@bs * 16);
   width: (@bs * 16);
+  transition: left 0.5s;
 }
 
 .content {
@@ -103,6 +106,7 @@ html, body {
   padding-top: (@bs * 4);
   padding-right: (@bs  * 3);
   padding-left: (@bs  * 2);
+  transition: left 0.5s;
 }
 
 // Tablet

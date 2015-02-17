@@ -1,0 +1,75 @@
+var React = require('react');
+var Router = require('react-router');
+var RouteHandler = Router.RouteHandler;
+var Navigation = require('react-router').Navigation;
+var FileActions = require('./FileActions');
+var $ = require('zepto-browserify').$;
+
+var App = React.createClass({
+    mixins: [Navigation],
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var keyword = this.refs.keyword.getDOMNode().value.trim();
+        if(keyword.length) {
+            FileActions.searchFile(keyword);
+        }
+    },
+    handleMenuButton: function(e) {
+        e.preventDefault();
+        console.log('menu btn handled');
+        $('main').toggleClass('menu-open');
+    },
+    render: function () {
+        return (
+            <div>
+                <header className='header'>
+                    <div className="header-logo">
+                        <img src="./images/logo-drive.png" alt="" className="header-logo-1" />
+                        <div className="header-logo-2">
+                            <img src="./images/logo-sedap.png" alt="" />
+                            <span>centre de ressource</span>
+                        </div>
+                    </div>
+                    <div className="header-search">
+                        <form onSubmit={this.handleSubmit}>
+                            <input type="search" ref="keyword" placeholder="Rechercher dans Google Drive…" className="header-input" />
+                        </form>
+                    </div>
+                    <div className="header-button">
+                        <button className="header-button-item" onClick={this.handleMenuButton}></button>
+                    </div>
+                </header>
+                <main role="main" className="main menu-open">
+                    <aside className="menu">
+                        <div className="menu-result">
+                            Résultats de recherche
+                        </div>
+                        <nav>
+                            <ul>
+                                <li>
+                                    <a href="" title=""><i></i>Parcourir</a>
+                                </li>
+                                <li>
+                                    <a href="" title=""><i></i>Statistiques</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <article className="menu-sites">
+                            <ul>
+                                <li><a href="" target="_blank"><img src="" alt="" />LUCID</a></li>
+                                <li><a href="" target="_blank"><img src="" alt="" />bellelummières.fr</a></li>
+                                <li><a href="" target="_blank"><img src="" alt="" />dix heures dix</a></li>
+                                <li><a href="" target="_blank"><img src="" alt="" />atelier sedap</a></li>
+                            </ul>
+                        </article>
+                    </aside>
+                    <section className="content">
+                        <RouteHandler/>
+                    </section>
+                </main>
+            </div>
+        );
+    }
+});
+
+module.exports = App;
