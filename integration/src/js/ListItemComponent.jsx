@@ -8,7 +8,6 @@ var ListItemComponent = React.createClass({
         return (
             <div>
                 {this.props.data.map(function(item) {
-                    console.log(item);
                   return (
                     <li>
                         <span>{item.title}</span> -

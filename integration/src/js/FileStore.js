@@ -3,21 +3,27 @@ var FileActions = require('./FileActions');
 var $ = require('zepto-browserify').$;
 
 var _files = [];
+var req = null;
 
 var FileStore = Reflux.createStore({
     init: function() {
         this.loadFiles();
         this.listenTo(FileActions.searchFile, this.onSearchFile);
     },
-    loadFiles: function() {
+    loadFiles: function(keyword) {
+        var terms = keyword ? ('/search/' + keyword) : '';
         var that = this;
-        $.ajax({
+
+        if(req != null) req.abort();
+        console.log('search : ' + keyword);
+
+        req = $.ajax({
             type: 'GET',
-            url: 'http://localhost/app_dev.php/api/files',
+            url: 'http://localhost/app_dev.php/api/files' + terms,
             dataType: 'json',
             success: function(data) {
                 _files = data;
-                that.trigger(_files.list);
+                that.trigger(_files.list, keyword);
             },
             error: function(xhr, type) {
                 console.log('Ajax error!');
@@ -25,8 +31,7 @@ var FileStore = Reflux.createStore({
         });
     },
     onSearchFile: function(keyword) {
-        console.log('search : ' + keyword);
-        // process request for search
+        this.loadFiles(keyword);
     }
 });
 
