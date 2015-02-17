@@ -145,6 +145,11 @@ class GoogleDriveService
         }
     }
 
+    /**
+     * @param null $folderId
+     *
+     * @return array
+     */
     public function getFolders($folderId = null)
     {
         $folderId = !empty($folderId) ? $folderId :  $this->getRootFolderId();
@@ -157,6 +162,9 @@ class GoogleDriveService
         return $treeView;
     }
 
+    /**
+     * @return mixed
+     */
     public function getRootFolderId()
     {
         return $this->container->getParameter('dms.root_folder_id');
@@ -181,7 +189,7 @@ class GoogleDriveService
         $nextToken = null;
         $result = array();
         $optParams = new GoogleDriveListParameters();
-        $optParams->setMaxResults(1000);
+        $optParams->setMaxResults(GoogleDriveListParameters::MAX_RESULTS);
         $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
         $condition = GoogleDriveListParameters::NO_FOLDERS;
         if ($isFolder) {
@@ -309,15 +317,203 @@ class GoogleDriveService
     }
 
     // TODO
-    public function getFilesPerType($relativeInterval = '-1 week', $optParams = null)
+    /**
+     * @return array
+     */
+    public function getFilesPerType()
     {
         return array();
     }
 
-    // TODO
-    public function getFilesTypes($relativeInterval = '-1 week', $optParams = null)
+    /**
+     * (A single API call to get both)
+     *
+     * @return array      (found, grouped, definition)
+     * @throws \Exception
+     */
+    public function getTypes()
     {
-        return array();
+        $singles = $this->getFoundTypes();
+
+        return array(
+            'found' => $singles,
+            'grouped' => $this->getFoundGroupedTypes($singles),
+            'definitions' => $this->getFilesTypesGroupsDefinitions(),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function getFoundTypes()
+    {
+        $nextToken = null;
+        $loop = 0;
+        $maxLoop = 10;
+        $maxItemPerLoop = GoogleDriveListParameters::MAX_RESULTS;
+        $optParams = new GoogleDriveListParameters();
+        $optParams->setMaxResults($maxItemPerLoop);
+        $optParams->setQuery(GoogleDriveListParameters::NO_TRASH);
+        $items = array();
+        do {
+            $result = $this->service->files->listFiles($optParams->getArray());
+            $items = array_merge($items, array_values($result->getItems()));
+            //$items += $result->getItems();
+
+            $nextToken = $result->getNextPageToken();
+            $optParams->setPageToken($nextToken);
+            $loop++;
+            if ($maxLoop <= $loop) {
+                // 10 * 1000 files is enough
+                throw new \Exception(sprintf("Preventing too-many API calls : max %d loops occurred of %d items each time ", $loop, $optParams->getMaxResults()));
+            }
+        } while (!empty($nextToken));
+
+        $types = array();
+        foreach ($items as $item) {
+            $types[$item->mimeType] = $item->mimeType; // trick do avoid duplicate entries
+        }
+
+        return array_values($types);
+    }
+
+    /**
+     * @param array $types
+     *
+     * Good practice: give a types list in order to limit API calls
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function getFoundGroupedTypes($types = array())
+    {
+        $types = !empty($types) ? $types : $this->getFoundTypes();
+        $definitions = $this->getFilesTypesGroupsDefinitions();
+        $result = array();
+        foreach ($definitions as $groupName => $definitionList) {
+            //var_dump("crawling into $groupName");
+            foreach ($definitionList as $ext => $typeMIME) {
+                //var_dump("testing $typeMIME:");
+                $found = false;
+                foreach ($types as $key => $type) {
+                    // var_dump(" is $type === with $typeMIME ?");
+                    if ($type === $typeMIME) {
+                        //var_dump("YES, we add $groupName as a known group");
+                        $found    = true;
+                        $result[] = $groupName;
+                        break;
+                    }
+                }
+                if ($found) {
+                    //var_dump("we stop crawling into $groupName.");
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Please keep both 'groupedBy' and 'single' lists sync'ed
+     *
+     * @link http://filext.com/faq/office_mime_types.php
+     * @link http://www.openoffice.org/framework/documentation/mimetypes/mimetypes.html
+     * @link https://developers.google.com/drive/web/mime-types
+     *
+     * @return array
+     */
+    public function getFilesTypesGroupsDefinitions()
+    {
+        return array(
+            "image" => array(
+                'jpg' =>         'image/jpeg',
+                'png' =>         'image/png',
+                'gif' =>         'image/gif',
+                'bmp' =>         'image/bmp',
+                'gpng' =>       'application/vnd.google.drive.ext-type.png',
+                'gjpg' =>       'application/vnd.google.drive.ext-type.jpg',
+                'ggif' =>       'application/vnd.google.drive.ext-type.gif',
+                'gphoto' =>     'application/vnd.google-apps.photo',
+            ),
+            'spreadsheet' => array(
+                'xls' =>    'application/vnd.ms-excel',
+                'xlsx' =>   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xltx' =>   'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+                'xlsm' =>   'application/vnd.ms-excel.sheet.macroEnabled.12',
+                'xltm' =>   'application/vnd.ms-excel.template.macroEnabled.12',
+                'xlam' =>   'application/vnd.ms-excel.addin.macroEnabled.12',
+                'xlsb' =>   'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+                'ods' =>    'application/vnd.oasis.opendocument.spreadsheet',
+                'ots' =>    'application/vnd.oasis.opendocument.spreadsheet-template',
+                'gsheet' => 'application/vnd.google-apps.spreadsheet',
+                //'csv' => 'text/plain', // may match a lot of other files: txt, etc.
+            ),
+            'text' => array(
+                'doc' =>     'application/msword',
+                'dot' =>    'application/msword',
+                'docx' =>   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'dotx' =>   'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+                'docm' =>   'application/vnd.ms-word.document.macroEnabled.12',
+                'dotm' =>   'application/vnd.ms-word.template.macroEnabled.12',
+                'odt' =>    'application/vnd.oasis.opendocument.text',
+                'ott' =>    'application/vnd.oasis.opendocument.text-template',
+                'oth' =>    'application/vnd.oasis.opendocument.text-web',
+                'odm' =>    'application/vnd.oasis.opendocument.text-master',
+                'gdoc' =>   'application/vnd.google-apps.document',
+                'txt' =>    'text/plain',
+                'pdf' =>    'application/pdf',
+            ),
+            'presentation' => array(
+                'ppt' =>        'application/vnd.ms-powerpoint',
+                'pot' =>        'application/vnd.ms-powerpoint',
+                'pps' =>        'application/vnd.ms-powerpoint',
+                'ppa' =>        'application/vnd.ms-powerpoint',
+                'pptx' =>       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'potx' =>       'application/vnd.openxmlformats-officedocument.presentationml.template',
+                'ppsx' =>       'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+                'ppam' =>       'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+                'pptm' =>       'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+                'potm' =>       'application/vnd.ms-powerpoint.template.macroEnabled.12',
+                'ppsm' =>       'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+                'gslides' =>    'application/vnd.google-apps.presentation',
+                'odp' =>        'application/vnd.oasis.opendocument.presentation',
+                'otp' =>        'application/vnd.oasis.opendocument.presentation-template',
+            ),
+            'animation' => array(
+                'swf' =>     'application/x-shockwave-flash',
+            ),
+            'audio' => array(
+                'mp3' => 'audio/mpeg',
+            ),
+            'video' => array(
+                'mpeg' =>        'video/mpeg',
+                'webm' =>       'video/webm',
+                'gvideo' =>     'application/vnd.google-apps.video',
+            ),
+            'archives' => array(
+                'zip' =>    'application/zip',
+                'rar' =>    'application/rar',
+                'tar' =>    'application/tar',
+                'arj' =>    'application/arj',
+                'cab' =>    'application/cab',
+            ),
+            'code' => array(
+                'php' =>        'application/x-httpd-php',
+                'js' =>         'text/js',
+                'html' =>       'text/html',
+                'xml' =>        'text/xml',
+                'gscript' =>    'application/vnd.google-apps.script',
+            ),
+            'folder' => array(
+                'folder' => 'application/vnd.google-apps.folder',
+            ),
+            'various' => array(
+                'default' =>    'application/octet-stream',
+                'file' =>       'application/vnd.google-apps.file',
+                'unknown' =>    'application/vnd.google-apps.unknown',
+            ),
+        );
     }
 
     /**
@@ -344,6 +540,12 @@ class GoogleDriveService
         );
     }
 
+    /**
+     * @param $a
+     * @param $b
+     *
+     * @return int
+     */
     protected function fileCompare($a, $b)
     {
         return strcmp($a['title'], $b['title']);

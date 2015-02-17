@@ -25,6 +25,7 @@ class GoogleDriveListParameters
     const NO_TRASH = 'trashed = false';
     const FOLDERS = 'mimeType = "application/vnd.google-apps.folder"';
     const NO_FOLDERS = 'mimeType != "application/vnd.google-apps.folder"';
+    const MAX_RESULTS = 1000; // see API documentation
 
     /**
      * @var string Query string for searching files

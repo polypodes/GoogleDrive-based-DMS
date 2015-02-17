@@ -44,6 +44,27 @@ class ApiController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param mixed   $data
+     *
+     * @return JsonResponse
+     */
+    protected function getJsonResponse(Request $request, $data = null)
+    {
+        $date = new \DateTime();
+        $date->modify('+1 day');
+
+        $response = new JsonResponse($data);
+        $response->setExpires($date);
+        $response->setETag(md5($response->getContent()));
+        $response->setPublic();
+        $response->isNotModified($request);
+        $response->headers->set('X-Proudly-Crafted-By', "LesPolypodes.com"); // It's nerdy, I know that.
+
+        return $response;
+    }
+
+    /**
      * @Route("/files/search/{searchTerm}/{pageToken}", name="_api_files_search", defaults={"searchTerm" = null, "pageToken" = null})
      * @param Request $request
      * @param string  $searchTerm full-text search parameter
@@ -145,6 +166,19 @@ class ApiController extends Controller
     }
 
     /**
+     * @Route("/filetypes", name="_api_filetypes")
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiFileTypes(Request $request)
+    {
+        $data =  $this->get('google_drive')->getTypes();
+
+        return $this->getJsonResponse($request, $data);
+    }
+
+    /**
      * @Route("/stats", name="_api_stats")
      * @param Request $request
      *
@@ -164,26 +198,5 @@ class ApiController extends Controller
         ];
 
         return $this->getJsonResponse($request, $data);
-    }
-
-    /**
-     * @param Request $request
-     * @param mixed   $data
-     *
-     * @return JsonResponse
-     */
-    protected function getJsonResponse(Request $request, $data = null)
-    {
-        $date = new \DateTime();
-        $date->modify('+1 day');
-
-        $response = new JsonResponse($data);
-        $response->setExpires($date);
-        $response->setETag(md5($response->getContent()));
-        $response->setPublic();
-        $response->isNotModified($request);
-        $response->headers->set('X-Proudly-Crafted-By', "LesPolypodes.com"); // It's nerdy, I know that.
-
-        return $response;
     }
 }
