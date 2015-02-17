@@ -64,7 +64,7 @@ vendor/autoload.php:
 	@composer install --optimize-autoloader
 
 web/bower_components:
-	@cd web; bower install bootstrap; cd -;
+	@cd web; bower install; cd -;
 
 .git/hook/pre-commit:
 	@curl -s -o .git/hooks/pre-commit https://raw.githubusercontent.com/polypodes/Build-and-Deploy/master/hooks/pre-commit
@@ -78,25 +78,6 @@ integration:
 	@cd integration
 	@gulp build
 	@cd ../
-
-dumps:
-	@echo "Creating dump folder for SQL exports..."
-	@mkdir ./dumps
-
-mysqldump: dumps
-	@echo "Dumping existing db into ./dumps ..."
-	@mysqldump --user=${DB_USER} --password=${DB_PASSWORD} ${DB_NAME} > dumps/${NOW}.sql 2>/dev/null
-
-mysqlinfo: dumps
-	@echo "mysql --user=${DB_USER} --password=${DB_PASSWORD} ${DB_NAME}"
-
-data: vendor/autoload.php
-#	@echo "Install initial datas..."
-#	@php app/console dbal:data:initialize --purge
-
-fixtures: vendor/autoload.php
-#	@echo "Install fixtures in db..."
-#	@php app/console dbal:fixtures:load --purge
 
 ############################################################################
 # Generic sf2 tasks:
@@ -120,23 +101,6 @@ check:
 pull:
 	@git pull origin $(BRANCH)
 
-
-dropDb: vendor/autoload.php mysqldump
-	@echo
-	@echo "Drop database..."
-	@php app/console doctrine:database:drop --force
-
-createDb: vendor/autoload.php
-	@echo
-	@echo "Create database..."
-	@php app/console doctrine:database:create
-	@php app/console doctrine:schema:update --force
-
-schemaDb: vendor/autoload.php mysqldump
-	@echo
-	@echo "Configure database schema..."
-	@php app/console doctrine:schema:update --force
-
 assets:
 	@echo "\nPublishing assets..."
 	@php app/console assets:install --symlink
@@ -152,16 +116,16 @@ explain:
 	@echo "Note you can change the git remote repo username in .git/config"
 
 behavior: vendor/autoload.php
-	@echo "Run behavior tests..."
-	@bin/behat --lang=fr  "@AcmeDemoBundle"
+#	@echo "Run behavior tests..."
+#	@bin/behat --lang=fr  "@AcmeDemoBundle"
 
 unit: vendor/autoload.php
 	@echo "Run unit tests..."
-	@php bin/phpunit -c build/phpunit.xml -v
+	@php bin/phpunit -c app -v
 
 codecoverage: vendor/autoload.php
 	@echo "Run coverage tests..."
-	@bin/phpunit -c build/phpunit.xml -v --coverage-html ./build/codecoverage
+	@bin/phpunit -c app -v --coverage-html ./build/codecoverage
 
 continuous: vendor/autoload.php
 	@echo "Starting continuous tests..."
@@ -175,7 +139,7 @@ dry-fix:
 
 cs-fix:
 	@bin/phpcbf --standard=PSR2 src
-	@bin/php-cs-fixer fix . --config=sf23 -vv
+	@bin/php-cs-fixer fix . --config=sf23 -vgv
 
 #quality must remain quiet, as far as it's used in a pre-commit hook validation
 quality: sniff dry-fix
@@ -211,17 +175,9 @@ done:
 
 # Tasks sets:
 
-all: vendor/autoload.php check
+install: all assets clear done
 
-prepareDb: createDb schemaDb
-
-purgeDb: dropDb createDb schemaDb
-
-install: prepareDb data assets clear done
-
-reinstall: dropDb install
-
-tests: reinstall fixtures behavior unit codecoverage
+tests: behavior unit codecoverage
 
 deploy: vendor/autoload.php
 	@$(MAKE) explain
