@@ -27,17 +27,33 @@ class ApiController extends Controller
 {
 
     /**
-     * @Route("/files/{pageToken}", name="_api_files", defaults={"searchTerm" = null, "pageToken" = null})
+     * @Route("/files/{pageToken}", name="_api_files", defaults={"pageToken"=null})
      * @param Request $request
      * @param string  $pageToken Google-side generated result page token
-     *
      *
      * @return array|RedirectResponse
      */
     public function apiFilesListAction(Request $request, $pageToken)
     {
         $optParams = new GoogleDriveListParameters(null, $pageToken);
-        $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, null, $type);
+        $result['folders'] = $this->get('google_drive')->getFilesList(true);
+        // JSON rendering improvements
+        return $this->getJsonResponse($request, $result);
+    }
+
+    /**
+     * @Route("/files/type/{type}/{pageToken}", name="_api_files", defaults={"type"=null,"pageToken"=null})
+     * @param Request $request
+     * @param string  $type      MIME
+     * @param string  $pageToken Google-side generated result page token
+     *
+     * @return array|RedirectResponse
+     */
+    public function apiFilesListPerTypeAction(Request $request, $pageToken, $type)
+    {
+        $optParams = new GoogleDriveListParameters(null, $pageToken);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, null, $type);
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
         return $this->getJsonResponse($request, $result);
@@ -65,11 +81,10 @@ class ApiController extends Controller
     }
 
     /**
-     * @Route("/files/search/{searchTerm}/{pageToken}", name="_api_files_search", defaults={"searchTerm" = null, "pageToken" = null})
+     * @Route("/files/search/{searchTerm}/{pageToken}", name="_api_files_search", defaults={"searchTerm"=null, "pageToken"=null})
      * @param Request $request
      * @param string  $searchTerm full-text search parameter
      * @param string  $pageToken  Google-side generated result page token
-     *
      *
      * @return array|RedirectResponse
      */
@@ -136,7 +151,8 @@ class ApiController extends Controller
         $result['pagination'] = $this->get('google_drive')->buildPagination(
             $result['nextPageToken'],
             $optParams,
-            $this->generateUrl('_folder', array('folderId' => $folderId))
+            $this->generateUrl('_folder', array('folderId' => $folderId)),
+            null
         );
         $result['folder'] = $this->get('google_drive')->getFile($folderId);
         $result['folders'] = $this->get('google_drive')->getFolders($folderId);

@@ -1,8 +1,9 @@
-<div class="col-md-6">
-    <h3>Children folders:</h3>
+<div class="col-md-3">
+    <h3>Folders:</h3>
     <ul>
         {% for id,folder in folders %}
             <li><a href="{{ url("_folder", {folderId: folder.id} ) }}">{{ folder.title }}</a></li>
         {% endfor %}
     </ul>
+    <a href="{{ url('_files') }}">Back Home</a>
 </div>

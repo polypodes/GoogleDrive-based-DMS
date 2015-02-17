@@ -233,12 +233,13 @@ class GoogleDriveService
      * @param bool                      $isFolder
      * @param GoogleDriveListParameters $optParams
      * @param string                    $parentFolderId
+     * @param string                    $filter
      *
      * @return array
      */
-    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null, $parentFolderId = null)
+    public function getFilesList($isFolder = false, GoogleDriveListParameters $optParams = null, $parentFolderId = null, $filter = null)
     {
-        $files = $this->getFiles($isFolder, $optParams, $parentFolderId);
+        $files = $this->getFiles($isFolder, $optParams, $parentFolderId, $filter);
         $result = array(
             'optParams'         => (!is_null($optParams)) ? $optParams->getArray(true) : null,
             'query'             => $files['query'],
@@ -257,6 +258,7 @@ class GoogleDriveService
      * @param bool                      $isFolder       = true
      * @param GoogleDriveListParameters $optParams
      * @param string                    $parentFolderId
+     * @param string                    $filter
      *
      * @link https://developers.google.com/drive/web/search-parameters
      *
@@ -264,15 +266,22 @@ class GoogleDriveService
      *
      * @return \Google_Service_Drive_FileList
      */
-    public function getFiles($isFolder = true, GoogleDriveListParameters $optParams = null, $parentFolderId = "")
+    public function getFiles($isFolder = true, GoogleDriveListParameters $optParams = null, $parentFolderId = "", $filter = null)
     {
         $result = array();
         $optParams = empty($optParams) ? new GoogleDriveListParameters() : $optParams;
-        $optParams->setQuery(sprintf("%s and (%s)", GoogleDriveListParameters::NO_TRASH, $optParams->getQuery()));
+        if (0 < strlen($optParams->getQuery())) {
+            $optParams->setQuery(sprintf("%s and (%s)", GoogleDriveListParameters::NO_TRASH, $optParams->getQuery()));
+        } else {
+            $optParams->setQuery(GoogleDriveListParameters::NO_TRASH, $optParams->getQuery());
+        }
 
         // Filters
         $filters = array();
-        $filters['type'] = ($isFolder) ? GoogleDriveListParameters::FOLDERS : GoogleDriveListParameters::NO_FOLDERS;
+        $filters['type'] = (!is_null($filter)) ? $this->buildTypeFilter($filter) : null;
+        if (empty($filters['type'])) {
+            $filters['type'] = $isFolder ? GoogleDriveListParameters::FOLDERS : GoogleDriveListParameters::NO_FOLDERS;
+        }
         if (!empty($parentFolderId)) {
             $filters['parentFolder'] = sprintf('"%s" in parents', $parentFolderId);
         }
@@ -301,6 +310,148 @@ class GoogleDriveService
         return $result;
     }
 
+    protected function buildTypeFilter($type = "")
+    {
+        $result = $or = "";
+        $types = $this->getFilesTypesPerGroup($type, true);
+        if (!empty($types)) {
+            foreach ($types as $index => $type) {
+                if (0 < $index) {
+                    $or = ' or ';
+                }
+                $result .= sprintf('%s mimeType="%s"', $or, $type);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $groupName
+     * @param bool   $uniqueValues
+     *
+     * @return array
+     */
+    protected function getFilesTypesPerGroup($groupName = null, $uniqueValues = false)
+    {
+        $list = $this->getFilesTypesGroupsDefinitions();
+        $result = null;
+
+        if (!empty($groupName) && array_key_exists($groupName, $list)) {
+            $result = $list[$groupName];
+
+            if ($uniqueValues) {
+                $result = array_unique(array_values($result));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Please keep both 'groupedBy' and 'single' lists sync'ed
+     *
+     * @link http://filext.com/faq/office_mime_types.php
+     * @link http://www.openoffice.org/framework/documentation/mimetypes/mimetypes.html
+     * @link https://developers.google.com/drive/web/mime-types
+     *
+     * @return array
+     */
+    public function getFilesTypesGroupsDefinitions()
+    {
+        return array(
+            "image" => array(
+                'jpg' =>         'image/jpeg',
+                'png' =>         'image/png',
+                'gif' =>         'image/gif',
+                'bmp' =>         'image/bmp',
+                'gpng' =>       'application/vnd.google.drive.ext-type.png',
+                'gjpg' =>       'application/vnd.google.drive.ext-type.jpg',
+                'ggif' =>       'application/vnd.google.drive.ext-type.gif',
+                'gphoto' =>     'application/vnd.google-apps.photo',
+            ),
+            'spreadsheet' => array(
+                'xls' =>    'application/vnd.ms-excel',
+                'xlsx' =>   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xltx' =>   'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+                'xlsm' =>   'application/vnd.ms-excel.sheet.macroEnabled.12',
+                'xltm' =>   'application/vnd.ms-excel.template.macroEnabled.12',
+                'xlam' =>   'application/vnd.ms-excel.addin.macroEnabled.12',
+                'xlsb' =>   'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+                'ods' =>    'application/vnd.oasis.opendocument.spreadsheet',
+                'ots' =>    'application/vnd.oasis.opendocument.spreadsheet-template',
+                'gsheet' => 'application/vnd.google-apps.spreadsheet',
+                //'csv' => 'text/plain', // may match a lot of other files: txt, etc.
+            ),
+            'text' => array(
+                'doc' =>     'application/msword',
+                'dot' =>    'application/msword',
+                'docx' =>   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'dotx' =>   'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+                'docm' =>   'application/vnd.ms-word.document.macroEnabled.12',
+                'dotm' =>   'application/vnd.ms-word.template.macroEnabled.12',
+                'odt' =>    'application/vnd.oasis.opendocument.text',
+                'ott' =>    'application/vnd.oasis.opendocument.text-template',
+                'oth' =>    'application/vnd.oasis.opendocument.text-web',
+                'odm' =>    'application/vnd.oasis.opendocument.text-master',
+                'gdoc' =>   'application/vnd.google-apps.document',
+                'txt' =>    'text/plain',
+                'pdf' =>    'application/pdf',
+            ),
+            'presentation' => array(
+                'ppt' =>        'application/vnd.ms-powerpoint',
+                'pot' =>        'application/vnd.ms-powerpoint',
+                'pps' =>        'application/vnd.ms-powerpoint',
+                'ppa' =>        'application/vnd.ms-powerpoint',
+                'pptx' =>       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'potx' =>       'application/vnd.openxmlformats-officedocument.presentationml.template',
+                'ppsx' =>       'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+                'ppam' =>       'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+                'pptm' =>       'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+                'potm' =>       'application/vnd.ms-powerpoint.template.macroEnabled.12',
+                'ppsm' =>       'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+                'gslides' =>    'application/vnd.google-apps.presentation',
+                'odp' =>        'application/vnd.oasis.opendocument.presentation',
+                'otp' =>        'application/vnd.oasis.opendocument.presentation-template',
+            ),
+            'animation' => array(
+                'swf' =>     'application/x-shockwave-flash',
+            ),
+            'audio' => array(
+                'mp3' => 'audio/mpeg',
+            ),
+            'video' => array(
+                'mpeg' =>       'video/mpeg',
+                'mp4' =>        'video/mp4',
+                'flv' =>        'video/flv',
+                'webm' =>       'video/webm',
+                'gvideo' =>     'application/vnd.google-apps.video',
+            ),
+            'archives' => array(
+                'zip' =>    'application/zip',
+                'rar' =>    'application/rar',
+                'tar' =>    'application/tar',
+                'arj' =>    'application/arj',
+                'cab' =>    'application/cab',
+            ),
+            'code' => array(
+                'php' =>        'application/x-httpd-php',
+                'js' =>         'text/js',
+                'html' =>       'text/html',
+                'xml' =>        'text/xml',
+                'gscript' =>    'application/vnd.google-apps.script',
+            ),
+            'folder' => array(
+                'folder' => 'application/vnd.google-apps.folder',
+            ),
+            'various' => array(
+                'default' =>    'application/octet-stream',
+                'file' =>       'application/vnd.google-apps.file',
+                'unknown' =>    'application/vnd.google-apps.unknown',
+            ),
+        );
+    }
+
     /**
      * @return array
      */
@@ -316,7 +467,6 @@ class GoogleDriveService
         );
     }
 
-    // TODO
     /**
      * @return array
      */
@@ -415,123 +565,23 @@ class GoogleDriveService
     }
 
     /**
-     * Please keep both 'groupedBy' and 'single' lists sync'ed
-     *
-     * @link http://filext.com/faq/office_mime_types.php
-     * @link http://www.openoffice.org/framework/documentation/mimetypes/mimetypes.html
-     * @link https://developers.google.com/drive/web/mime-types
-     *
-     * @return array
-     */
-    public function getFilesTypesGroupsDefinitions()
-    {
-        return array(
-            "image" => array(
-                'jpg' =>         'image/jpeg',
-                'png' =>         'image/png',
-                'gif' =>         'image/gif',
-                'bmp' =>         'image/bmp',
-                'gpng' =>       'application/vnd.google.drive.ext-type.png',
-                'gjpg' =>       'application/vnd.google.drive.ext-type.jpg',
-                'ggif' =>       'application/vnd.google.drive.ext-type.gif',
-                'gphoto' =>     'application/vnd.google-apps.photo',
-            ),
-            'spreadsheet' => array(
-                'xls' =>    'application/vnd.ms-excel',
-                'xlsx' =>   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'xltx' =>   'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-                'xlsm' =>   'application/vnd.ms-excel.sheet.macroEnabled.12',
-                'xltm' =>   'application/vnd.ms-excel.template.macroEnabled.12',
-                'xlam' =>   'application/vnd.ms-excel.addin.macroEnabled.12',
-                'xlsb' =>   'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
-                'ods' =>    'application/vnd.oasis.opendocument.spreadsheet',
-                'ots' =>    'application/vnd.oasis.opendocument.spreadsheet-template',
-                'gsheet' => 'application/vnd.google-apps.spreadsheet',
-                //'csv' => 'text/plain', // may match a lot of other files: txt, etc.
-            ),
-            'text' => array(
-                'doc' =>     'application/msword',
-                'dot' =>    'application/msword',
-                'docx' =>   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'dotx' =>   'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-                'docm' =>   'application/vnd.ms-word.document.macroEnabled.12',
-                'dotm' =>   'application/vnd.ms-word.template.macroEnabled.12',
-                'odt' =>    'application/vnd.oasis.opendocument.text',
-                'ott' =>    'application/vnd.oasis.opendocument.text-template',
-                'oth' =>    'application/vnd.oasis.opendocument.text-web',
-                'odm' =>    'application/vnd.oasis.opendocument.text-master',
-                'gdoc' =>   'application/vnd.google-apps.document',
-                'txt' =>    'text/plain',
-                'pdf' =>    'application/pdf',
-            ),
-            'presentation' => array(
-                'ppt' =>        'application/vnd.ms-powerpoint',
-                'pot' =>        'application/vnd.ms-powerpoint',
-                'pps' =>        'application/vnd.ms-powerpoint',
-                'ppa' =>        'application/vnd.ms-powerpoint',
-                'pptx' =>       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'potx' =>       'application/vnd.openxmlformats-officedocument.presentationml.template',
-                'ppsx' =>       'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-                'ppam' =>       'application/vnd.ms-powerpoint.addin.macroEnabled.12',
-                'pptm' =>       'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
-                'potm' =>       'application/vnd.ms-powerpoint.template.macroEnabled.12',
-                'ppsm' =>       'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
-                'gslides' =>    'application/vnd.google-apps.presentation',
-                'odp' =>        'application/vnd.oasis.opendocument.presentation',
-                'otp' =>        'application/vnd.oasis.opendocument.presentation-template',
-            ),
-            'animation' => array(
-                'swf' =>     'application/x-shockwave-flash',
-            ),
-            'audio' => array(
-                'mp3' => 'audio/mpeg',
-            ),
-            'video' => array(
-                'mpeg' =>        'video/mpeg',
-                'webm' =>       'video/webm',
-                'gvideo' =>     'application/vnd.google-apps.video',
-            ),
-            'archives' => array(
-                'zip' =>    'application/zip',
-                'rar' =>    'application/rar',
-                'tar' =>    'application/tar',
-                'arj' =>    'application/arj',
-                'cab' =>    'application/cab',
-            ),
-            'code' => array(
-                'php' =>        'application/x-httpd-php',
-                'js' =>         'text/js',
-                'html' =>       'text/html',
-                'xml' =>        'text/xml',
-                'gscript' =>    'application/vnd.google-apps.script',
-            ),
-            'folder' => array(
-                'folder' => 'application/vnd.google-apps.folder',
-            ),
-            'various' => array(
-                'default' =>    'application/octet-stream',
-                'file' =>       'application/vnd.google-apps.file',
-                'unknown' =>    'application/vnd.google-apps.unknown',
-            ),
-        );
-    }
-
-    /**
      * @param string                    $nextPageToken
      * @param GoogleDriveListParameters $optParams
+     * @param string                    $type          MIME
      * @param string                    $prefixUrl     route Url
      *
      * @return array
      */
-    public function buildPagination($nextPageToken, $optParams = null, $prefixUrl = null)
+    public function buildPagination($nextPageToken, $optParams = null, $type = null, $prefixUrl = null)
     {
         $nextUrl = (!empty($prefixUrl)) ? $prefixUrl : null;
         $searchTerm = (!is_null($optParams)) ? $optParams->getSearchTerm() : '';
         if (!empty($nextPageToken)) {
             $nextUrl .= sprintf(
-                "?q=%s&pageToken=%s",
+                "?q=%s&pageToken=%s&type=%s",
                 $searchTerm,
-                $nextPageToken
+                $nextPageToken,
+                $type
             );
         }
 

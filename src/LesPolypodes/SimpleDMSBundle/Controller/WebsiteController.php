@@ -64,7 +64,8 @@ class WebsiteController extends Controller
         $result['pagination'] = $this->get('google_drive')->buildPagination(
             $result['nextPageToken'],
             $optParams,
-            $this->generateUrl('_folder', array('folderId' => $folderId))
+            $this->generateUrl('_folder', array('folderId' => $folderId)),
+            null
         );
         $result['folder'] = $this->get('google_drive')->getFile($folderId);
         //$result['children'] = $this->get('google_drive')->getChildren($folderId);
@@ -92,13 +93,15 @@ class WebsiteController extends Controller
         $form = $this->get('form.factory')->createNamedBuilder(
             '',
             'form',
-            array('q' => null, 'pageToken' => null),
+            array('q' => null, 'pageToken' => null, 'filter' => null),
             array(
                 'csrf_protection' => false,
             )
         )
             ->add('q', 'text', array('label' => ' ', 'required' => false))
-            ->add('pageToken', 'hidden', array('label' => ' ', 'required' => false));
+            // these two fields are reset for now, see form.html.twig
+            ->add('pageToken', 'hidden', array('label' => ' ', 'required' => false))
+            ->add('type', 'hidden', array('label' => ' ', 'required' => false));
         $form->setMethod('GET');
         $form = $form->getForm();
 
@@ -108,12 +111,18 @@ class WebsiteController extends Controller
             $data = $form->getData();
         }
 
-        $pageToken = $request->get("pageToken"); // not a form field
-        $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
-        $result = $this->get('google_drive')->getFilesList(false, $optParams);
+        $optParams = new GoogleDriveListParameters($data['q'], $request->get("pageToken"));
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, null, $request->get("type"));
         $result['folders'] = $this->get('google_drive')->getFolders();
         $result['form'] = $form->createView();
-        $result['pagination'] = $this->get('google_drive')->buildPagination($result['nextPageToken'], $optParams);
+        $result['pagination'] = $this->get('google_drive')->buildPagination(
+            $result['nextPageToken'],
+            $optParams,
+            $request->get("type"),
+            null
+        );
+        $filters = $this->get('google_drive')->getTypes();
+        $result['filters'] = $filters['grouped'];
 
         return $result;
     }

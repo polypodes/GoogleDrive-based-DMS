@@ -1,0 +1,8 @@
+<div class="col-md-3">
+    <h3>Filters:</h3>
+    <ul>
+        {% for filter in filters %}
+            <li><a href="{{ url("_files") }}?type={{ filter }}">{{ filter }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

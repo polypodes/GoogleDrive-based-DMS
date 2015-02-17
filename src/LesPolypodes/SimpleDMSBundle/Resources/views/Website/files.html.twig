@@ -5,6 +5,9 @@
         {% if folders is defined and 0 < folders|length %}
             {% include "@LesPolypodesSimpleDMS/Website/common/folders.html.twig" with {'folders': folders } %}
         {% endif %}
+        {% if filters is defined and 0 < filters|length %}
+            {% include "@LesPolypodesSimpleDMS/Website/common/filters.html.twig" with {'filters': filters } %}
+        {% endif %}
         {% if usages is defined and 0 < usages|length %}
             {% include "@LesPolypodesSimpleDMS/Website/common/usages.html.twig" with {'usages': usages } %}
         {% endif %}

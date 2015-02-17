@@ -18,8 +18,8 @@
 - [ ] Give complete folders list tree as a JSON
 - [X] OAuth2 client
 - [X] Use Google paginated result & pagination token system
-- [ ] Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
-- [ ] Building browsable folders treeview, sarting from the `root` typed folder
+- [X] Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
+- [ ] Building browsable folders treeview, starting from the `root` typed folder
 - [ ] JSON: most downloaded docs using Google API
 - [ ] JSON: last uploaded docs using Google API
 - [X] predictable API-like URLs, even for HTML front
