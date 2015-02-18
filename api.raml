@@ -1,0 +1,90 @@
+#%RAML 0.8
+title: GoogleDMS
+version: 1.0.0
+baseUri: http://dms.preprod.lespolypodes.com
+documentation:
+ - title: Home
+   content: |
+     Welcome to the _Google-based DMS_ Documentation. The _Google-based DMS_
+     allows you to connect your application to a collection of files
+     hosted in a shared, protected Google Drive folder.
+
+     Read more and fork the
+     project on [Github](https://github.com/polypodes/GoogleDrive-based-DMS).
+mediaType: application/json
+#schemas:
+#resourceTypes:
+#traits:
+/api/files:
+  displayName: Files collection (paginated)
+  description: Actions on a collection of files
+  get:
+    description: Get a collection of files, in a paginated list
+  /{pageToken}:
+      description: Paginated files collection list
+      displayName: Get next paginated files list
+      uriParameters:
+        pageToken:
+          displayName: Page token for changes
+          type: string
+          required: false
+      get:
+        description: Next paginated results
+  /type/{type}/{pageToken}:
+      displayName: Paginated files collection list of a certain family MIME/Type
+      description: Get next paginated files list for a given MIME/Type family
+      uriParameters:
+        type:
+          displayName: MIME/Type family name
+          type: string
+          required: true
+        pageToken:
+          displayName: Page token for changes
+          type: string
+          required: false
+      get:
+        description: Next paginated results
+  /search/{searchTerm}/{pageToken}:
+      displayName: Paginated collection list of files containing a certain term
+      description: Get next paginated collection list of files containing a certain term
+      uriParameters:
+        searchTerm:
+          displayName: searched term
+          type: string
+          required: true
+        pageToken:
+          displayName: Page token for changes
+          type: string
+          required: false
+      get:
+        description: Next paginated results
+/api/folders/{folderId}/{pageToken}:
+  displayName: Collection list of children files in a given folder
+  description: Actions on a collection of children files in a given folder
+  uriParameters:
+        folderId:
+          displayName: searched term
+          type: string
+          default: Shared Root Folder Id
+          required: true
+        pageToken:
+          displayName: Page token for changes
+          type: string
+          required: false
+  get:
+    description: Get a collection of children files in a given folder
+/api/lastmodified:
+  displayName: Collection list of the last 100 modified files for the last 7 days
+  description: Actions on the collection of the last 100 modified files for the last 7 days
+  get:
+    description: Get the collection of the last 100 modified files for the last 7 days
+/api/filetypes:
+  displayName: Collection list of the available file MIME/Types (single & grouped)
+  description: Actions on the collection list of the available file MIME/Types (single & grouped)
+  get:
+    description: Get the collection list of the available file MIME/Types (single & grouped)
+/api/stats:
+  displayName: Google Drive account statistics
+  description: Actions on the Google Drive account statistics
+  get:
+    description: Get Google Drive account statistics

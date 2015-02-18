@@ -43,6 +43,13 @@ $~: make
 $~: make install
 ```
 
+## API documentation generation (with [RAML](http://raml.org) & [NPM](https://www.npmjs.com))
+
+```bash
+npm install -g raml2html
+raml2html api.raml.yml > build/API.html
+[open/xdg-open] build/API.html
+```
 
 
 ## Usage:
