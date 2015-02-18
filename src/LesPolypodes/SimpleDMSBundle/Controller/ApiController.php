@@ -37,7 +37,6 @@ class ApiController extends Controller
     {
         $optParams = new GoogleDriveListParameters(null, $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams, null);
-        $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
         return $this->getJsonResponse($request, $result);
     }
@@ -54,7 +53,6 @@ class ApiController extends Controller
     {
         $optParams = new GoogleDriveListParameters(null, $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams, null, $type);
-        $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
         return $this->getJsonResponse($request, $result);
     }
@@ -111,7 +109,6 @@ class ApiController extends Controller
 
         $optParams = new GoogleDriveListParameters($data['q'], $pageToken);
         $result = $this->get('google_drive')->getFilesList(false, $optParams);
-        $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
         return $this->getJsonResponse($request, $result);
     }
