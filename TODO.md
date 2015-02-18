@@ -13,15 +13,15 @@
 
 ## v1.1
 - [x] GET request for search route
-- [X] JSON Api using same URL with different extension, default remain HTML as it is now
+- [X] API: Have an API
+- [X] API: propose a [RAML](http://raml.org) API definition & generate the API documentation
 - [ ] give more info about images dimension - see Google Drive API doc
-- [ ] Give complete folders list tree as a JSON
-- [X] OAuth2 client
-- [X] Use Google paginated result & pagination token system
-- [X] Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
-- [ ] Building browsable folders treeview, starting from the `root` typed folder
-- [ ] JSON: most downloaded docs using Google API
-- [ ] JSON: last uploaded docs using Google API
+- [X] Web/API: OAuth2 client
+- [X] Web/API: Use Google paginated result & pagination token system
+- [X] Web/API: Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
+- [X] Web/API: Building browsable folders navigation menu starting from the `root` typed folder
+- [ ] API: most downloaded docs using Google API
+- [X] API: last uploaded docs using Google API
 - [X] predictable API-like URLs, even for HTML front
 - [ ] Front-end design
 
@@ -30,8 +30,8 @@
 - [ ] [logstash + kibana to monitore search queries & results](https://coderwall.com/p/irhi_q/how-to-use-logstash-with-monolog)
 - [ ] Caching the one-hour-valid token ?
 - [ ] Special private folder
-- [ ] better search experience : "did you mean ?"
-- [ ] better search experience : facets results
+- [ ] Web/API: better search experience : "did you mean ?"
+- [ ] Web/API: better search experience : facets results
 
 ## Notable Google Drive API Features
 
