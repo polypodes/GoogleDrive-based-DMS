@@ -4,12 +4,12 @@
         {{ form_label(form.q) }}
         {{ form_widget(form.q, { 'attr': {'class': 'form-control', 'placeholder': 'search for...'} }) }}
         {{ form_widget(form.pageToken, { 'value': '' }) }} {# we reset it: submitting new form musn't take this token in account again#}
+        {{ form_widget(form.type, { 'value': '' }) }} {# we reset it: submitting new form musn't take this token in account again#}
     </div>
     {{ form_rest(form) }}
     <div class="form-group">
         <button type="submit" class="btn btn-default">{{ 'Find' | trans }}</button>
         <a class="btn btn-default" href="{{ url("_files") }}?q=">Reset</a>
-
     </div>
     <hr />
 </form>

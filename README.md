@@ -34,6 +34,7 @@ dms.service_account_key_file:
 dms.service_account_email:
 ```
 
+
 ## 3/3 Installation:
 
 ```bash
@@ -44,6 +45,14 @@ $~: make install
 ```
 
 
+## API documentation generation (with [RAML](http://raml.org) & [NPM](https://www.npmjs.com))
+
+```bash
+npm install -g raml2html
+raml2html api.raml.yml > build/API.html
+[open/xdg-open] build/API.html
+```
+
 
 ## Usage:
 
@@ -53,6 +62,7 @@ with the same email address used to fill `dms.service_account_email` above.
 
 Then open the `/files` route URL in a browser to see, view & download filesize, filetype & thubmnail of each file & folder.
 
+
 ## VPS deployement
 
 ```bash
@@ -60,6 +70,7 @@ ssh login@production
 cd current_release
 make deploy
 ```
+
 
 ## Hackin' & Slashin'
 
@@ -73,11 +84,13 @@ Just comment these lines at the very end of `app/config/security.yml`
 
 ```
 
+
 ## Heroku deployment
 
 ### One-click way:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 
 ### Manual way:
 
