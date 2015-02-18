@@ -196,16 +196,7 @@ class ApiController extends Controller
      */
     public function apiStatsAction(Request $request)
     {
-        $data = [
-            "total" =>  600, // documents
-            "etag" =>   new \DateTime(),
-            "stats" =>  [
-                "texts" =>  [ "count" => 300,   "percent" =>  50 ],
-                "videos" => [ "count" => 75,    "percent" =>   12.5 ],
-                "images" => [ "count" => 50,    "percent" =>   25 ],
-                "others" => [ "count" => 75,    "percent" =>   12.5 ],
-            ],
-        ];
+        $data = $this->get('google_drive')->getUsage();
 
         return $this->getJsonResponse($request, $data);
     }
