@@ -8,14 +8,21 @@
 .menu {
   background-color: @col-1;
 
-  &-result {
-    height: (@bs * 4);
-    padding-left: (@bs * 2) - 4;
-    line-height: (@bs * 4);
+  .current {
     border-left: 4px solid @col-3;
     background-color: @col-2;
+  }
 
-    &:before {
+  &-result {
+    a {
+      display: block;
+      height: (@bs * 4);
+      line-height: (@bs * 4);
+      padding-left: (@bs * 2) - 4;
+      line-height: (@bs * 4);
+    }
+
+    a:before {
       .icon('\e800');
       padding-right: @bs;
       color: @col-3;
@@ -32,15 +39,19 @@
   }
 
   nav > ul > li {
-    height: (@bs * 4);
-    padding-left: (@bs * 2);
-    line-height: (@bs * 4);
 
     i {
       font-style: normal;
       font-family: 'drive';
       padding-right: @bs;
       color: @col-3;
+    }
+
+    a {
+      display: block;
+      height: (@bs * 4);
+      padding-left: (@bs * 2);
+      line-height: (@bs * 4);
     }
   }
 
@@ -56,14 +67,12 @@
     padding: @bs (@bs * 2);
     background-color: @col-2;
 
-    ul
-
     li {
       height: (@bs * 2);
       line-height: (@bs * 2);
 
       a:before {
-      .icon('\e805');
+        .icon('\e805');
         padding-right: @bs;
         color: @col-3;
       }

@@ -2,36 +2,33 @@
 // layout styles
 // =========================================================
 
-// Color debug
-// =====================================
+@keyframes bounceInLeft {
+  0%, 60%, 75%, 90%, 100% {
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
 
-// html, body {
-//   background-color: red;
-// }
+  0% {
+    opacity: 0;
+    transform: translate3d(-3000px, 0, 0);
+  }
 
-// .header {
-//   background-color: orange;
-// }
+  60% {
+    opacity: 1;
+    transform: translate3d(25px, 0, 0);
+  }
 
-// .header-logo {
-//   background-color: orange;
-// }
+  75% {
+    transform: translate3d(-10px, 0, 0);
+  }
 
-// .header-button {
-//   background-color: green;
-// }
+  90% {
+    transform: translate3d(5px, 0, 0);
+  }
 
-// .main {
-//   background-color: yellow;
-// }
-
-// .menu {
-//   background-color: blue;
-// }
-
-// .content {
-//   background-color: pink;
-// }
+  100% {
+    transform: none;
+  }
+}
 
 // Mobile first
 // =====================================

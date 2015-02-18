@@ -1,52 +1,30 @@
 var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
+var Link = Router.Link;
 var Navigation = require('react-router').Navigation;
 var FileActions = require('./FileActions');
 var $ = require('zepto-browserify').$;
+var util = require('./util');
 
-var debounce = function(func, wait) {
- // we need to save these in the closure
- var timeout, args, context, timestamp;
-
- return function() {
-
-  // save details of latest call
-  context = this;
-  args = [].slice.call(arguments, 0);
-  timestamp = new Date();
-
-  // this is where the magic happens
-  var later = function() {
-
-   // how long ago was the last call
-   var last = (new Date()) - timestamp;
-
-   // if the latest call was less that the wait period ago
-   // then we reset the timeout to wait for the difference
-   if (last < wait) {
-    timeout = setTimeout(later, wait - last);
-
-   // or if not we can null out the timer and run the latest
-   } else {
-    timeout = null;
-    func.apply(context, args);
-   }
-  };
-
-  // we only need to set the timer now if one isn't already running
-  if (!timeout) {
-   timeout = setTimeout(later, wait);
-  }
- }
-};
 
 var App = React.createClass({
     mixins: [Navigation],
     handleSubmit: function(e) {
         e.preventDefault();
-        var keyword = this.refs.keyword.getDOMNode().value.trim();
-        debounce(FileActions.searchFile(keyword), 500);
+        this.transitionTo('list');
+        var that = this;
+        util.debounce(function() {
+            var keyword = that.refs.keyword.getDOMNode().value.trim();
+            FileActions.searchFile(keyword);
+        }, 400);
+    },
+    handleChangeView: function(e) {
+        $('.current').removeClass('current');
+        setTimeout(function() {
+            $('.menu .active').parent().toggleClass('current');
+        }, 50);
+        this.refs.keyword.getDOMNode().value = '';
     },
     handleMenuButton: function(e) {
         e.preventDefault();
@@ -76,15 +54,18 @@ var App = React.createClass({
                 <main role="main" className="main menu-open">
                     <aside className="menu">
                         <div className="menu-result">
-                            Résultats de recherche
+                            <Link to="list" onClick={this.handleChangeView}>Résultats de recherche</Link>
                         </div>
                         <nav>
                             <ul>
                                 <li>
-                                    <a href="" title=""><i></i>Parcourir</a>
+                                    <Link to="browse" id="menu-1" onClick={this.handleChangeView}><i></i>Filtrer</Link>
                                 </li>
                                 <li>
-                                    <a href="" title=""><i></i>Statistiques</a>
+                                    <Link to="stats" id="menu-2" onClick={this.handleChangeView}><i></i>Statistiques</Link>
+                                </li>
+                                <li>
+                                    <Link to="stats" id="menu-2" onClick={this.handleChangeView}><i></i>Modifications récentes</Link>
                                 </li>
                             </ul>
                         </nav>

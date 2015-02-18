@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var FileActions = require('./FileActions');
 var $ = require('zepto-browserify').$;
+var CONST = require('./Constant');
 
 var _files = [];
 var req = null;
@@ -12,18 +13,39 @@ var FileStore = Reflux.createStore({
     },
     loadFiles: function(keyword) {
         var terms = keyword ? ('/search/' + keyword) : '';
-        var that = this;
+        var url = CONST.API_GET_FILES + terms;
 
+        this.getResources(url, keyword);
+    },
+    getResources: function(url, args) {
+        var that = this;
         if(req != null) req.abort();
-        console.log('search : ' + keyword);
 
         req = $.ajax({
             type: 'GET',
-            url: 'http://localhost/app_dev.php/api/files' + terms,
+            url: url,
             dataType: 'json',
             success: function(data) {
                 _files = data;
-                that.trigger(_files.list, keyword);
+                that.trigger(_files.list, args);
+            },
+            error: function(xhr, type) {
+                console.log('Ajax error!');
+            }
+        });
+    },
+    getFilesType: function() {
+        var url = CONST.API_GET_FILES_TYPE;
+        if(req != null) req.abort();
+        var that = this;
+
+        req = $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                that.trigger(data);
             },
             error: function(xhr, type) {
                 console.log('Ajax error!');

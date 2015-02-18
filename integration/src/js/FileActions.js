@@ -1,7 +1,9 @@
 var Reflux = require('reflux');
 
 var FileActions = Reflux.createActions([
-	'searchFile'
+	'searchFile',
+    'getFileTypes',
+    'getFilesByType'
 ]);
 
 module.exports = FileActions;

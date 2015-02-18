@@ -1,6 +1,7 @@
 var React = require('react');
 var FileStore = require('./FileStore');
 var ListItemComponent = require('./ListItemComponent.jsx');
+var $ = require('zepto-browserify').$;
 
 var If = React.createClass({
     render: function() {
@@ -15,11 +16,15 @@ var If = React.createClass({
 
 var ListComponent = React.createClass({
     getInitialState: function() {
+        FileStore.init();
         return {files: ''};
     },
     componentDidMount: function() {
         var that = this;
         this.unsubscribe = FileStore.listen(this.filesUpdated);
+    },
+    componentWillUnmount: function() {
+        this.unsubscribe();
     },
     filesUpdated: function(newFiles, newTerms) {
         this.setState({
@@ -32,11 +37,9 @@ var ListComponent = React.createClass({
           return (
                 <div>
                     <If test={this.state.terms}>
-                        <h1>Résultat de votre recherche pour le(s) mot(s) : {this.state.terms}</h1>
+                        <h1>Résultats de votre recherche pour le(s) mot(s) : {this.state.terms}</h1>
                     </If>
-                    <ul>
-                        <ListItemComponent data={this.state.files} terms={this.state.terms} />
-                    </ul>
+                    <ListItemComponent data={this.state.files} terms={this.state.terms} />
                 </div>
             );
         } else {

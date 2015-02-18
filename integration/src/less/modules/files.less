@@ -1,0 +1,99 @@
+//
+// files styles
+// template files : files.jade
+// =========================================================
+
+
+// Mobile first
+// =====================================
+.files {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
+  &-heading {
+    position: relative;
+    padding-left: @bs * 3;
+
+    li {
+      display: inline-block;
+      width: 46%;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    li:last-child {
+      position: absolute;
+      width: 6%;
+      right: @bs / 2;
+      text-align: center;
+    }
+  }
+
+  &-row {
+    height: (@bs * 2);
+    padding-left: @bs;
+    line-height: (@bs * 2);
+    list-style-type: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: @col-1;
+    }
+  }
+
+  &-field {
+    display: inline-block;
+    vertical-align: top;
+    width: 46%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &-name {
+    padding-left: @bs;
+  }
+
+  &-download {
+    display: inline-block;
+    width: 6%;
+    text-align: center;
+
+    a {
+      text-decoration: none;
+    }
+
+    a:after {
+      .icon('\e80a');
+      font-size: 20px;
+    }
+  }
+
+  &-size {
+    font-size: 14px;
+    color: darken(@col-2, 20%);
+  }
+
+  [data-icon=pdf]:before {
+    .icon('\e806');
+    font-size: 20px;
+    color: @col-3;
+  }
+}
+
+// Tablet
+// =====================================
+@media (min-width: @screen-tablet) {
+  .files {
+
+  }
+}
+
+// Desktop
+// =====================================
+@media (min-width: @screen-desktop) {
+  .files {
+
+  }
+}
