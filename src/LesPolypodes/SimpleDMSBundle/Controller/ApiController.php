@@ -36,14 +36,14 @@ class ApiController extends Controller
     public function apiFilesListAction(Request $request, $pageToken)
     {
         $optParams = new GoogleDriveListParameters(null, $pageToken);
-        $result = $this->get('google_drive')->getFilesList(false, $optParams, null, $type);
+        $result = $this->get('google_drive')->getFilesList(false, $optParams, null);
         $result['folders'] = $this->get('google_drive')->getFilesList(true);
         // JSON rendering improvements
         return $this->getJsonResponse($request, $result);
     }
 
     /**
-     * @Route("/files/type/{type}/{pageToken}", name="_api_files", defaults={"type"=null,"pageToken"=null})
+     * @Route("/files/type/{type}/{pageToken}", name="_api_files_types", defaults={"type"=null,"pageToken"=null})
      * @param Request $request
      * @param string  $type      MIME
      * @param string  $pageToken Google-side generated result page token
