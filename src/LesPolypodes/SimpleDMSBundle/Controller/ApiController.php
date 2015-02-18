@@ -127,21 +127,18 @@ class ApiController extends Controller
     }
 
     /**
-     * @Route("/folders/{folderId}", name="_api_folder")
+     * @Route("/folders/{folderId}/{pageToken}", name="_api_folder",  defaults={"pageToken"=null}))
      * @param Request $request
      * @param string  $folderId
      *
      * @return array|RedirectResponse
      */
-    public function apiFolderAction(Request $request, $folderId)
+    public function apiFolderAction(Request $request, $folderId, $pageToken)
     {
         if ($folderId === $this->get('google_drive')->getRootFolderId()) {
             return $this->redirect($this->generateUrl('_files'), 301);
         }
-        $optParams = new GoogleDriveListParameters();
-        if ($request->query->has("pageToken")) {
-            $optParams->setPageToken($request->get("pageToken"));
-        }
+        $optParams = new GoogleDriveListParameters(null, $pageToken);
 
         $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
 
