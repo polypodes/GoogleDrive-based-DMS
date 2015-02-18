@@ -417,12 +417,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "b3853aa242dabf8f4b8e343d986f9368632c4eb6"
+                "reference": "57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/b3853aa242dabf8f4b8e343d986f9368632c4eb6",
-                "reference": "b3853aa242dabf8f4b8e343d986f9368632c4eb6",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66",
+                "reference": "57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66",
                 "shasum": ""
             },
             "require": {
@@ -451,7 +451,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2015-02-11 11:38:54"
+            "time": "2015-02-18 11:45:22"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -1569,12 +1569,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "81e4eccea302300ac0c69c7ed04c94e29f580633"
+                "reference": "80c1424e6522a3303d320b611647fa6fbc29a8e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/81e4eccea302300ac0c69c7ed04c94e29f580633",
-                "reference": "81e4eccea302300ac0c69c7ed04c94e29f580633",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/80c1424e6522a3303d320b611647fa6fbc29a8e4",
+                "reference": "80c1424e6522a3303d320b611647fa6fbc29a8e4",
                 "shasum": ""
             },
             "require": {
@@ -1613,7 +1613,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2015-01-27 08:16:46"
+            "time": "2015-02-12 21:08:01"
         },
         {
             "name": "heroku/heroku-buildpack-php",
@@ -2584,9 +2584,7 @@
             "time": "2014-09-13 10:57:19"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "google/apiclient": 20,
@@ -2599,7 +2597,5 @@
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
