@@ -30,6 +30,31 @@
     }
   }
 
+  &-button {
+    padding-bottom: 20px;
+    text-align: right;
+
+    &-list,
+    &-thumbnail {
+      background-color: transparent;
+      border: 0;
+      outline: none;
+      color: darken(@col-2, 10%);
+    }
+
+    &-list:before {
+      .icon('\e80b');
+    }
+
+    &-thumbnail:before {
+      .icon('\e80c');
+    }
+  }
+
+  &-select {
+    float: left;
+  }
+
   &-row {
     height: (@bs * 2);
     padding-left: @bs;
@@ -39,6 +64,70 @@
 
     &:hover {
       background-color: @col-1;
+    }
+  }
+
+  &-thumbnail {
+    margin-bottom: @bs * 2;
+    list-style-type: none;
+
+    &-box {
+      position: relative;
+      width: 100%;
+      height: 210px;
+      margin-bottom: (@bs / 2);
+      text-align: center;
+      background-color: @col-1;
+    }
+
+    &-img {
+      display: inline-block;
+      height: 100%;
+      width: auto;
+      max-width: 100%;
+    }
+
+    &-name {
+      b {
+        display: inline-block;
+        width: 90%;
+        padding-left: (@bs / 2);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+
+    &-download {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      margin: 0 auto;
+      padding-top: (@bs * 3.5);
+      width: 100% !important;
+      background-color: @col-3;
+      cursor: pointer;
+      opacity: 0;
+
+      a {
+        color: @col-1;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+
+      a:after {
+        content: '' !important;
+      }
+
+      a:before {
+        display: block;
+        .icon('\e80a');
+        font-size: (@bs * 2);
+      }
     }
   }
 
@@ -86,7 +175,11 @@
 // =====================================
 @media (min-width: @screen-tablet) {
   .files {
-
+    &-thumbnail {
+      float: left;
+      width: 50%;
+      padding: 0 10px;
+    }
   }
 }
 
@@ -94,6 +187,14 @@
 // =====================================
 @media (min-width: @screen-desktop) {
   .files {
+    &-thumbnail {
+      float: left;
+      width: 25%;
+      padding: 0 20px;
+    }
 
+    &-button {
+      padding-right: 20px;
+    }
   }
 }

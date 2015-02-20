@@ -6,6 +6,7 @@ var TodoComponent = require('./TodoComponent.jsx');
 var App = require('./AppComponent.jsx');
 var ListComponent = require('./ListComponent.jsx');
 var BrowseComponent = require('./BrowseComponent.jsx');
+var FolderComponent = require('./FolderComponent.jsx');
 var StatsComponent = require('./StatsComponent.jsx');
 
 var defaultRoute = React.createClass({
@@ -22,6 +23,7 @@ var routes = (
     <Route name="list" handler={ListComponent} />
     <Route name="result" handler={ListComponent} />
     <Route name="browse" handler={BrowseComponent} />
+    <Route name="folder" handler={FolderComponent} />
     <Route name="stats" handler={StatsComponent} />
     <DefaultRoute handler={defaultRoute} />
   </Route>

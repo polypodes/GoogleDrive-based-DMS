@@ -13,18 +13,21 @@ var App = React.createClass({
     handleSubmit: function(e) {
         e.preventDefault();
         this.transitionTo('list');
-        var that = this;
         util.debounce(function() {
-            var keyword = that.refs.keyword.getDOMNode().value.trim();
+            var keyword = this.refs.keyword.getDOMNode().value.trim();
             FileActions.searchFile(keyword);
-        }, 400);
+            this.setMenuCurrent();
+        }.bind(this), 400);
     },
     handleChangeView: function(e) {
+        this.setMenuCurrent();
+        this.refs.keyword.getDOMNode().value = '';
+    },
+    setMenuCurrent: function() {
         $('.current').removeClass('current');
         setTimeout(function() {
             $('.menu .active').parent().toggleClass('current');
         }, 50);
-        this.refs.keyword.getDOMNode().value = '';
     },
     handleMenuButton: function(e) {
         e.preventDefault();
@@ -60,6 +63,9 @@ var App = React.createClass({
                             <ul>
                                 <li>
                                     <Link to="browse" id="menu-1" onClick={this.handleChangeView}><i></i>Filtrer</Link>
+                                </li>
+                                <li>
+                                    <Link to="folder" id="menu-1" onClick={this.handleChangeView}><i></i>Parcourir</Link>
                                 </li>
                                 <li>
                                     <Link to="stats" id="menu-2" onClick={this.handleChangeView}><i></i>Statistiques</Link>

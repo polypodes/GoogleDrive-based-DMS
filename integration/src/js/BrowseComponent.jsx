@@ -11,7 +11,8 @@ var BrowseComponent = React.createClass({
         FileActions.getFileTypes();
         return {
             fileType: [],
-            files: []
+            files: [],
+            layout: 'list'
         }
     },
     componentDidMount: function() {
@@ -20,7 +21,6 @@ var BrowseComponent = React.createClass({
     },
     fileByTypeUpdated: function(files) {
         this.state.files = files;
-        // ugly shit to force re-rendering
         this.setState(this.state);
     },
     componentWillUnmount: function() {
@@ -40,19 +40,33 @@ var BrowseComponent = React.createClass({
         });
         console.log(this.state.fileType);
     },
+    showList: function() {
+        console.log('okok');
+        this.state.layout = 'list';
+        this.setState(this.state);
+    },
+    showThumbnail: function() {
+        console.log('okok');
+        this.state.layout = 'thumbnail';
+        this.setState(this.state);
+    },
     render: function() {
         if(this.state.fileType.length) {
             return (
                 <div>
                     <h1>Vue parcourir</h1>
-                    <select ref="select" id="filetype" name="filetype" onChange={this.handleSelectChange}>
-                        <option value="">-- Trier par type --</option>
-                        {this.state.fileType.map(function(item) {
-                          return <option value={item}>{item}</option>;
-                        })}
-                    </select>
+                    <aside className="files-button">
+                        <select className="files-select" ref="select" id="filetype" name="filetype" onChange={this.handleSelectChange}>
+                            <option value="">-- Trier par type --</option>
+                            {this.state.fileType.map(function(item) {
+                              return <option value={item}>{item}</option>;
+                            })}
+                        </select>
+                        <button className="files-button-list" onClick={this.showList}></button>
+                        <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>
+                    </aside>
                     <ul>
-                        <ListItemComponent data={this.state.files} terms={'lolo'} />
+                        <ListItemComponent data={this.state.files} layout={this.state.layout} />
                     </ul>
                 </div>
             );
