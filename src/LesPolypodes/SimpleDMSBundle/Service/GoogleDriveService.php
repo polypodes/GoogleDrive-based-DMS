@@ -457,14 +457,7 @@ class GoogleDriveService
      */
     public function getUsage()
     {
-        $about       = $this->service->about->get();
-
-        return array(
-            "Current user name: "   => $about->getName(),
-            "Root folder ID: "      => $about->getRootFolderId(),
-            "Total quota (bytes): " => $about->getQuotaBytesTotal(),
-            "Used quota (bytes): "  => $about->getQuotaBytesUsed(),
-        );
+        return $this->service->about->get();
     }
 
     /**

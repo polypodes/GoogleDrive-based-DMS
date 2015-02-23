@@ -417,12 +417,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "51c4c055fd98c45b996ebddb976f7fff4596d2a3"
+                "reference": "57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/51c4c055fd98c45b996ebddb976f7fff4596d2a3",
-                "reference": "51c4c055fd98c45b996ebddb976f7fff4596d2a3",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66",
+                "reference": "57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66",
                 "shasum": ""
             },
             "require": {
@@ -451,7 +451,11 @@
             "keywords": [
                 "google"
             ],
+<<<<<<< HEAD
             "time": "2015-02-13 11:40:56"
+=======
+            "time": "2015-02-18 11:45:22"
+>>>>>>> 0f3fdca49a00d0f421b0e4e5af6da09f760b8c82
         },
         {
             "name": "hwi/oauth-bundle",
