@@ -8,7 +8,7 @@ hwi_oauth_login:
     prefix:   /login
 
 github_login:
-    pattern: /login/check-github
+    pattern: /login/check-sedap
 
 les_polypodes_simple_dms:
     resource: "@LesPolypodesSimpleDMSBundle/Resources/config/routing.yml"
