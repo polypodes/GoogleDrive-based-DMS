@@ -135,9 +135,6 @@ class ApiController extends Controller
      */
     public function apiFolderAction(Request $request, $folderId, $pageToken)
     {
-        if ($folderId === $this->get('google_drive')->getRootFolderId()) {
-            return $this->redirect($this->generateUrl('_files'), 301);
-        }
         $optParams = new GoogleDriveListParameters(null, $pageToken);
 
         $result = $this->get('google_drive')->getFilesList(false, $optParams, $folderId);
