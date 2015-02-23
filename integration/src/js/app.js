@@ -8,12 +8,15 @@ var ListComponent = require('./ListComponent.jsx');
 var BrowseComponent = require('./BrowseComponent.jsx');
 var FolderComponent = require('./FolderComponent.jsx');
 var StatsComponent = require('./StatsComponent.jsx');
+var NProgress = require('nprogress');
 
 var defaultRoute = React.createClass({
     render: function() {
         return (<h1>404</h1>);
     }
 });
+
+NProgress.start();
 
 /**
  * Routes
@@ -32,5 +35,3 @@ var routes = (
 Router.run(routes, function (Handler) {
   React.render(<Handler/>, document.body);
 });
-
-// React.renderComponent(<TodoComponent />, document.getElementById('app'));

@@ -6,17 +6,20 @@ var Navigation = require('react-router').Navigation;
 var FileActions = require('./FileActions');
 var $ = require('zepto-browserify').$;
 var util = require('./util');
+var NProgress = require('nprogress');
 
 
 var App = React.createClass({
     mixins: [Navigation],
     handleSubmit: function(e) {
         e.preventDefault();
-        this.transitionTo('list');
+
         util.debounce(function() {
             var keyword = this.refs.keyword.getDOMNode().value.trim();
             FileActions.searchFile(keyword);
             this.setMenuCurrent();
+            this.transitionTo('list');
+            NProgress.start();
         }.bind(this), 400);
     },
     handleChangeView: function(e) {

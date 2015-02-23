@@ -3,10 +3,13 @@ var FolderStore = require('./FolderStore');
 var FolderItemComponent = require('./FolderItemComponent.jsx');
 var ListItemComponent = require('./ListItemComponent.jsx');
 var If = require('./If.jsx');
+var NProgress = require('nprogress');
 
 var FolderComponent = React.createClass({
     getInitialState: function() {
+        NProgress.start();
         FolderStore.init();
+
         return {
             folders: [],
             files: [],
@@ -38,28 +41,29 @@ var FolderComponent = React.createClass({
     },
     render: function() {
         console.log(this.state);
+        NProgress.done();
         return (
-            <section>
-                {this.state.breadcrumb.map(function(item) {
-                    return <span>/ {item}</span>;
-                })}
-                <h1>Folder componenet</h1>
-                {this.state.folders.map(function(folder) {
-                    return <FolderItemComponent folder={folder} />;
-                })}
-                <If test={this.state.breadcrumb.length > 1}>
-                    <button onClick={this.getParent}>parent</button>
-                </If>
-                <If test={this.state.files.list}>
-                    <div>
-                        <aside className="files-button">
-                            <button className="files-button-list" onClick={this.showList}></button>
-                            <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>
-                        </aside>
-                        <ListItemComponent data={this.state.files.list} layout={this.state.layout} />
-                    </div>
-                </If>
-            </section>
+                <section>
+                    {this.state.breadcrumb.map(function(item) {
+                        return <span>/ {item}</span>;
+                    })}
+                    <h1>Folder componenet</h1>
+                    {this.state.folders.map(function(folder) {
+                        return <FolderItemComponent folder={folder} />;
+                    })}
+                    <If test={this.state.breadcrumb.length > 1}>
+                        <button onClick={this.getParent}>parent</button>
+                    </If>
+                    <If test={this.state.files.list}>
+                        <div>
+                            <aside className="files-button">
+                                <button className="files-button-list" onClick={this.showList}></button>
+                                <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>
+                            </aside>
+                            <ListItemComponent data={this.state.files.list} layout={this.state.layout} />
+                        </div>
+                    </If>
+                </section>
             );
     }
 });

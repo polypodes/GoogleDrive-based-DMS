@@ -3,11 +3,13 @@ var FileTypeStore = require('./FileTypeStore');
 var FileByTypeStore = require('./FileByTypeStore');
 var FileActions = require('./FileActions');
 var ListItemComponent = require('./ListItemComponent.jsx');
+var NProgress = require('nprogress');
 
 var data = [];
 
 var BrowseComponent = React.createClass({
     getInitialState: function() {
+        NProgress.start();
         FileActions.getFileTypes();
         return {
             fileType: [],
@@ -18,6 +20,7 @@ var BrowseComponent = React.createClass({
     componentDidMount: function() {
         this.unsubscribe = FileTypeStore.listen(this.fileTypeUpdated);
         this.unsubscribe2 = FileByTypeStore.listen(this.fileByTypeUpdated);
+        NProgress.done();
     },
     fileByTypeUpdated: function(files) {
         this.state.files = files;
@@ -32,6 +35,7 @@ var BrowseComponent = React.createClass({
         var text = this.refs.select.getDOMNode()[selectIndex].text;
         console.log('select changed : ' + selectIndex + ' = ' + text);
         FileActions.getFilesByType(text);
+        NProgress.start();
     },
     fileTypeUpdated: function(newFileType) {
         data.fileType = newFileType;
@@ -52,6 +56,7 @@ var BrowseComponent = React.createClass({
     },
     render: function() {
         if(this.state.fileType.length) {
+            NProgress.done();
             return (
                 <div>
                     <h1>Vue parcourir</h1>

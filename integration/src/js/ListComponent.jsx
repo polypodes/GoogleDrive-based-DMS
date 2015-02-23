@@ -3,11 +3,13 @@ var FileStore = require('./FileStore');
 var ListItemComponent = require('./ListItemComponent.jsx');
 var $ = require('zepto-browserify').$;
 var If = require('./If.jsx');
+var NProgress = require('nprogress');
 
 var classes = "list"
 
 var ListComponent = React.createClass({
     getInitialState: function() {
+        NProgress.start();
         FileStore.init();
         return {
             files: '',
@@ -44,7 +46,8 @@ var ListComponent = React.createClass({
     },
     render: function() {
         if (this.state.files) {
-          return (
+            NProgress.done();
+            return (
                 <div>
                     <aside className="files-button">
                         <button className="files-button-list" onClick={this.showList}></button>
