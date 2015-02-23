@@ -3,7 +3,10 @@ var FileTypeStore = require('./FileTypeStore');
 var FileByTypeStore = require('./FileByTypeStore');
 var FileActions = require('./FileActions');
 var ListItemComponent = require('./ListItemComponent.jsx');
+var $ = require('zepto-browserify').$;
 var NProgress = require('nprogress');
+var If = require('./If.jsx');
+NProgress.configure({ showSpinner: false });
 
 var data = [];
 
@@ -11,6 +14,7 @@ var BrowseComponent = React.createClass({
     getInitialState: function() {
         NProgress.start();
         FileActions.getFileTypes();
+        $('.pagination-prev').attr('disabled', 'true');
         return {
             fileType: [],
             files: [],
@@ -20,11 +24,23 @@ var BrowseComponent = React.createClass({
     componentDidMount: function() {
         this.unsubscribe = FileTypeStore.listen(this.fileTypeUpdated);
         this.unsubscribe2 = FileByTypeStore.listen(this.fileByTypeUpdated);
-        NProgress.done();
     },
-    fileByTypeUpdated: function(files) {
+    fileByTypeUpdated: function(files, hasPagination, isFirstPage) {
         this.state.files = files;
         this.setState(this.state);
+
+        if(isFirstPage && hasPagination) {
+            $('.pagination-prev').attr('disabled', 'true');
+            $('.pagination-next').removeAttr('disabled');
+            console.log("first page & pagination");
+        } else if(isFirstPage) {
+            $('.pagination-btn').attr('disabled', 'true');
+        } else if(hasPagination) {
+            $('.pagination-btn').removeAttr('disabled');
+        } else if(!hasPagination) {
+            $('.pagination-next').attr('disabled', 'true');
+            $('.pagination-prev').removeAttr('disabled');
+        }
     },
     componentWillUnmount: function() {
         this.unsubscribe();
@@ -43,6 +59,8 @@ var BrowseComponent = React.createClass({
           fileType: newFileType
         });
         console.log(this.state.fileType);
+        $('.pagination-prev').attr('disable', 'true');
+        this.handleSelectChange();
     },
     showList: function() {
         console.log('okok');
@@ -54,9 +72,19 @@ var BrowseComponent = React.createClass({
         this.state.layout = 'thumbnail';
         this.setState(this.state);
     },
+    handlePrev: function() {
+        FileByTypeStore.getPrev();
+        $('.pagination-btn').attr("disabled", "true");
+    },
+    handleNext: function() {
+        FileByTypeStore.getNext();
+        $('.pagination-btn').attr("disabled", "true");
+    },
     render: function() {
         if(this.state.fileType.length) {
             NProgress.done();
+            $('.content').scrollTop(0);
+
             return (
                 <div>
                     <h1>Vue parcourir</h1>
@@ -73,10 +101,12 @@ var BrowseComponent = React.createClass({
                     <ul>
                         <ListItemComponent data={this.state.files} layout={this.state.layout} />
                     </ul>
+                    <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
+                    <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
                 </div>
             );
         } else {
-            return <h3>Loading…</h3>;
+            return (<span>Chargement…</span>);
         }
     }
 });

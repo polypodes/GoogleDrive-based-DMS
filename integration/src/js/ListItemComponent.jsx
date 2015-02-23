@@ -22,8 +22,9 @@ var ListItemComponent = React.createClass({
                     </ul>
                 </div>
             );
+        } else {
+            return <h3>Aucun fichiers</h3>;
         }
-        return <h1>Aucun résultat trouvé</h1>;
     }
 });
 

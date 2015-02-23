@@ -1,4 +1,5 @@
 var React = require('react');
+var NProgress = require('nprogress');
 
 var FileSize = React.createClass({
     formatFileSize: function() {
@@ -11,12 +12,24 @@ var FileSize = React.createClass({
 
 var ListRowComponent = React.createClass({
     handleDownload: function(e) {
-         console.log(e);
+        console.log(e);
         e.preventDefault();
-
+        NProgress.start();
         window.location.assign(
           'http://localhost/app_dev.php/files/' + this.props.file.id
         );
+        var url = 'http://localhost/app_dev.php/files/' + this.props.file.id;
+        setTimeout(NProgress.done, 4000);
+    },
+    count: 0,
+    downloadUrl: function(url, callback) {
+        var hiddenIFrameID = 'hiddenDownloader' + this.count++;
+        var iframe = document.createElement('iframe');
+        iframe.id = hiddenIFrameID;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        iframe.src = url;
+        callback();
     },
     render: function() {
         if(this.props.layout === "list") {

@@ -8,9 +8,14 @@ var $ = require('zepto-browserify').$;
 var util = require('./util');
 var NProgress = require('nprogress');
 
-
 var App = React.createClass({
     mixins: [Navigation],
+    getInitialState: function() {
+        NProgress.configure({ showSpinner: false });
+        return {
+            searchViewName: 'Tout les fichiers'
+        };
+    },
     handleSubmit: function(e) {
         e.preventDefault();
 
@@ -19,12 +24,14 @@ var App = React.createClass({
             FileActions.searchFile(keyword);
             this.setMenuCurrent();
             this.transitionTo('list');
+            this.setState({ searchViewName: 'Résultats de recherche' });
             NProgress.start();
         }.bind(this), 400);
     },
     handleChangeView: function(e) {
         this.setMenuCurrent();
         this.refs.keyword.getDOMNode().value = '';
+        this.setState({ searchViewName: 'Tout les fichiers' });
     },
     setMenuCurrent: function() {
         $('.current').removeClass('current');
@@ -42,11 +49,13 @@ var App = React.createClass({
             <div>
                 <header className='header'>
                     <div className="header-logo">
-                        <img src="./images/logo-drive.png" alt="" className="header-logo-1" />
-                        <div className="header-logo-2">
-                            <img src="./images/logo-sedap.png" alt="" />
-                            <span>centre de ressource</span>
-                        </div>
+                        <Link to="list" id="menu-2" onClick={this.handleChangeView}>
+                            <img src="./images/logo-drive.png" alt="" className="header-logo-1" />
+                            <div className="header-logo-2">
+                                <img src="./images/logo-sedap.png" alt="" />
+                                <span>centre de ressource</span>
+                            </div>
+                        </Link>
                     </div>
                     <div className="header-search">
                         <form onSubmit={this.handleSubmit}>
@@ -59,22 +68,19 @@ var App = React.createClass({
                 </header>
                 <main role="main" className="main menu-open">
                     <aside className="menu">
-                        <div className="menu-result">
-                            <Link to="list" onClick={this.handleChangeView}>Résultats de recherche</Link>
+                        <div className="menu-result current">
+                            <Link to="list" onClick={this.handleChangeView}>{this.state.searchViewName}</Link>
                         </div>
                         <nav>
                             <ul>
                                 <li>
-                                    <Link to="browse" id="menu-1" onClick={this.handleChangeView}><i></i>Filtrer</Link>
-                                </li>
-                                <li>
                                     <Link to="folder" id="menu-1" onClick={this.handleChangeView}><i></i>Parcourir</Link>
                                 </li>
                                 <li>
-                                    <Link to="stats" id="menu-2" onClick={this.handleChangeView}><i></i>Statistiques</Link>
+                                    <Link to="browse" id="menu-1" onClick={this.handleChangeView}><i></i>Filtrer</Link>
                                 </li>
                                 <li>
-                                    <Link to="stats" id="menu-2" onClick={this.handleChangeView}><i></i>Modifications récentes</Link>
+                                    <Link to="lastmodified" id="menu-2" onClick={this.handleChangeView}><i></i>Modifications récentes</Link>
                                 </li>
                             </ul>
                         </nav>

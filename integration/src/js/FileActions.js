@@ -6,6 +6,7 @@ var FileActions = Reflux.createActions([
     'getFilesByType',
     'getFolders',
     'getFilesFromFolder',
+    'lastModifiedFile'
 ]);
 
 module.exports = FileActions;

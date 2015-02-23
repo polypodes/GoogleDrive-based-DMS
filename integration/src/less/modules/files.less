@@ -164,8 +164,30 @@
     color: darken(@col-2, 20%);
   }
 
+  // default icon
+  [data-icon]:before {
+    .icon('\e808');
+    font-size: 20px;
+    color: @col-3;
+  }
+
+  // pdf icon
   [data-icon=pdf]:before {
     .icon('\e806');
+    font-size: 20px;
+    color: @col-3;
+  }
+
+  [data-icon=jpg]:before,
+  [data-icon=png]:before,
+  [data-icon=gif]:before,
+  [data-icon=flv]:before,
+  [data-icon=mp4]:before,
+  [data-icon=webm]:before,
+  [data-icon=ogv]:before,
+  [data-icon=ogg]:before,
+  [data-icon=avi]:before {
+    .icon('\e807');
     font-size: 20px;
     color: @col-3;
   }
