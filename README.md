@@ -84,6 +84,15 @@ Just comment these lines at the very end of `app/config/security.yml`
 
 ```
 
+## Front-end
+
+### Set up front-end stuff
+
+```bash
+cd integration
+npm install
+gulp
+``
 
 ## Heroku deployment
 
@@ -141,17 +150,6 @@ But remember that this will not connect you to one of the web dynos that may be 
 
 
 ex: [vast-temple-3501](https://vast-temple-3501.herokuapp.com)
-
-
-## Front-end
-
-### Set up front-end stuff
-
-```bash
-cd integration
-npm install
-gulp
-``
 
 ## TODO
 
