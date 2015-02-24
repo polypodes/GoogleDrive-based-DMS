@@ -70,23 +70,26 @@ var ListComponent = React.createClass({
         if (this.state.files) {
             NProgress.done();
             $('.content').scrollTop(0);
-
             return (
                 <div>
+                    <h1 className="title-1">Tout les fichiers</h1>
+                    <p className="instruction">Vous trouverez ici la liste de tout les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier.</p>
                     <aside className="files-button">
                         <button className="files-button-list" onClick={this.showList}></button>
                         <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>
                     </aside>
                     <If test={this.state.terms}>
-                        <h1>Résultats de votre recherche pour le(s) mot(s) : {this.state.terms}</h1>
+                        <h2 className="title-2">Résultats de votre recherche pour le(s) mot(s) : {this.state.terms}</h2>
                     </If>
                     <ListItemComponent data={this.state.files} terms={this.state.terms} layout={this.state.layout} />
-                    <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
-                    <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
+                    <div>
+                        <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
+                        <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
+                    </div>
                 </div>
             );
         } else {
-          return <div>Loading...</div>;
+          return <div>Chargement de la liste des fichiers...</div>;
         }
     }
 });

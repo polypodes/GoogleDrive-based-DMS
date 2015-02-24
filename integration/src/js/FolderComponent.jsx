@@ -69,15 +69,18 @@ var FolderComponent = React.createClass({
 
         return (
                 <section>
-                    {this.state.breadcrumb.map(function(item) {
-                        return <span>/ {item}</span>;
-                    })}
-                    <h1>Folder componenet</h1>
+                    <h1 className="title-1">Parcourir</h1>
+                    <p className="instruction">Pour parcourir les fichiers par dossier, cliquer sur le dossiers voulut pour accèder à ses sous-dossiers et fichiers.</p>
                     {this.state.folders.map(function(folder) {
                         return <FolderItemComponent folder={folder} />;
                     })}
+                    <div className="breadcrumb">
+                        {this.state.breadcrumb.map(function(item) {
+                            return <span>/ {item}</span>;
+                        })}
+                    </div>
                     <If test={this.state.breadcrumb.length > 1}>
-                        <button onClick={this.getParent}>parent</button>
+                        <button className="btn-parent" onClick={this.getParent}>Dossier parent</button>
                     </If>
                     <If test={this.state.files.list}>
                         <div>
@@ -86,8 +89,10 @@ var FolderComponent = React.createClass({
                                 <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>
                             </aside>
                             <ListItemComponent data={this.state.files.list} layout={this.state.layout} />
-                            <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
-                            <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
+                            <div>
+                                <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
+                                <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
+                            </div>
                         </div>
                     </If>
                 </section>

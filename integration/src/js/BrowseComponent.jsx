@@ -87,22 +87,25 @@ var BrowseComponent = React.createClass({
 
             return (
                 <div>
-                    <h1>Vue parcourir</h1>
-                    <aside className="files-button">
+                    <h1 className="title-1">Filtrer par type de fichier</h1>
+                    <p className="instruction">Utiliser le filtre ci-dessous afin de trier les fichiers par type (image, documents, videos etc…)</p>
+                    <div className="files-select-wrapper">
                         <select className="files-select" ref="select" id="filetype" name="filetype" onChange={this.handleSelectChange}>
-                            <option value="">-- Trier par type --</option>
+                            <option value="">Trier par type</option>
                             {this.state.fileType.map(function(item) {
                               return <option value={item}>{item}</option>;
                             })}
                         </select>
+                    </div>
+                    <aside className="files-button">
                         <button className="files-button-list" onClick={this.showList}></button>
                         <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>
                     </aside>
-                    <ul>
-                        <ListItemComponent data={this.state.files} layout={this.state.layout} />
-                    </ul>
-                    <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
-                    <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
+                    <ListItemComponent data={this.state.files} layout={this.state.layout} />
+                    <div>
+                        <button className="pagination-btn pagination-prev" onClick={this.handlePrev}>Précédent</button>
+                        <button className="pagination-btn pagination-next" onClick={this.handleNext}>Suivant</button>
+                    </div>
                 </div>
             );
         } else {

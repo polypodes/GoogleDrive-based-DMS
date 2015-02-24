@@ -8,7 +8,7 @@ var FolderItemComponent = React.createClass({
     },
     render: function() {
         return (
-            <div onClick={this.handleClick}>{this.props.folder.title} - {this.props.folder.id}</div>
+            <div className="folder-item" onClick={this.handleClick}>{this.props.folder.title}</div>
             );
     }
 });

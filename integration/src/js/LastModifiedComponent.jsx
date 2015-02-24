@@ -44,10 +44,10 @@ var LastModifiedComponent = React.createClass({
     render: function() {
         if (this.state.files) {
             NProgress.done();
-            console.log('render last modifiied');
             return (
                 <div>
-                    <h1>Vue modification récente</h1>
+                    <h1 className="title-1">Derniers fichiers modifiés</h1>
+                    <p className="instruction">Vous trouverez ici la liste des 100 derniers fichiers modifiés.</p>
                     <aside className="files-button">
                         <button className="files-button-list" onClick={this.showList}></button>
                         <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>

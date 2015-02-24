@@ -47,6 +47,7 @@ var App = React.createClass({
     render: function () {
         return (
             <div>
+                <div className="notify"></div>
                 <header className='header'>
                     <div className="header-logo">
                         <Link to="list" id="menu-2" onClick={this.handleChangeView}>
@@ -86,10 +87,10 @@ var App = React.createClass({
                         </nav>
                         <article className="menu-sites">
                             <ul>
-                                <li><a href="" target="_blank"><img src="" alt="" />LUCID</a></li>
-                                <li><a href="" target="_blank"><img src="" alt="" />bellelummières.fr</a></li>
-                                <li><a href="" target="_blank"><img src="" alt="" />dix heures dix</a></li>
-                                <li><a href="" target="_blank"><img src="" alt="" />atelier sedap</a></li>
+                                <li><a href="http://www.lucid.fr/" target="_blank"><img src="" alt="" />LUCID</a></li>
+                                <li><a href="http://www.belleslumieres.fr/" target="_blank"><img src="" alt="" />bellelummières.fr</a></li>
+                                <li><a href="http://www.dixheuresdix.com/fr/" target="_blank"><img src="" alt="" />dix heures dix</a></li>
+                                <li><a href="http://www.sedap.com/" target="_blank"><img src="" alt="" />atelier sedap</a></li>
                             </ul>
                         </article>
                     </aside>

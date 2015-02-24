@@ -2,8 +2,30 @@ var React = require('react');
 var FileStore = require('./FileStore');
 var ListRowComponent = require('./ListRowComponent.jsx');
 var If = require('./If.jsx');
+var ZeroClipboard = require('zeroclipboard');
+var $ = require('zepto-browserify').$;
 
 var ListItemComponent = React.createClass({
+    componentDidMount: function() {
+        this.handleCopy();
+    },
+    componentDidUpdate: function() {
+        this.handleCopy();
+    },
+    handleCopy: function() {
+        var client = new ZeroClipboard($("button.files-download-copy"));
+
+        client.on('ready', function(readyEvent) {
+            client.on('aftercopy', function(e) {
+                $('.notify').toggleClass('show');
+                $('.notify').html('Le lien à bien été copié dans votre presse-papier');
+
+                setTimeout(function() {
+                    $('.notify').toggleClass('show');
+                }, 3000);
+            });
+        });
+    },
     render: function() {
         if(this.props.data.length) {
             return (

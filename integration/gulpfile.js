@@ -27,6 +27,12 @@ gulp.task('template', function() {
         .pipe(gulp.dest('./public/'));
 });
 
+/* zeroClipboard libs */
+gulp.task('libs', function() {
+    return gulp.src('./src/js/*.swf')
+        .pipe(gulp.dest('./public/js/'));
+});
+
 gulp.task('fonts', function() {
     return gulp.src('./src/fonts/**/*.*')
         .pipe(gulp.dest('./public/fonts/'));
@@ -70,7 +76,7 @@ function bundle() {
     .pipe(reload({stream:true}));
 }
 
-gulp.task('default', ['script', 'images', 'fonts', 'style', 'template', 'browser-sync'], function() {
+gulp.task('default', ['script', 'libs', 'images', 'fonts', 'style', 'template', 'browser-sync'], function() {
     gulp.watch('./src/*.html', ['template', browserSync.reload]);
     gulp.watch('./src/less/**/*.less', ['style']);
     gulp.watch('./src/fonts/**/*.*', ['fonts']);

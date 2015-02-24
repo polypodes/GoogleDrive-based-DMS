@@ -6,6 +6,137 @@ body {
   background-color: #fafafa;
 }
 
+.folder-item {
+  margin-top: 5px;
+  padding-left: @bs;
+  cursor: pointer;
+
+  &:before {
+    .icon('\e80e');
+    padding-right: (@bs / 2);
+  }
+}
+
+.breadcrumb {
+  padding-left: @bs;
+  margin-top: @bs;
+  margin-bottom: @bs;
+  font-style: italic;
+  color: darken(@col-2, 22%);
+}
+
+.btn-parent {
+  /* reset */
+  border: 0;
+  outline: none;
+
+  padding-left: (@bs / 4);
+  padding-right: (@bs / 2);
+  margin-left: @bs;
+  margin-top: @bs;
+  height: (@bs * 1.5);
+  background-color: @col-3;
+  color: @white;
+
+  &:before {
+    .icon('\e809');
+    padding-left: (@bs / 4);
+    padding-right: (@bs / 2);
+  }
+}
+
+.pagination-btn {
+  /* reset */
+  border: 0;
+  outline: none;
+
+  padding: 0 (@bs / 1.5);
+  margin-left: @bs;
+  margin-top: @bs;
+  height: (@bs * 1.5);
+  background-color: @col-3;
+  color: @white;
+
+  &:disabled {
+    background-color: @col-2;
+    transition: all 0.3s;
+  }
+
+  &:hover {
+    background-color: darken(@col-3, 10%);
+    transition: all 0.3s;
+  }
+}
+
+.pagination-prev {
+  &:before {
+    padding-right: (@bs / 3);
+    .icon('\e809');
+  }
+}
+
+.pagination-next {
+  &:after {
+    padding-left: (@bs / 3);
+    .icon('\e800');
+  }
+}
+
+// Text
+// =====================================
+
+.title-1 {
+  padding-left: 20px;
+  margin-bottom: @bs;
+  .primary-font-light(20px);
+  text-transform: uppercase;
+  color: @col-3;
+}
+
+.title-2 {
+  padding-left: 20px;
+  margin-bottom: (@bs / 2);
+  .primary-font-regular();
+  color: darken(@col-3, 10%);
+}
+
+.instruction {
+  padding-left: 20px;
+  font-size: 14px;
+  max-width: 350px;
+}
+
+// Notify
+// =====================================
+
+.notify {
+  position: fixed;
+  top: (@bs * 2);
+  right: (@bs * 2);
+  z-index: 1000;
+  padding: @bs;
+  padding-left: (@bs * 3);
+  max-width: 250px;
+  background-color: @col-3;
+  color: @white;
+  border-radius: 3px;
+  font-size: 14px;
+  transition: all 1s;
+  opacity: 0;
+
+  &.show {
+    transition: all 1s;
+    opacity: 1;
+  }
+
+  &:before {
+    position: absolute;
+    left: @bs;
+    .icon('\e80f');
+    font-size: 32px;
+  }
+}
+
 // Mobile first
 // =====================================
 
