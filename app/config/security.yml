@@ -4,11 +4,21 @@ hwi_oauth:
     connect:
         confirmation: true
     resource_owners:
-        github:
-            type:                github
-            client_id:           %github_client_id%
-            client_secret:       %github_client_secret%
-            scope:               "user:email"
+        sedap:
+            type:                oauth2
+            client_id:           demoapp
+            client_secret:       demopass
+            access_token_url:    http://oauthserverphp/lockdin/token
+            authorization_url:   http://oauthserverphp/lockdin/authorize
+            infos_url:           http://oauthserverphp/lockdin/resource
+            scope:
+            options:
+                csrf:            true
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            paths:
+                identifier: id
+                nickname:   username
+                realname:   fullname
 
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
@@ -78,7 +88,7 @@ security:
 #                default_target_path: /list
             oauth:
                 resource_owners:
-                    github:         /login/check-github
+                    sedap:          /login/check-sedap
                 login_path:         /login
                 use_forward:        false
                 failure_path:       /login
@@ -92,6 +102,6 @@ security:
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/api, roles: ROLE_USER }
-#        - { path: ^/files, roles: ROLE_USER }
+        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/files, roles: ROLE_USER }
 
