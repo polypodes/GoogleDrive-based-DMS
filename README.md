@@ -92,7 +92,7 @@ Just comment these lines at the very end of `app/config/security.yml`
 cd integration
 npm install
 gulp
-``
+```
 
 ## Heroku deployment
 
