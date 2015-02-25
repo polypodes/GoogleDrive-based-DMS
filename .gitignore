@@ -8,9 +8,20 @@
 !app/logs/.gitkeep
 /build/
 /vendor/
-/web/bower_components/
 /bin/
 /composer.phar
-/src/LesPolypodes/SimpleDMSBundle/Resources/fake/
 .DS_Store
+
+# fake document generation default output
+/src/LesPolypodes/SimpleDMSBundle/Resources/fake/
+
+# buildable Integration
+/app/Resources/index.html
 /integration/node_modules/
+/integration/public
+/web/css
+/web/fonts
+/web/images
+/web/index.html
+/web/js
+/web/bower_components/

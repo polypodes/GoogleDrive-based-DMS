@@ -29,6 +29,17 @@ class WebsiteController extends Controller
 {
 
     /**
+     * @Route("/", name="_index")
+     * @Template()
+     *
+     * @return array
+     */
+    public function indexAction()
+    {
+        return $this->render('@LesPolypodesSimpleDMS/Website/index.html.twig');
+    }
+
+    /**
      * @Route("/folders", name="_folders")
      * @Template()
      *

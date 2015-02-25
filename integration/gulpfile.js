@@ -82,7 +82,6 @@ var bundle = function() {
     if(!sync) {
         var bundler = browserify('./src/js/app.js');
         bundler.transform([reactify]);
-        console.log([typeof browserify]);
         return bundler.bundle()
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))

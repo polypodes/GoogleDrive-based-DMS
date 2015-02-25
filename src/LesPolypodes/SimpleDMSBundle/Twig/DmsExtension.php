@@ -29,6 +29,21 @@ class DmsExtension extends \Twig_Extension
     }
 
     /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return [
+            'include_raw' =>  new \Twig_Function_Method($this, 'twigIncludeRaw', array('needs_environment' => true, 'is_safe' => array('all'))),
+        ];
+    }
+
+    public function twigIncludeRaw(\Twig_Environment $env, $template)
+    {
+        return $env->getLoader()->getSource($template);
+    }
+
+    /**
      * Filter for converting bytes to a human-readable format, as Unix command "ls -h" does.
      *
      * @param string|int $bytes           A string or integer number value to format.

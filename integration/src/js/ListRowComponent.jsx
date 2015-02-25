@@ -1,6 +1,7 @@
 var React = require('react');
 var NProgress = require('nprogress');
 var $ = require('zepto-browserify').$;
+var CONST = require('./Constant');
 
 var FileSize = React.createClass({
     formatFileSize: function() {
@@ -24,9 +25,8 @@ var ListRowComponent = React.createClass({
         }, 2500);
 
         window.location.assign(
-          'http://localhost/app_dev.php/files/' + this.props.file.id
+            CONST.API_GET_FILE + this.props.file.id
         );
-        var url = 'http://localhost/app_dev.php/files/' + this.props.file.id;
         setTimeout(NProgress.done, 3000);
     },
     notifyCopy: function() {
@@ -39,15 +39,15 @@ var ListRowComponent = React.createClass({
         }, 3000);
     },
     render: function() {
-        console.log(location.origin + '/' + this.props.file.id);
         if(this.props.layout === "list") {
             return (
                 <li className="files-row" data-icon={this.props.file.fileExtension}>
                     <span className="files-field files-name"><b>{this.props.file.title}</b></span>
                     <span className="files-field files-size"><FileSize data={this.props.file.fileSize} /></span>
-                    <span className="files-download"><button className="files-download-copy" data-clipboard-text={location.origin + '/' + this.props.file.id}>Copier le lien</button><a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier"></a></span>
+                    <span className="files-download"><button className="files-download-copy" data-clipboard-text={CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button><a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier"></a></span>
                 </li>);
         } else if(this.props.layout === "thumbnail") {
+            console.log(CONST.API_GET_FILE + this.props.file.id);
             return (
                 <li className="files-thumbnail" >
                     <div className="files-thumbnail-box">
@@ -56,7 +56,7 @@ var ListRowComponent = React.createClass({
                             <a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier">
                                 Télécharger
                             </a>
-                            <button className="files-download-copy" data-clipboard-text={location.origin + '/' + this.props.file.id}>Copier le lien</button>
+                            <button className="files-download-copy" data-clipboard-text={CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button>
                         </div>
                     </div>
                     <span className="files-thumbnail-name" data-icon={this.props.file.fileExtension}><b>{this.props.file.title}</b></span>
