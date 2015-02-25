@@ -86,7 +86,7 @@ Just comment these lines at the very end of `app/config/security.yml`
 
 ## Front-end
 
-### Set up front-end stuff
+### Set up front-end 'stuff'
 
 ```bash
 cd integration
