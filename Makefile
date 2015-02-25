@@ -67,7 +67,7 @@ vendor/autoload.php:
 	@curl -s -o .git/hooks/pre-commit https://raw.githubusercontent.com/polypodes/Build-and-Deploy/master/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 
-install: all assets web/index.html clear done
+install: all assets app/Resources/index.html clear done
 
 ############################################################################
 # Specific, front-related tasks:
@@ -78,12 +78,21 @@ integration/node_modules:
 integration/public:
 	@cd integration; gulp build; cd ../
 
-web/index.html: integration/public
-	@ln -s integration/public/css web/css
-	@ln -s integration/public/fonts web/fonts
-	@ln -s integration/public/images web/images
-	@ln -s integration/public/index.html web/index.html
-	@ln -s integration/public/js web/js
+# We sleep 5 seconds to let bower end its own build
+web/css: integration/public
+	@sleep 5;
+	@cd web; ln -s ../integration/public/css css; \
+	    ln -s ../integration/public/fonts fonts; \
+    	ln -s ../integration/public/images images; \
+	    ln -s ../integration/public/js js; cd ../
+
+app/Resources/index.html: web/css
+	@cd app/Resources; ln -s ../../integration/public/index.html index.html; cd ../../
+
+front_remove:
+	@rm -rf integration/node_modules
+	@rm -rf integration/public
+	@rm web/css web/js web/fonts web/images app/Resources/index.html
 
 ############################################################################
 # Generic sf2 tasks:
@@ -187,10 +196,11 @@ deploy: vendor/autoload.php
 	@$(MAKE) clear
 	@$(MAKE) done
 
+
 ############################################################################
 # .PHONY tasks list
 
-.PHONY: data fixtures help check all pull
+.PHONY: data fixtures help check all pull front_remove
 .PHONY: assets clear explain behavior unit codecoverage
 .PHONY: continuous sniff dry-fix cs-fix quality stats deploy done
 .PHONY: install reinstall test update robot unrobot
