@@ -9,7 +9,6 @@ var reactify = require('reactify');
 var reload = browserSync.reload;
 var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
-var gulp_browserify = require('gulp-browserify');
 var less = require('gulp-less');
 var prefixer = require('gulp-autoprefixer');
 
@@ -76,35 +75,39 @@ gulp.task('script-nosync', function() {
     // TODO: http://stackoverflow.com/questions/24190351/using-gulp-browserify-for-my-react-js-modules-im-getting-require-is-not-define
     // SCOPE : gulp build that stop.
 //var bundler = watchify(browserify('./src/js/app.js', watchify.args));
-var bundler = watchify(browserify('./src/js/app.js', watchify.args));
-// add any other browserify options or transforms here
-bundler.transform([reactify]);
+
 
 var bundle = function() {
-  if(!sync) {
-      console.log([typeof browserify]);
-      return gulp.src('./src/js/app.js')
-          .pipe(gulp_browserify())
-          .pipe(gulp.dest('./public/js'))
-  } else {
 
-      return bundler.bundle()
-          // log errors if they happen
-          .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-          .pipe(source('bundle.js'))
-          // optional, remove if you dont want sourcemaps
-          .pipe(buffer())
-          .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
-          .pipe(sourcemaps.write('./')) // writes .map file
-          //
-          .pipe(gulp.dest('./public/js'))
-          .pipe(reload({stream: true}));
+    if(!sync) {
+        var bundler = browserify('./src/js/app.js');
+        bundler.transform([reactify]);
+        console.log([typeof browserify]);
+        return bundler.bundle()
+            .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+            .pipe(source('bundle.js'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest('./public/js'));
+    } else {
+        var bundler = watchify(browserify('./src/js/app.js', watchify.args));
+        bundler.transform([reactify]);
+        bundler.on('update', bundle); // on any dep update, runs the bundler
 
-  }
+        return bundler.bundle()
+            .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+            .pipe(source('bundle.js'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest('./public/js'))
+            .pipe(reload({stream: true}));
+    }
 }
 
 gulp.task('script', bundle); // so you can run `gulp js` to build the file
-bundler.on('update', bundle); // on any dep update, runs the bundler
+
 
 gulp.task('default', ['script', 'libs', 'images', 'fonts', 'style', 'template', 'browser-sync'], function() {
     gulp.watch('./src/*.html', ['template', browserSync.reload]);
