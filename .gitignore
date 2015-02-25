@@ -16,6 +16,7 @@
 /src/LesPolypodes/SimpleDMSBundle/Resources/fake/
 
 # buildable Integration
+/app/Resources/index.html
 /integration/node_modules/
 /integration/public
 /web/css
