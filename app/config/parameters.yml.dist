@@ -29,3 +29,7 @@ parameters:
 
     github_client_id:       629a7...
     github_client_secret:   b67db...
+
+    oauth_access_token_url:    https://path.to/oauth/v2/token
+    oauth_authorization_url:   https://path.to/oauth/v2/authorize
+    oauth_infos_url:           https://path.to/api/user

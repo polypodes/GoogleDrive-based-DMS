@@ -6,20 +6,19 @@ hwi_oauth:
     resource_owners:
         sedap:
             type:                oauth2
-            client_id:           demoapp
-            client_secret:       demopass
-            access_token_url:    http://oauthserverphp/lockdin/token
-            authorization_url:   http://oauthserverphp/lockdin/authorize
-            infos_url:           http://oauthserverphp/lockdin/resource
-            scope:
+            client_id:           sedap_dms
+            client_secret:       LpPjLU9OjNihoQKLomZbIstR1qpK4s5yesMNcjzQ
+            access_token_url:    %oauth_access_token_url%
+            authorization_url:   %oauth_authorization_url%
+            infos_url:           %oauth_infos_url%
+            scope:               "read"
             options:
                 csrf:            true
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
-                nickname:   username
-                realname:   fullname
-
+                nickname:   sedap-dms
+                realname:   "Manager de documents Sedap"
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
     # redirect the user to /my/destination after facebook authenticates them.  If this is not
