@@ -57,27 +57,33 @@ endif
 ############################################################################
 # Mandatory tasks:
 
-all: .git/hook/pre-commit web/bower_components vendor/autoload.php check help
+all: .git/hook/pre-commit vendor/autoload.php integration/node_modules check help
 
 vendor/autoload.php:
 	@composer self-update
 	@composer install --optimize-autoloader
 
-web/bower_components:
-	@cd web; bower install; cd -;
-
 .git/hook/pre-commit:
 	@curl -s -o .git/hooks/pre-commit https://raw.githubusercontent.com/polypodes/Build-and-Deploy/master/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 
-############################################################################
-# Specific, project-related sf2 tasks:
+install: all assets web/index.html clear done
 
-integration:
-	@echo
-	@cd integration
-	@gulp build
-	@cd ../
+############################################################################
+# Specific, front-related tasks:
+
+integration/node_modules:
+	@cd integration; npm install; bower install; cd ../
+
+integration/public:
+	@cd integration; gulp build; cd ../
+
+web/index.html: integration/public
+	@ln -s integration/public/css web/css
+	@ln -s integration/public/fonts web/fonts
+	@ln -s integration/public/images web/images
+	@ln -s integration/public/index.html web/index.html
+	@ln -s integration/public/js web/js
 
 ############################################################################
 # Generic sf2 tasks:
@@ -112,7 +118,7 @@ clear: vendor/autoload.php
 	@php app/console cache:clear --env=dev
 
 explain:
-	@echo "git pull origin master + update db schema + build integration + copy new assets + rebuild prod cache"
+	@echo "git pull origin master + build integration + copy new assets + rebuild prod cache"
 	@echo "Note you can change the git remote repo username in .git/config"
 
 behavior: vendor/autoload.php
@@ -173,24 +179,19 @@ done:
 	@echo
 	@echo "${GREEN}Done.${RESETC}"
 
-# Tasks sets:
-
-install: all assets clear done
-
 tests: behavior unit codecoverage
 
 deploy: vendor/autoload.php
 	@$(MAKE) explain
 	@$(MAKE) pull
-#	@$(MAKE) schemaDb
 	@$(MAKE) clear
 	@$(MAKE) done
 
 ############################################################################
 # .PHONY tasks list
 
-.PHONY: integration data fixtures help check all pull dropDb createDb myqldump
-.PHONY: schemaDb assets clear explain behavior unit codecoverage
-.PHONY: continuous sniff dry-fix cs-fix quality stats deploy done prepareDb purgeDb
+.PHONY: data fixtures help check all pull
+.PHONY: assets clear explain behavior unit codecoverage
+.PHONY: continuous sniff dry-fix cs-fix quality stats deploy done
 .PHONY: install reinstall test update robot unrobot
 # vim:ft=make
