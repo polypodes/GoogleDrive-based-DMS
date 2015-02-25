@@ -8,13 +8,6 @@ _api:
     type:     annotation
     prefix:   /api
 
-_website_root:
-    path: /
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /files
-        permanent: true
-
 _api_root:
     path: /api
     defaults:
