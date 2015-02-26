@@ -56,7 +56,7 @@ var ListRowComponent = React.createClass({
                             <a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier">
                                 Télécharger
                             </a>
-                            <button className="files-download-copy" data-clipboard-text={CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button>
+                            <button className="files-download-copy" data-clipboard-text={document.location.host + CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button>
                         </div>
                     </div>
                     <span className="files-thumbnail-name" data-icon={this.props.file.fileExtension}><b>{this.props.file.title}</b></span>

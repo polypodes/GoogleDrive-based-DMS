@@ -28011,7 +28011,7 @@ var ListRowComponent = React.createClass({displayName: "ListRowComponent",
                             React.createElement("a", {href: "#", onClick: this.handleDownload, title: "Lien vers de téléchargement vers le fichier"}, 
                                 "Télécharger"
                             ), 
-                            React.createElement("button", {className: "files-download-copy", "data-clipboard-text": CONST.API_GET_FILE + this.props.file.id}, "Copier le lien")
+                            React.createElement("button", {className: "files-download-copy", "data-clipboard-text": document.location.host + CONST.API_GET_FILE + this.props.file.id}, "Copier le lien")
                         )
                     ), 
                     React.createElement("span", {className: "files-thumbnail-name", "data-icon": this.props.file.fileExtension}, React.createElement("b", null, this.props.file.title))
