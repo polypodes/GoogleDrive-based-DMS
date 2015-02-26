@@ -60,7 +60,6 @@ endif
 all: .git/hook/pre-commit vendor/autoload.php integration/node_modules check help
 
 vendor/autoload.php:
-	@composer self-update
 	@composer install --optimize-autoloader
 
 .git/hook/pre-commit:
