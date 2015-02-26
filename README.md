@@ -115,7 +115,7 @@ To push a branch other than master, use this syntax:
 
 ```bash
 git push heroku yourbranch:master
-``
+```
 
 ### Set up Heroku parameters
 
@@ -133,7 +133,7 @@ Heroku allows you to run commands in a one-off dyno with heroku run.
 Use this for scripts and applications that only need to be executed when needed,
 or to launch an interactive PHP shell attached to your local terminal for experimenting in you app’s environment:
 
-```
+```bash
 $ heroku run "php -a"
 Running `php -a` attached to terminal... up, run.8081
 Interactive shell
