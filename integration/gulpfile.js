@@ -72,11 +72,6 @@ gulp.task('script-nosync', function() {
 /**
  * Browserify poop
  */
-    // TODO: http://stackoverflow.com/questions/24190351/using-gulp-browserify-for-my-react-js-modules-im-getting-require-is-not-define
-    // SCOPE : gulp build that stop.
-//var bundler = watchify(browserify('./src/js/app.js', watchify.args));
-
-
 var bundle = function() {
 
     if(!sync) {

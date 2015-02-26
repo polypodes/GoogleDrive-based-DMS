@@ -8,17 +8,25 @@ var $ = require('zepto-browserify').$;
 var util = require('./util');
 var NProgress = require('nprogress');
 
+/**
+ * Main view, handles other views
+ */
 var App = React.createClass({
     mixins: [Navigation],
     getInitialState: function() {
-        NProgress.configure({ showSpinner: false });
         return {
             searchViewName: 'Tout les fichiers'
         };
     },
+    /**
+     * Handle searched keyword and get the result
+     */
     handleSubmit: function(e) {
         e.preventDefault();
 
+        /**
+         * Wait for user to stop keystroke for submit
+         */
         util.debounce(function() {
             var keyword = this.refs.keyword.getDOMNode().value.trim();
             FileActions.searchFile(keyword);
@@ -28,23 +36,31 @@ var App = React.createClass({
             NProgress.start();
         }.bind(this), 400);
     },
+    /**
+     * Actions to trigger when the view change
+     */
     handleChangeView: function(e) {
         this.setMenuCurrent();
         this.refs.keyword.getDOMNode().value = '';
         this.setState({ searchViewName: 'Tout les fichiers' });
     },
+    /**
+     * Add css style to current view in menu
+     */
     setMenuCurrent: function() {
         $('.current').removeClass('current');
         setTimeout(function() {
             $('.menu .active').parent().toggleClass('current');
         }, 50);
     },
+    /**
+     * Button to toggle menu
+     */
     handleMenuButton: function(e) {
         e.preventDefault();
-        console.log('menu btn handled');
         $('main').toggleClass('menu-open');
     },
-    render: function () {
+    render: function() {
         return (
             <div>
                 <div className="notify"></div>

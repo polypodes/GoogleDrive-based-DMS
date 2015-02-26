@@ -10,23 +10,29 @@ var FolderComponent = require('./FolderComponent.jsx');
 var lastModifiedComponent = require('./lastModifiedComponent.jsx');
 var NProgress = require('nprogress');
 
-NProgress.start();
-
 /**
  * Routes
  */
 var routes = (
   React.createElement(Route, {name: "app", path: "/", handler: App}, 
+    "// File list/Result list view", 
     React.createElement(Route, {name: "list", handler: ListComponent}), 
+    "// Filter by type view", 
     React.createElement(Route, {name: "browse", handler: BrowseComponent}), 
+    "// Browse through folder", 
     React.createElement(Route, {name: "folder", handler: FolderComponent}), 
+    "// Last modified files view", 
     React.createElement(Route, {name: "lastmodified", handler: lastModifiedComponent}), 
+    "// Default view", 
     React.createElement(DefaultRoute, {handler: ListComponent})
   )
 );
 
-Router.run(routes, function (Handler) {
-  React.render(React.createElement(Handler, null), document.body);
+Router.run(routes, function(Handler) {
+    NProgress.configure({ showSpinner: false });
+    NProgress.start();
+
+    React.render(React.createElement(Handler, null), document.body);
 });
 
 },{"./AppComponent.jsx":"/Users/alex/repo/GoogleDrive-based-DMS/integration/src/js/AppComponent.jsx","./BrowseComponent.jsx":"/Users/alex/repo/GoogleDrive-based-DMS/integration/src/js/BrowseComponent.jsx","./FolderComponent.jsx":"/Users/alex/repo/GoogleDrive-based-DMS/integration/src/js/FolderComponent.jsx","./ListComponent.jsx":"/Users/alex/repo/GoogleDrive-based-DMS/integration/src/js/ListComponent.jsx","./lastModifiedComponent.jsx":"/Users/alex/repo/GoogleDrive-based-DMS/integration/src/js/lastModifiedComponent.jsx","nprogress":"/Users/alex/repo/GoogleDrive-based-DMS/integration/node_modules/nprogress/nprogress.js","react":"/Users/alex/repo/GoogleDrive-based-DMS/integration/node_modules/react/react.js","react-router":"/Users/alex/repo/GoogleDrive-based-DMS/integration/node_modules/react-router/lib/index.js"}],"/Users/alex/repo/GoogleDrive-based-DMS/integration/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
@@ -27036,17 +27042,25 @@ var $ = require('zepto-browserify').$;
 var util = require('./util');
 var NProgress = require('nprogress');
 
+/**
+ * Main view, handles other views
+ */
 var App = React.createClass({displayName: "App",
     mixins: [Navigation],
     getInitialState: function() {
-        NProgress.configure({ showSpinner: false });
         return {
             searchViewName: 'Tout les fichiers'
         };
     },
+    /**
+     * Handle searched keyword and get the result
+     */
     handleSubmit: function(e) {
         e.preventDefault();
 
+        /**
+         * Wait for user to stop keystroke for submit
+         */
         util.debounce(function() {
             var keyword = this.refs.keyword.getDOMNode().value.trim();
             FileActions.searchFile(keyword);
@@ -27056,23 +27070,31 @@ var App = React.createClass({displayName: "App",
             NProgress.start();
         }.bind(this), 400);
     },
+    /**
+     * Actions to trigger when the view change
+     */
     handleChangeView: function(e) {
         this.setMenuCurrent();
         this.refs.keyword.getDOMNode().value = '';
         this.setState({ searchViewName: 'Tout les fichiers' });
     },
+    /**
+     * Add css style to current view in menu
+     */
     setMenuCurrent: function() {
         $('.current').removeClass('current');
         setTimeout(function() {
             $('.menu .active').parent().toggleClass('current');
         }, 50);
     },
+    /**
+     * Button to toggle menu
+     */
     handleMenuButton: function(e) {
         e.preventDefault();
-        console.log('menu btn handled');
         $('main').toggleClass('menu-open');
     },
-    render: function () {
+    render: function() {
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "notify"}), 
