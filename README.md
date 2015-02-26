@@ -90,6 +90,7 @@ Just comment these lines at the very end of `app/config/security.yml`
 
 ```bash
 cd integration
+bower install
 npm install
 gulp
 ```

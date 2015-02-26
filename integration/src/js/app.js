@@ -9,12 +9,6 @@ var FolderComponent = require('./FolderComponent.jsx');
 var lastModifiedComponent = require('./lastModifiedComponent.jsx');
 var NProgress = require('nprogress');
 
-var defaultRoute = React.createClass({
-    render: function() {
-        return (<h1>404</h1>);
-    }
-});
-
 NProgress.start();
 
 /**

@@ -10,12 +10,6 @@ var FolderComponent = require('./FolderComponent.jsx');
 var lastModifiedComponent = require('./lastModifiedComponent.jsx');
 var NProgress = require('nprogress');
 
-var defaultRoute = React.createClass({displayName: "defaultRoute",
-    render: function() {
-        return (React.createElement("h1", null, "404"));
-    }
-});
-
 NProgress.start();
 
 /**
@@ -27873,8 +27867,8 @@ var ListComponent = React.createClass({displayName: "ListComponent",
             $('.content').scrollTop(0);
             return (
                 React.createElement("div", null, 
-                    React.createElement("h1", {className: "title-1"}, "Tous les fichiers"),
-                    React.createElement("p", {className: "instruction"}, "Vous trouverez ici la liste de tous les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier."),
+                    React.createElement("h1", {className: "title-1"}, "Tous les fichiers"), 
+                    React.createElement("p", {className: "instruction"}, "Vous trouverez ici la liste de tous les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier."), 
                     React.createElement("aside", {className: "files-button"}, 
                         React.createElement("button", {className: "files-button-list", onClick: this.showList}), 
                         React.createElement("button", {className: "files-button-thumbnail", onClick: this.showThumbnail})
