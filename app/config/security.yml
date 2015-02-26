@@ -11,7 +11,7 @@ hwi_oauth:
             access_token_url:    %oauth_access_token_url%
             authorization_url:   %oauth_authorization_url%
             infos_url:           %oauth_infos_url%
-            scope:               "read"
+            scope:               "%oauth_client_scope%"
             options:
                 csrf:            true
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
