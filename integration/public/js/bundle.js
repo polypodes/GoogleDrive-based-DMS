@@ -27047,7 +27047,7 @@ var App = React.createClass({displayName: "App",
     getInitialState: function() {
         NProgress.configure({ showSpinner: false });
         return {
-            searchViewName: 'Tout les fichiers'
+            searchViewName: 'Tous les fichiers'
         };
     },
     handleSubmit: function(e) {
@@ -27065,7 +27065,7 @@ var App = React.createClass({displayName: "App",
     handleChangeView: function(e) {
         this.setMenuCurrent();
         this.refs.keyword.getDOMNode().value = '';
-        this.setState({ searchViewName: 'Tout les fichiers' });
+        this.setState({ searchViewName: 'Tous les fichiers' });
     },
     setMenuCurrent: function() {
         $('.current').removeClass('current');
@@ -27088,7 +27088,7 @@ var App = React.createClass({displayName: "App",
                             React.createElement("img", {src: "./images/logo-drive.png", alt: "", className: "header-logo-1"}), 
                             React.createElement("div", {className: "header-logo-2"}, 
                                 React.createElement("img", {src: "./images/logo-sedap.png", alt: ""}), 
-                                React.createElement("span", null, "centre de ressource")
+                                React.createElement("span", null, "centre de ressources")
                             )
                         )
                     ), 
@@ -27873,8 +27873,8 @@ var ListComponent = React.createClass({displayName: "ListComponent",
             $('.content').scrollTop(0);
             return (
                 React.createElement("div", null, 
-                    React.createElement("h1", {className: "title-1"}, "Tout les fichiers"), 
-                    React.createElement("p", {className: "instruction"}, "Vous trouverez ici la liste de tout les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier."), 
+                    React.createElement("h1", {className: "title-1"}, "Tous les fichiers"),
+                    React.createElement("p", {className: "instruction"}, "Vous trouverez ici la liste de tous les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier."),
                     React.createElement("aside", {className: "files-button"}, 
                         React.createElement("button", {className: "files-button-list", onClick: this.showList}), 
                         React.createElement("button", {className: "files-button-thumbnail", onClick: this.showThumbnail})

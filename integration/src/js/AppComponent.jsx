@@ -13,7 +13,7 @@ var App = React.createClass({
     getInitialState: function() {
         NProgress.configure({ showSpinner: false });
         return {
-            searchViewName: 'Tout les fichiers'
+            searchViewName: 'Tous les fichiers'
         };
     },
     handleSubmit: function(e) {
@@ -31,7 +31,7 @@ var App = React.createClass({
     handleChangeView: function(e) {
         this.setMenuCurrent();
         this.refs.keyword.getDOMNode().value = '';
-        this.setState({ searchViewName: 'Tout les fichiers' });
+        this.setState({ searchViewName: 'Tous les fichiers' });
     },
     setMenuCurrent: function() {
         $('.current').removeClass('current');
@@ -54,7 +54,7 @@ var App = React.createClass({
                             <img src="./images/logo-drive.png" alt="" className="header-logo-1" />
                             <div className="header-logo-2">
                                 <img src="./images/logo-sedap.png" alt="" />
-                                <span>centre de ressource</span>
+                                <span>centre de ressources</span>
                             </div>
                         </Link>
                     </div>
