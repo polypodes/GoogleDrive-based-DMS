@@ -27999,7 +27999,7 @@ var ListRowComponent = React.createClass({displayName: "ListRowComponent",
                 React.createElement("li", {className: "files-row", "data-icon": this.props.file.fileExtension}, 
                     React.createElement("span", {className: "files-field files-name"}, React.createElement("b", null, this.props.file.title)), 
                     React.createElement("span", {className: "files-field files-size"}, React.createElement(FileSize, {data: this.props.file.fileSize})), 
-                    React.createElement("span", {className: "files-download"}, React.createElement("button", {className: "files-download-copy", "data-clipboard-text": CONST.API_GET_FILE + this.props.file.id}, "Copier le lien"), React.createElement("a", {href: "#", onClick: this.handleDownload, title: "Lien vers de téléchargement vers le fichier"}))
+                    React.createElement("span", {className: "files-download"}, React.createElement("button", {className: "files-download-copy", "data-clipboard-text": document.location.host + CONST.API_GET_FILE + this.props.file.id}, "Copier le lien"), React.createElement("a", {href: "#", onClick: this.handleDownload, title: "Lien vers de téléchargement vers le fichier"}))
                 ));
         } else if(this.props.layout === "thumbnail") {
             console.log(CONST.API_GET_FILE + this.props.file.id);
