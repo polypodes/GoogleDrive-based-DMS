@@ -6,8 +6,8 @@ hwi_oauth:
     resource_owners:
         sedap:
             type:                oauth2
-            client_id:           sedap_dms
-            client_secret:       LpPjLU9OjNihoQKLomZbIstR1qpK4s5yesMNcjzQ
+            client_id:           %oauth_client_id%
+            client_secret:       %oauth_client_secret%
             access_token_url:    %oauth_access_token_url%
             authorization_url:   %oauth_authorization_url%
             infos_url:           %oauth_infos_url%
