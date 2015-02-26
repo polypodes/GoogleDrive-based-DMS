@@ -15,20 +15,18 @@
 - [x] GET request for search route
 - [X] API: Have an API
 - [X] API: propose a [RAML](http://raml.org) API definition & generate the API documentation
-- [ ] give more info about images dimension - see Google Drive API doc
 - [X] Web/API: OAuth2 client
 - [X] Web/API: Use Google paginated result & pagination token system
 - [X] Web/API: Build a clickable list of available mimeTypes filters: pdf, mp4, docx, png, and grouped filters : docs, videos, images, ...
 - [X] Web/API: Building browsable folders navigation menu starting from the `root` typed folder
-- [ ] API: most downloaded docs using Google API
 - [X] API: last uploaded docs using Google API
 - [X] predictable API-like URLs, even for HTML front
-- [ ] Front-end design
+- [X] Front-end design
 
 
 ## v1.2
+- [ ] API: most downloaded docs using Google API
 - [ ] [logstash + kibana to monitore search queries & results](https://coderwall.com/p/irhi_q/how-to-use-logstash-with-monolog)
-- [ ] Caching the one-hour-valid token ?
 - [ ] Special private folder
 - [ ] Web/API: better search experience : "did you mean ?"
 - [ ] Web/API: better search experience : facets results
