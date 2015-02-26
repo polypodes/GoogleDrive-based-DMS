@@ -60,7 +60,6 @@ endif
 all: .git/hook/pre-commit vendor/autoload.php integration/node_modules check help
 
 vendor/autoload.php:
-	@composer self-update
 	@composer install --optimize-autoloader
 
 .git/hook/pre-commit:
@@ -75,11 +74,8 @@ install: all assets app/Resources/index.html clear done
 integration/node_modules:
 	@cd integration; npm install; bower install; cd ../
 
-integration/public:
-	@cd integration; gulp build; cd ../
-
 # We sleep 5 seconds to let bower end its own build
-web/css: integration/public
+web/css:
 	@sleep 5;
 	@cd web; ln -s ../integration/public/css css; \
 	    ln -s ../integration/public/fonts fonts; \
