@@ -72,8 +72,8 @@ var ListComponent = React.createClass({
             $('.content').scrollTop(0);
             return (
                 <div>
-                    <h1 className="title-1">Tout les fichiers</h1>
-                    <p className="instruction">Vous trouverez ici la liste de tout les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier.</p>
+                    <h1 className="title-1">Tous les fichiers</h1>
+                    <p className="instruction">Vous trouverez ici la liste de tous les fichiers. Utiliser la barre de recherche ci-dessus afin de rechercher un fichier.</p>
                     <aside className="files-button">
                         <button className="files-button-list" onClick={this.showList}></button>
                         <button className="files-button-thumbnail" onClick={this.showThumbnail}></button>

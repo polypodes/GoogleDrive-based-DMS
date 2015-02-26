@@ -81,8 +81,6 @@ var bundle = function() {
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))
             .pipe(buffer())
-            .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./public/js'));
     } else {
         var bundler = watchify(browserify('./src/js/app.js', watchify.args));
@@ -93,8 +91,6 @@ var bundle = function() {
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))
             .pipe(buffer())
-            .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./public/js'))
             .pipe(reload({stream: true}));
     }
