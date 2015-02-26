@@ -417,12 +417,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66"
+                "reference": "4b1b666e6365a3d78649782d1a0f0dede08f8777"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66",
-                "reference": "57a3b880b4c1c9caed14fe7f20e2e42f42cf2d66",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/4b1b666e6365a3d78649782d1a0f0dede08f8777",
+                "reference": "4b1b666e6365a3d78649782d1a0f0dede08f8777",
                 "shasum": ""
             },
             "require": {
@@ -451,11 +451,7 @@
             "keywords": [
                 "google"
             ],
-<<<<<<< HEAD
-            "time": "2015-02-13 11:40:56"
-=======
-            "time": "2015-02-18 11:45:22"
->>>>>>> 0f3fdca49a00d0f421b0e4e5af6da09f760b8c82
+            "time": "2015-02-25 11:51:59"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -1516,16 +1512,16 @@
     "packages-dev": [
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.4.2",
+            "version": "v1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038"
+                "reference": "2d6851520bf0250f668307ab2fd28cbb0b35d2b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/3af00cf237289a406e7307e18e7ab0d92cf57038",
-                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/2d6851520bf0250f668307ab2fd28cbb0b35d2b9",
+                "reference": "2d6851520bf0250f668307ab2fd28cbb0b35d2b9",
                 "shasum": ""
             },
             "require": {
@@ -1565,7 +1561,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-02-03 21:20:51"
+            "time": "2015-02-18 19:35:59"
         },
         {
             "name": "fzaninotto/faker",
@@ -1573,12 +1569,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "80c1424e6522a3303d320b611647fa6fbc29a8e4"
+                "reference": "2495d3361ac1e9fc15608a1b33ec2dd41c56b2dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/80c1424e6522a3303d320b611647fa6fbc29a8e4",
-                "reference": "80c1424e6522a3303d320b611647fa6fbc29a8e4",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/2495d3361ac1e9fc15608a1b33ec2dd41c56b2dc",
+                "reference": "2495d3361ac1e9fc15608a1b33ec2dd41c56b2dc",
                 "shasum": ""
             },
             "require": {
@@ -1617,20 +1613,20 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2015-02-12 21:08:01"
+            "time": "2015-02-23 10:49:44"
         },
         {
             "name": "heroku/heroku-buildpack-php",
-            "version": "v63",
+            "version": "v64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heroku/heroku-buildpack-php.git",
-                "reference": "62bddfebfd8c3e79b9710d11d558e07727356484"
+                "reference": "aea81319f561cf2eb581736b9b30e7a81c48363b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/62bddfebfd8c3e79b9710d11d558e07727356484",
-                "reference": "62bddfebfd8c3e79b9710d11d558e07727356484",
+                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/aea81319f561cf2eb581736b9b30e7a81c48363b",
+                "reference": "aea81319f561cf2eb581736b9b30e7a81c48363b",
                 "shasum": ""
             },
             "bin": [
@@ -1661,7 +1657,7 @@
                 "nginx",
                 "php"
             ],
-            "time": "2015-02-10 23:24:07"
+            "time": "2015-02-19 09:59:04"
         },
         {
             "name": "pdepend/pdepend",
