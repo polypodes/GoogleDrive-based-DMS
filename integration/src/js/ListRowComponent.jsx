@@ -44,7 +44,7 @@ var ListRowComponent = React.createClass({
                 <li className="files-row" data-icon={this.props.file.fileExtension}>
                     <span className="files-field files-name"><b>{this.props.file.title}</b></span>
                     <span className="files-field files-size"><FileSize data={this.props.file.fileSize} /></span>
-                    <span className="files-download"><button className="files-download-copy" data-clipboard-text={CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button><a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier"></a></span>
+                    <span className="files-download"><button className="files-download-copy" data-clipboard-text={document.location.host + CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button><a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier"></a></span>
                 </li>);
         } else if(this.props.layout === "thumbnail") {
             console.log(CONST.API_GET_FILE + this.props.file.id);
