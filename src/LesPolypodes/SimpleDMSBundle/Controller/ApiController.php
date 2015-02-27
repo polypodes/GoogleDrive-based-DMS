@@ -10,6 +10,7 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Controller;
 
 use LesPolypodes\SimpleDMSBundle\Service\GoogleDriveListParameters;
@@ -20,14 +21,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Class FileController
- * @package LesPolypodes\SimpleDMSBundle\Controller
+ * Class FileController.
  */
 class ApiController extends Controller
 {
-
     /**
      * @Route("/files/{pageToken}", name="_api_files", defaults={"pageToken"=null})
+     *
      * @param Request $request
      * @param string  $pageToken Google-side generated result page token
      *
@@ -43,6 +43,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/files/type/{type}/{pageToken}", name="_api_files_types", defaults={"type"=null,"pageToken"=null})
+     *
      * @param Request $request
      * @param string  $type      MIME
      * @param string  $pageToken Google-side generated result page token
@@ -80,6 +81,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/files/search/{searchTerm}/{pageToken}", name="_api_files_search", defaults={"searchTerm"=null, "pageToken"=null})
+     *
      * @param Request $request
      * @param string  $searchTerm full-text search parameter
      * @param string  $pageToken  Google-side generated result page token
@@ -115,6 +117,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/folders", name="_folders")
+     *
      * @param Request $request
      *
      * @return array
@@ -128,6 +131,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/folders/{folderId}/{pageToken}", name="_api_folder",  defaults={"pageToken"=null}))
+     *
      * @param Request $request
      * @param string  $folderId
      *
@@ -161,6 +165,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/lastmodified", name="_api_last_modified")
+     *
      * @param Request $request
      *
      * @return array|RedirectResponse
@@ -174,6 +179,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/filetypes", name="_api_filetypes")
+     *
      * @param Request $request
      *
      * @return array|RedirectResponse
@@ -187,6 +193,7 @@ class ApiController extends Controller
 
     /**
      * @Route("/stats", name="_api_stats")
+     *
      * @param Request $request
      *
      * @return array|RedirectResponse

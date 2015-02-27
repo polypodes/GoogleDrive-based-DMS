@@ -10,17 +10,16 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Service;
 
 /**
- * Class GoogleDriveListParameters
- * @package LesPolypodes\SimpleDMSBundle\Service
+ * Class GoogleDriveListParameters.
  */
 class GoogleDriveListParameters
 {
-
     /**
-     * query suffix helper
+     * query suffix helper.
      */
     const NO_TRASH = 'trashed = false';
     const FOLDERS = 'mimeType = "application/vnd.google-apps.folder"';
@@ -29,6 +28,7 @@ class GoogleDriveListParameters
 
     /**
      * @var string Query string for searching files
+     *
      * @link https://developers.google.com/drive/web/search-parameters
      */
     protected $query;

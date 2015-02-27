@@ -10,6 +10,7 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;

@@ -10,6 +10,7 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

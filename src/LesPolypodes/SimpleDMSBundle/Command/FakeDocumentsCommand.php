@@ -10,6 +10,7 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -20,12 +21,10 @@ use Faker;
 use PhpOffice;
 
 /**
- * Class FakeDocumentsCommand
- * @package LesPolypodes\SimpleDMSBundle\Command
+ * Class FakeDocumentsCommand.
  */
 class FakeDocumentsCommand extends ContainerAwareCommand
 {
-
     /**
      * @var array
      */
@@ -65,8 +64,6 @@ class FakeDocumentsCommand extends ContainerAwareCommand
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -227,6 +224,7 @@ class FakeDocumentsCommand extends ContainerAwareCommand
      * @param $fakeDir
      *
      * @return string
+     *
      * @throws PhpOffice\PhpWord\Exception\Exception
      */
     protected function createWordFile($fakeDir)
