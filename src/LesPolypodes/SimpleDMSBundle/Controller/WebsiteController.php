@@ -10,6 +10,7 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Controller;
 
 use LesPolypodes\SimpleDMSBundle\Service\GoogleDriveListParameters;
@@ -22,12 +23,10 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Class FileController
- * @package LesPolypodes\SimpleDMSBundle\Controller
+ * Class FileController.
  */
 class WebsiteController extends Controller
 {
-
     /**
      * @Route("/", name="_index")
      * @Template()
@@ -55,6 +54,7 @@ class WebsiteController extends Controller
     /**
      * @Route("/folders/{folderId}", name="_folder")
      * @Template()
+     *
      * @param Request $request
      * @param string  $folderId
      *
@@ -95,6 +95,7 @@ class WebsiteController extends Controller
     /**
      * @Route("/files", name="_files")
      * @Template()
+     *
      * @param Request $request
      *
      * @return array

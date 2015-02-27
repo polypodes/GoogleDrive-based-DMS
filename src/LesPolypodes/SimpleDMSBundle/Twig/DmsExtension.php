@@ -10,11 +10,11 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Twig;
 
 /**
- * Class DmsExtension
- * @package LesPolypodes\SimpleDMSBundle\Twig
+ * Class DmsExtension.
  */
 class DmsExtension extends \Twig_Extension
 {
@@ -53,6 +53,7 @@ class DmsExtension extends \Twig_Extension
      * @link https://github.com/twigphp/Twig-extensions/pull/116/files
      *
      * @return string The number converted to human readable representation.
+     *
      * @todo: Use Intl-based translations to deal with "11.4" conversion to "11,4" value
      */
     public function formatBytes($bytes, $base2conversion = true)
