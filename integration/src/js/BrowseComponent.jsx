@@ -6,33 +6,36 @@ var ListItemComponent = require('./ListItemComponent.jsx');
 var $ = require('zepto-browserify').$;
 var NProgress = require('nprogress');
 var If = require('./If.jsx');
-NProgress.configure({ showSpinner: false });
-
-var data = [];
 
 var BrowseComponent = React.createClass({
     getInitialState: function() {
-        NProgress.start();
-        FileActions.getFileTypes();
-        $('.pagination-prev').attr('disabled', 'true');
         return {
             fileType: [],
             files: [],
             layout: 'list'
         }
     },
+    componentWillMount: function() {
+        NProgress.start();
+        FileActions.getFileTypes();
+        $('.pagination-prev').attr('disabled', 'true');
+    },
     componentDidMount: function() {
         this.unsubscribe = FileTypeStore.listen(this.fileTypeUpdated);
         this.unsubscribe2 = FileByTypeStore.listen(this.fileByTypeUpdated);
+    },
+    componentWillUnmount: function() {
+        this.unsubscribe();
+        this.unsubscribe2();
     },
     fileByTypeUpdated: function(files, hasPagination, isFirstPage) {
         this.state.files = files;
         this.setState(this.state);
 
+        // pagination next/prev stuff
         if(isFirstPage && hasPagination) {
             $('.pagination-prev').attr('disabled', 'true');
             $('.pagination-next').removeAttr('disabled');
-            console.log("first page & pagination");
         } else if(isFirstPage) {
             $('.pagination-btn').attr('disabled', 'true');
         } else if(hasPagination) {
@@ -42,42 +45,33 @@ var BrowseComponent = React.createClass({
             $('.pagination-prev').removeAttr('disabled');
         }
     },
-    componentWillUnmount: function() {
-        this.unsubscribe();
-        this.unsubscribe2();
-    },
-    handleSelectChange: function() {
-        var selectIndex = this.refs.select.getDOMNode().selectedIndex;
-        var text = this.refs.select.getDOMNode()[selectIndex].text;
-        console.log('select changed : ' + selectIndex + ' = ' + text);
-        FileActions.getFilesByType(text);
-        NProgress.start();
-    },
     fileTypeUpdated: function(newFileType) {
-        data.fileType = newFileType;
         this.setState({
           fileType: newFileType
         });
-        console.log(this.state.fileType);
         $('.pagination-prev').attr('disable', 'true');
         this.handleSelectChange();
     },
+    handleSelectChange: function() {
+        NProgress.start();
+        var selectIndex = this.refs.select.getDOMNode().selectedIndex;
+        var text = this.refs.select.getDOMNode()[selectIndex].text;
+        FileActions.getFilesByType(text);
+    },
     showList: function() {
-        console.log('okok');
         this.state.layout = 'list';
         this.setState(this.state);
     },
     showThumbnail: function() {
-        console.log('okok');
         this.state.layout = 'thumbnail';
         this.setState(this.state);
     },
     handlePrev: function() {
-        FileByTypeStore.getPrev();
+        FileActions.getPrev();
         $('.pagination-btn').attr("disabled", "true");
     },
     handleNext: function() {
-        FileByTypeStore.getNext();
+        FileActions.getNext();
         $('.pagination-btn').attr("disabled", "true");
     },
     render: function() {
@@ -92,8 +86,8 @@ var BrowseComponent = React.createClass({
                     <div className="files-select-wrapper">
                         <select className="files-select" ref="select" id="filetype" name="filetype" onChange={this.handleSelectChange}>
                             <option value="">Trier par type</option>
-                            {this.state.fileType.map(function(item) {
-                              return <option value={item}>{item}</option>;
+                            {this.state.fileType.map(function(item, index) {
+                              return <option value={item} key={index}>{item}</option>;
                             })}
                         </select>
                     </div>

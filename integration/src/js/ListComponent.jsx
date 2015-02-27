@@ -1,5 +1,6 @@
 var React = require('react');
 var FileStore = require('./FileStore');
+var FileActions = require('./FileActions');
 var ListItemComponent = require('./ListItemComponent.jsx');
 var $ = require('zepto-browserify').$;
 var If = require('./If.jsx');
@@ -9,46 +10,44 @@ var classes = "list"
 
 var ListComponent = React.createClass({
     getInitialState: function() {
-        NProgress.start();
         FileStore.init();
-        $('.pagination-prev').attr('disabled', 'true');
         return {
             files: '',
             layout: 'list'
         };
     },
     componentDidMount: function() {
-        var that = this;
         this.unsubscribe = FileStore.listen(this.filesUpdated);
+        $('.pagination-prev').attr('disabled', 'true');
     },
     componentWillUnmount: function() {
         this.unsubscribe();
     },
     showList: function() {
         this.setState({
-          files: this.state.files,
-          terms: this.state.terms,
-          layout: 'list'
+            files: this.state.files,
+            terms: this.state.terms,
+            layout: 'list'
         });
     },
     showThumbnail: function() {
         this.setState({
-          files: this.state.files,
-          terms: this.state.terms,
-          layout: 'thumbnail'
+            files: this.state.files,
+            terms: this.state.terms,
+            layout: 'thumbnail'
         });
     },
     filesUpdated: function(newFiles, newTerms, hasPagination, isFirstPage) {
         this.setState({
-          files: newFiles,
-          terms: newTerms,
-          layout: this.state.layout
+            files: newFiles,
+            terms: newTerms,
+            layout: this.state.layout
         });
 
+        // Pagination stuffs
         if(isFirstPage && hasPagination) {
             $('.pagination-prev').attr('disabled', 'true');
             $('.pagination-next').removeAttr('disabled');
-            console.log("first page & pagination");
         } else if(isFirstPage) {
             $('.pagination-btn').attr('disabled', 'true');
         } else if(hasPagination) {
@@ -59,11 +58,11 @@ var ListComponent = React.createClass({
         }
     },
     handlePrev: function() {
-        FileStore.getPrev();
+        FileActions.getPrev();
         $('.pagination-btn').attr("disabled", "true");
     },
     handleNext: function() {
-        FileStore.getNext();
+        FileActions.getNext();
         $('.pagination-btn').attr("disabled", "true");
     },
     render: function() {

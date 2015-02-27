@@ -4,8 +4,6 @@ var ListItemComponent = require('./ListItemComponent.jsx');
 var $ = require('zepto-browserify').$;
 var NProgress = require('nprogress');
 
-var classes = "list"
-
 var LastModifiedComponent = React.createClass({
     getInitialState: function() {
         NProgress.start();
@@ -24,21 +22,21 @@ var LastModifiedComponent = React.createClass({
     },
     showList: function() {
         this.setState({
-          files: this.state.files,
-          terms: this.state.terms,
-          layout: 'list'
+            files: this.state.files,
+            terms: this.state.terms,
+            layout: 'list'
         });
     },
     showThumbnail: function() {
         this.setState({
-          files: this.state.files,
-          terms: this.state.terms,
-          layout: 'thumbnail'
+            files: this.state.files,
+            terms: this.state.terms,
+            layout: 'thumbnail'
         });
     },
     filesUpdated: function(newFiles) {
         this.setState({
-          files: newFiles
+            files: newFiles
         });
     },
     render: function() {

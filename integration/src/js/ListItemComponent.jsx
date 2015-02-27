@@ -39,7 +39,7 @@ var ListItemComponent = React.createClass({
                     </If>
                     <ul className="files">
                         {this.props.data.map(function(item) {
-                          return <ListRowComponent file={item} layout={this.props.layout} />;
+                          return <ListRowComponent file={item} layout={this.props.layout} key={item.id} />;
                         }.bind(this))}
                     </ul>
                 </div>

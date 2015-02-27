@@ -14,7 +14,6 @@ var FileSize = React.createClass({
 
 var ListRowComponent = React.createClass({
     handleDownload: function(e) {
-        console.log(e);
         e.preventDefault();
         NProgress.start();
 
@@ -30,7 +29,6 @@ var ListRowComponent = React.createClass({
         setTimeout(NProgress.done, 3000);
     },
     notifyCopy: function() {
-        console.log('dededede');
         $('.notify').toggleClass('show');
         $('.notify').html('Le lien à bien été copié dans votre presse-papier');
 
@@ -47,7 +45,6 @@ var ListRowComponent = React.createClass({
                     <span className="files-download"><button className="files-download-copy" data-clipboard-text={document.location.host + CONST.API_GET_FILE + this.props.file.id}>Copier le lien</button><a href="#" onClick={this.handleDownload} title="Lien vers de téléchargement vers le fichier"></a></span>
                 </li>);
         } else if(this.props.layout === "thumbnail") {
-            console.log(CONST.API_GET_FILE + this.props.file.id);
             return (
                 <li className="files-thumbnail" >
                     <div className="files-thumbnail-box">

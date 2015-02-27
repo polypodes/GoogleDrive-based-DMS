@@ -23,10 +23,6 @@ var LastModifiedStore = Reflux.createStore({
             success: function(data) {
                 _files = data;
                 that.trigger(_files.list);
-                console.log(data);
-            },
-            error: function(xhr, type) {
-                console.log('Ajax error!');
             }
         });
     }

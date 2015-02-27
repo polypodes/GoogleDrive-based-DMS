@@ -27,27 +27,20 @@ var FileTypeStore = Reflux.createStore({
             dataType: 'json',
             success: function(data) {
                 _filesType = data;
-                console.log(data.grouped);
                 that.trigger(_filesType.grouped, args);
-            },
-            error: function(xhr, type) {
-                console.log('Ajax error!');
             }
         });
     },
     getNext: function() {
-        // @TODO check if no next token
         NProgress.start();
         var url = CONST.API_GET_FILES + '/' + _filesType.nextPageToken;
         tokenHistory.push('/' + _filesType.nextPageToken);
-        console.log(tokenHistory);
         this.getResources(url);
     },
     getPrev: function() {
         if(tokenHistory.length > 1) {
             NProgress.start();
             tokenHistory.pop();
-            console.log(tokenHistory);
             var url = CONST.API_GET_FILES + tokenHistory[tokenHistory.length - 1];
             this.getResources(url);
         }

@@ -8,16 +8,17 @@ var $ = require('zepto-browserify').$;
 
 var FolderComponent = React.createClass({
     getInitialState: function() {
-        NProgress.start();
         FolderStore.init();
-        $('.pagination-prev').attr('disabled', 'true');
-
         return {
             folders: [],
             files: [],
             breadcrumb: [],
             layout: 'list'
         };
+    },
+    componentWillMount: function() {
+        NProgress.start();
+        $('.pagination-prev').attr('disabled', 'true');
     },
     componentDidMount: function() {
         this.unsubscribe = FolderStore.listen(this.onFoldersUpdate);
@@ -26,14 +27,12 @@ var FolderComponent = React.createClass({
         this.unsubscribe();
     },
     onFoldersUpdate: function(arbo, hasPagination, isFirstPage) {
-        console.log('L15 ', arbo);
         arbo.layout = this.state.layout;
         this.setState(arbo);
 
         if(isFirstPage && hasPagination) {
             $('.pagination-prev').attr('disabled', 'true');
             $('.pagination-next').removeAttr('disabled');
-            console.log("first page & pagination");
         } else if(isFirstPage) {
             $('.pagination-btn').attr('disabled', 'true');
         } else if(hasPagination) {
@@ -63,7 +62,6 @@ var FolderComponent = React.createClass({
         $('.pagination-btn').attr("disabled", "true");
     },
     render: function() {
-        console.log(this.state);
         NProgress.done();
         $('.content').scrollTop(0);
 
@@ -72,11 +70,11 @@ var FolderComponent = React.createClass({
                     <h1 className="title-1">Parcourir</h1>
                     <p className="instruction">Pour parcourir les fichiers par dossier, cliquer sur le dossiers voulut pour accèder à ses sous-dossiers et fichiers.</p>
                     {this.state.folders.map(function(folder) {
-                        return <FolderItemComponent folder={folder} />;
+                        return <FolderItemComponent key={folder.id} folder={folder} />;
                     })}
                     <div className="breadcrumb">
-                        {this.state.breadcrumb.map(function(item) {
-                            return <span>/ {item}</span>;
+                        {this.state.breadcrumb.map(function(item, index) {
+                            return <span key={index} >/{item}</span>;
                         })}
                     </div>
                     <If test={this.state.breadcrumb.length > 1}>
