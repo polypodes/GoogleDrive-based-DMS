@@ -101,10 +101,10 @@ var App = React.createClass({
                                     <Link to="folder" id="menu-1" onClick={this.handleChangeView}><i></i>Parcourir</Link>
                                 </li>
                                 <li>
-                                    <Link to="browse" id="menu-1" onClick={this.handleChangeView}><i></i>Filtrer</Link>
+                                    <Link to="browse" id="menu-1" onClick={this.handleChangeView}><i></i>Filtrer</Link>
                                 </li>
                                 <li>
-                                    <Link to="lastmodified" id="menu-2" onClick={this.handleChangeView}><i></i>Modifications récentes</Link>
+                                    <Link to="lastmodified" id="menu-2" onClick={this.handleChangeView}><i></i>Modifications récentes</Link>
                                 </li>
                             </ul>
                         </nav>

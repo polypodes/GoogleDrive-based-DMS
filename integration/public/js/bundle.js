@@ -27141,10 +27141,10 @@ var App = React.createClass({displayName: "App",
                                     React.createElement(Link, {to: "folder", id: "menu-1", onClick: this.handleChangeView}, React.createElement("i", null, ""), "Parcourir")
                                 ), 
                                 React.createElement("li", null, 
-                                    React.createElement(Link, {to: "browse", id: "menu-1", onClick: this.handleChangeView}, React.createElement("i", null, ""), "Filtrer")
+                                    React.createElement(Link, {to: "browse", id: "menu-1", onClick: this.handleChangeView}, React.createElement("i", null, ""), "Filtrer")
                                 ), 
                                 React.createElement("li", null, 
-                                    React.createElement(Link, {to: "lastmodified", id: "menu-2", onClick: this.handleChangeView}, React.createElement("i", null, ""), "Modifications récentes")
+                                    React.createElement(Link, {to: "lastmodified", id: "menu-2", onClick: this.handleChangeView}, React.createElement("i", null, ""), "Modifications récentes")
                                 )
                             )
                         ), 

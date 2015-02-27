@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'drive';
-  src: url('../font/drive.eot?82126922');
-  src: url('../font/drive.eot?82126922#iefix') format('embedded-opentype'),
-       url('../font/drive.woff?82126922') format('woff'),
-       url('../font/drive.ttf?82126922') format('truetype'),
-       url('../font/drive.svg?82126922#drive') format('svg');
+  src: url('../font/drive.eot?43304726');
+  src: url('../font/drive.eot?43304726#iefix') format('embedded-opentype'),
+       url('../font/drive.woff?43304726') format('woff'),
+       url('../font/drive.ttf?43304726') format('truetype'),
+       url('../font/drive.svg?43304726#drive') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'drive';
-    src: url('../font/drive.svg?82126922#drive') format('svg');
+    src: url('../font/drive.svg?43304726#drive') format('svg');
   }
 }
 */
@@ -66,3 +66,5 @@
 .icon-icon-14:before { content: '\e80d'; } /* '' */
 .icon-icon-15:before { content: '\e80e'; } /* '' */
 .icon-icon-16:before { content: '\e80f'; } /* '' */
+.icon-icon-17:before { content: '\e810'; } /* '' */
+.icon-icon-18:before { content: '\e811'; } /* '' */
