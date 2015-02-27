@@ -57,14 +57,18 @@ body {
   background-color: @col-3;
   color: @white;
 
-  &:disabled {
-    background-color: @col-2;
-    transition: all 0.3s;
-  }
-
   &:hover {
     background-color: darken(@col-3, 10%);
     transition: all 0.3s;
+  }
+
+  &:disabled {
+    background-color: @col-2;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: @col-2;
+    }
   }
 }
 
