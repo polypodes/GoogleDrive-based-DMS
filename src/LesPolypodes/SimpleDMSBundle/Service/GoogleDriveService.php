@@ -10,6 +10,7 @@
  *
  * File created by ronan@lespolypodes.com
  */
+
 namespace LesPolypodes\SimpleDMSBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,8 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
- * Class GoogleDriveService
- * @package LesPolypodes\SimpleDMSBundle\Service
+ * Class GoogleDriveService.
  */
 class GoogleDriveService
 {
@@ -48,6 +48,8 @@ class GoogleDriveService
      * @var \Google_Service_Drive
      */
     private $service;
+
+    const FOLDER_MIMETYPE  = 'application/vnd.google-apps.folder';
 
     /**
      * @param ContainerInterface  $container
@@ -98,7 +100,7 @@ class GoogleDriveService
     }
 
     /**
-     * get Drive File metadata & content
+     * get Drive File metadata & content.
      *
      * @param string|\Google_Service_Drive_DriveFile $resource downloadUrl or Drive File instance.
      *
@@ -175,9 +177,11 @@ class GoogleDriveService
      * @param bool $isFolder
      *
      * @slink http://stackoverflow.com/a/16299157/490589 (C# version)
+     *
      * @link http://stackoverflow.com/a/17743049/490589 (Java version)
      *
      * @return array
+     *
      * @throws \Exception
      */
     public function getChildren($folderId, $isFolder = false)
@@ -349,7 +353,7 @@ class GoogleDriveService
     }
 
     /**
-     * Please keep both 'groupedBy' and 'single' lists sync'ed
+     * Please keep both 'groupedBy' and 'single' lists sync'ed.
      *
      * @link http://filext.com/faq/office_mime_types.php
      * @link http://www.openoffice.org/framework/documentation/mimetypes/mimetypes.html
@@ -357,7 +361,7 @@ class GoogleDriveService
      *
      * @return array
      */
-    public function getFilesTypesGroupsDefinitions()
+    public function getFilesTypesGroupsDefinitions($noFolder = true)
     {
         return array(
             "image" => array(
@@ -469,26 +473,33 @@ class GoogleDriveService
     }
 
     /**
-     * (A single API call to get both)
+     * (A single API call to get both).
      *
-     * @return array      (found, grouped, definition)
+     * @param bool $noFolder Do not return folder-related infos
+     *
+     * @return array (found, grouped, definition)
+     *
      * @throws \Exception
      */
-    public function getTypes()
+    public function getTypes($noFolder = true)
     {
-        $singles = $this->getFoundTypes();
+        $singles = $this->getFoundTypes($noFolder);
 
         return array(
             'found' => $singles,
-            'grouped' => $this->getFoundGroupedTypes($singles),
-            'definitions' => $this->getFilesTypesGroupsDefinitions(),
+            'grouped' => $this->getFoundGroupedTypes($noFolder, $singles),
+            'definitions' => $this->getFilesTypesGroupsDefinitions($noFolder),
         );
     }
 
     /**
+     * @param bool $noFolder Do not return folder-related infos
+     *
+     * @return array
+     *
      * @throws \Exception
      */
-    protected function getFoundTypes()
+    protected function getFoundTypes($noFolder = true)
     {
         $nextToken = null;
         $loop = 0;
@@ -515,6 +526,9 @@ class GoogleDriveService
         $types = array();
         foreach ($items as $item) {
             $types[$item->mimeType] = $item->mimeType; // trick do avoid duplicate entries
+            if ($noFolder && $item->mimeType === self::FOLDER_MIMETYPE) {
+                unset($types[$item->mimeType]);
+            }
         }
 
         return array_values($types);
@@ -522,15 +536,17 @@ class GoogleDriveService
 
     /**
      * @param array $types
+     * @param bool  $noFolder Do not return folder-related infos
      *
      * Good practice: give a types list in order to limit API calls
      *
      * @return array
+     *
      * @throws \Exception
      */
-    protected function getFoundGroupedTypes($types = array())
+    protected function getFoundGroupedTypes($noFolder = true, $types = array())
     {
-        $types = !empty($types) ? $types : $this->getFoundTypes();
+        $types = !empty($types) ? $types : $this->getFoundTypes($noFolder);
         $definitions = $this->getFilesTypesGroupsDefinitions();
         $result = array();
         foreach ($definitions as $groupName => $definitionList) {
