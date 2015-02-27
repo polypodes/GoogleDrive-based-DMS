@@ -22,11 +22,11 @@ var BrowseComponent = React.createClass({
     },
     componentDidMount: function() {
         this.unsubscribe = FileTypeStore.listen(this.fileTypeUpdated);
-        this.unsubscribe2 = FileByTypeStore.listen(this.fileByTypeUpdated);
+        this.unsubscribeBis = FileByTypeStore.listen(this.fileByTypeUpdated);
     },
     componentWillUnmount: function() {
         this.unsubscribe();
-        this.unsubscribe2();
+        this.unsubscribeBis();
     },
     fileByTypeUpdated: function(files, hasPagination, isFirstPage) {
         this.state.files = files;
@@ -59,12 +59,10 @@ var BrowseComponent = React.createClass({
         FileActions.getFilesByType(text);
     },
     showList: function() {
-        this.state.layout = 'list';
-        this.setState(this.state);
+        this.setState({layout: 'list'});
     },
     showThumbnail: function() {
-        this.state.layout = 'thumbnail';
-        this.setState(this.state);
+        this.setState({layout: 'thumbnail'});
     },
     handlePrev: function() {
         FileActions.getPrev();

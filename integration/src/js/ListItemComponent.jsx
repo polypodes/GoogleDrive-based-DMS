@@ -18,7 +18,7 @@ var ListItemComponent = React.createClass({
         client.on('ready', function(readyEvent) {
             client.on('aftercopy', function(e) {
                 $('.notify').toggleClass('show');
-                $('.notify').html('Le lien à bien été copié dans votre presse-papier');
+                $('.notify').html('Le lien a bien été copié dans votre presse-papier');
 
                 setTimeout(function() {
                     $('.notify').toggleClass('show');

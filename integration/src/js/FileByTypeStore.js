@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
-var FileActions = require('./FileActions');
+
 var CONST = require('./Constant');
+var FileActions = require('./FileActions');
 var $ = require('zepto-browserify').$;
 var NProgress = require('nprogress');
 

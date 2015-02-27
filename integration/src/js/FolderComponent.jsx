@@ -9,6 +9,7 @@ var $ = require('zepto-browserify').$;
 var FolderComponent = React.createClass({
     getInitialState: function() {
         FolderStore.init();
+        NProgress.start();
         return {
             folders: [],
             files: [],
@@ -17,17 +18,16 @@ var FolderComponent = React.createClass({
         };
     },
     componentWillMount: function() {
-        NProgress.start();
         $('.pagination-prev').attr('disabled', 'true');
     },
     componentDidMount: function() {
         this.unsubscribe = FolderStore.listen(this.onFoldersUpdate);
+        NProgress.start();
     },
     componentWillUnmount: function() {
         this.unsubscribe();
     },
     onFoldersUpdate: function(arbo, hasPagination, isFirstPage) {
-        arbo.layout = this.state.layout;
         this.setState(arbo);
 
         if(isFirstPage && hasPagination) {
@@ -46,12 +46,10 @@ var FolderComponent = React.createClass({
         FolderStore.getParentFolder();
     },
     showThumbnail: function() {
-        this.state.layout = 'thumbnail';
-        this.setState(this.arbo);
+        this.setState({layout: 'thumbnail'});
     },
     showList: function() {
-        this.state.layout = 'list';
-        this.setState(this.arbo);
+        this.setState({layout: 'list'});
     },
     handlePrev: function() {
         FolderStore.getPrev();

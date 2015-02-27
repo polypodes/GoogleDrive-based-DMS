@@ -1,12 +1,18 @@
 var React = require('react');
+
+// Router stuff
 var Router = require('react-router');
 var DefaultRoute = Router.DefaultRoute;
 var Route = Router.Route;
+
+// Components
 var App = require('./AppComponent.jsx');
 var ListComponent = require('./ListComponent.jsx');
 var BrowseComponent = require('./BrowseComponent.jsx');
 var FolderComponent = require('./FolderComponent.jsx');
 var lastModifiedComponent = require('./lastModifiedComponent.jsx');
+
+// Libs
 var NProgress = require('nprogress');
 
 /**

@@ -1,11 +1,14 @@
 var React = require('react');
+
+// Router stuff
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Link = Router.Link;
 var Navigation = require('react-router').Navigation;
+
 var FileActions = require('./FileActions');
-var $ = require('zepto-browserify').$;
 var util = require('./util');
+var $ = require('zepto-browserify').$;
 var NProgress = require('nprogress');
 
 /**
@@ -28,11 +31,15 @@ var App = React.createClass({
          * Wait for user to stop keystroke for submit
          */
         util.debounce(function() {
+
             var keyword = this.refs.keyword.getDOMNode().value.trim();
+
             FileActions.searchFile(keyword);
+
             this.setMenuCurrent();
             this.transitionTo('list');
             this.setState({ searchViewName: 'Résultats de recherche' });
+
             NProgress.start();
         }.bind(this), 400);
     },

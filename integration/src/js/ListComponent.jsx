@@ -24,24 +24,15 @@ var ListComponent = React.createClass({
         this.unsubscribe();
     },
     showList: function() {
-        this.setState({
-            files: this.state.files,
-            terms: this.state.terms,
-            layout: 'list'
-        });
+        this.setState({layout: 'list'});
     },
     showThumbnail: function() {
-        this.setState({
-            files: this.state.files,
-            terms: this.state.terms,
-            layout: 'thumbnail'
-        });
+        this.setState({layout: 'thumbnail'});
     },
     filesUpdated: function(newFiles, newTerms, hasPagination, isFirstPage) {
         this.setState({
             files: newFiles,
-            terms: newTerms,
-            layout: this.state.layout
+            terms: newTerms
         });
 
         // Pagination stuffs

@@ -21,23 +21,13 @@ var LastModifiedComponent = React.createClass({
         this.unsubscribe();
     },
     showList: function() {
-        this.setState({
-            files: this.state.files,
-            terms: this.state.terms,
-            layout: 'list'
-        });
+        this.setState({layout: 'list'});
     },
     showThumbnail: function() {
-        this.setState({
-            files: this.state.files,
-            terms: this.state.terms,
-            layout: 'thumbnail'
-        });
+        this.setState({layout: 'thumbnail'});
     },
     filesUpdated: function(newFiles) {
-        this.setState({
-            files: newFiles
-        });
+        this.setState({files: newFiles});
     },
     render: function() {
         if (this.state.files) {

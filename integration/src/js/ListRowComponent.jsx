@@ -19,6 +19,7 @@ var ListRowComponent = React.createClass({
 
         $('.notify').toggleClass('show');
         $('.notify').html('Votre téléchargement est sur le point de démarer…');
+
         setTimeout(function() {
             $('.notify').toggleClass('show');
         }, 2500);
@@ -26,6 +27,7 @@ var ListRowComponent = React.createClass({
         window.location.assign(
             CONST.API_GET_FILE + this.props.file.id
         );
+
         setTimeout(NProgress.done, 3000);
     },
     notifyCopy: function() {
