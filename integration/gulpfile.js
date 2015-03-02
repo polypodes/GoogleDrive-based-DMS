@@ -1,6 +1,10 @@
+"use strict";
+
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
+var del = require('del');
 var uglify = require('gulp-uglify');
+var jshint = require('gulp-jshint');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
@@ -12,10 +16,24 @@ var browserify = require('browserify');
 var less = require('gulp-less');
 var prefixer = require('gulp-autoprefixer');
 
+var src = './src',
+    output =  './public',
+    sync = true;
+
+gulp.task('nosync', function () {
+    sync = false;
+});
+
+gulp.task('clean', function (cb) {
+    del([
+        output + '/**'
+    ], cb);
+});
+
 gulp.task('browser-sync', function() {
     browserSync({
         server: {
-            baseDir: './public'
+            baseDir: output + ''
         },
         injectChanges: true,
         open: false
@@ -23,36 +41,30 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('template', function() {
-    return gulp.src('./src/*.html')
-        .pipe(gulp.dest('./public/'));
+    return gulp.src(src + '/*.html')
+        .pipe(gulp.dest(output + '/'));
 });
 
 /* zeroClipboard libs */
 gulp.task('libs', function() {
-    return gulp.src('./src/js/*.swf')
-        .pipe(gulp.dest('./public/js/'));
+    return gulp.src(src + '/js/*.swf')
+        .pipe(gulp.dest(output + '/js/'));
 });
 
 gulp.task('fonts', function() {
-    return gulp.src('./src/fonts/**/*.*')
-        .pipe(gulp.dest('./public/fonts/'));
+    return gulp.src(src + '/fonts/**/*.*')
+        .pipe(gulp.dest(output + '/fonts/'));
 });
 
 gulp.task('images', function() {
-    return gulp.src('./src/images/**/*.*')
-        .pipe(gulp.dest('./public/images/'));
+    return gulp.src(src + '/images/**/*.*')
+        .pipe(gulp.dest(output + '/images/'));
 });
-
-var sync = true;
-gulp.task('nosync', function () {
-    sync = false;
-});
-
 
 gulp.task('style', function () {
-    var result = gulp.src('./src/less/style.less')
+    var result = gulp.src(src + '/less/style.less')
     .pipe(less({compress: true}))
-    .pipe(gulp.dest('./public/css'))
+    .pipe(gulp.dest(output + '/css'))
     .pipe(prefixer('last 5 versions', 'ie 8'));
     if(sync) {
         result.pipe(browserSync.reload({stream:true}));
@@ -62,11 +74,10 @@ gulp.task('style', function () {
 });
 
 
-gulp.task('script-nosync', function() {
-    // Single entry point to browserify
-    gulp.src('./src/js/app.js')
-        .pipe(gulp_browserify())
-        .pipe(gulp.dest('./public/js'))
+gulp.task('lint', function() {
+    return gulp.src('/js/app.js')
+        .pipe(jshint(src + '/js/.jshintrc'))
+        .pipe(jshint.reporter('default'));
 });
 
 /**
@@ -75,16 +86,16 @@ gulp.task('script-nosync', function() {
 var bundle = function() {
 
     if(!sync) {
-        var bundler = browserify('./src/js/app.js');
+        var bundler = browserify(src + '/js/app.js');
         bundler.transform([reactify]);
         return bundler.bundle()
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))
             .pipe(buffer())
             .pipe(uglify())
-            .pipe(gulp.dest('./public/js'));
+            .pipe(gulp.dest(output + '/js'));
     } else {
-        var bundler = watchify(browserify('./src/js/app.js', watchify.args));
+        var bundler = watchify(browserify(src + '/js/app.js', watchify.args));
         bundler.transform([reactify]);
         bundler.on('update', bundle); // on any dep update, runs the bundler
 
@@ -92,20 +103,25 @@ var bundle = function() {
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))
             .pipe(buffer())
+            .pipe(jshint(src + '/js/.jshintrc'))
+            .pipe(jshint.reporter('default'))
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest('./public/js'))
+            .pipe(gulp.dest(output + '/js'))
             .pipe(reload({stream: true}));
     }
 }
 
 gulp.task('script', bundle); // so you can run `gulp js` to build the file
 
-
-gulp.task('default', ['script', 'libs', 'images', 'fonts', 'style', 'template', 'browser-sync'], function() {
-    gulp.watch('./src/*.html', ['template', browserSync.reload]);
-    gulp.watch('./src/less/**/*.less', ['style']);
-    gulp.watch('./src/fonts/**/*.*', ['fonts']);
+gulp.task('default', ['clean'], function() {
+    gulp.start(['lint', 'script', 'libs', 'images', 'fonts', 'style', 'template', 'browser-sync'], function () {
+        gulp.watch(src + '/*.html', ['template', browserSync.reload]);
+        gulp.watch(src + '/less/**/*.less', ['style']);
+        gulp.watch(src + '/fonts/**/*.*', ['fonts']);
+    });
 });
 
-gulp.task('build', ['nosync', 'libs', 'images', 'fonts', 'style', 'template', 'script' ]);
+gulp.task('build', ['clean'], function() {
+    gulp.start('nosync', 'lint', 'libs', 'images', 'fonts', 'style', 'template', 'script');
+});
