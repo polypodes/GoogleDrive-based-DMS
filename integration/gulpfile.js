@@ -20,10 +20,6 @@ var src = './src',
     output =  './public',
     sync = true;
 
-gulp.task('nosync', function () {
-    sync = false;
-});
-
 gulp.task('clean', function (cb) {
     del([
         output + '/**'
@@ -103,8 +99,6 @@ var bundle = function() {
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))
             .pipe(buffer())
-            .pipe(jshint(src + '/js/.jshintrc'))
-            .pipe(jshint.reporter('default'))
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(output + '/js'))
@@ -115,6 +109,7 @@ var bundle = function() {
 gulp.task('script', bundle); // so you can run `gulp js` to build the file
 
 gulp.task('default', ['clean'], function() {
+    sync = true;
     gulp.start(['lint', 'script', 'libs', 'images', 'fonts', 'style', 'template', 'browser-sync'], function () {
         gulp.watch(src + '/*.html', ['template', browserSync.reload]);
         gulp.watch(src + '/less/**/*.less', ['style']);
@@ -123,5 +118,6 @@ gulp.task('default', ['clean'], function() {
 });
 
 gulp.task('build', ['clean'], function() {
-    gulp.start('nosync', 'lint', 'libs', 'images', 'fonts', 'style', 'template', 'script');
+    sync = false;
+    gulp.start('lint', 'libs', 'images', 'fonts', 'style', 'template', 'script');
 });
