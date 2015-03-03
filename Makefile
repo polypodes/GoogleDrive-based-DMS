@@ -87,7 +87,6 @@ app/Resources/index.html: web/css
 
 front_remove:
 	@rm -rf integration/node_modules
-	@rm -rf integration/public
 	@rm web/css web/js web/fonts web/images app/Resources/index.html
 
 ############################################################################
