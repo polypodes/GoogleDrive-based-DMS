@@ -18,10 +18,10 @@ Le seul moyen de se connecter à l'application est d'utiliser l'authentification
 3. à valider une demande de confirmation d'authentification, sans avoir à saisir à nouveau un login/mot de passe
 4. l'internaute identifié sur le site principal est alors également identifié et autorisé à visiter le contenu de l'application GED. 
 
-Le Signel-Sign-On n'est pas une authentification "transparente" mais une autorisation qui ne nécessite pas de re-saisir un couple d'idientifiants (login / mot de passe). Il est toujours soumis à l'acceptation de l'internaute, qui consiste à valider une demande : un clic sur un bouton ou un lien proposé, comme pour les  boutons "s'identifier avec Google/Facebook/Twitter/Paypal".
+Le Single-Sign-On n'est pas une authentification "transparente" mais une autorisation qui ne nécessite pas de re-saisir un couple d'idientifiants (login / mot de passe). Il est soumis à l'acceptation de l'internaute, qui consiste à valider une demande : un clic sur un bouton ou un lien proposé, comme pour les  boutons "s'identifier avec Google/Facebook/Twitter/Paypal".
 
-L'authentification unique nécessite de mettre en place un serveur d'authentification sur le site principal
-et un client d'authentification dans l'application GED. Son mot de passe d'identification n'est pas stocké dans l'application GED mais reste géré dans le site principal.
+L'authentification unique nécessite de mettre en place un serveur d'authentification sur les sites SEDAP concernés
+et un client d'authentification dans l'application GED. Son mot de passe d'identification n'est pas stocké dans l'application GED mais reste géré dans les sites SEDAP concernés.
 
 L'utilisateur peut se connecter ou de déconnecter du site secondaire.
 
