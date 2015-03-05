@@ -16,5 +16,8 @@ sedap_l_login:
 lucid_login:
     pattern: /login/check-lucid
 
+logout:
+    path:   /logout
+
 les_polypodes_simple_dms:
     resource: "@LesPolypodesSimpleDMSBundle/Resources/config/routing.yml"

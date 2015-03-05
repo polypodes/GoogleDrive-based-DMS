@@ -127,6 +127,10 @@ security:
                 oauth_user_provider:
                     service:        hwi_oauth.user.provider
 
+            logout:
+                path:   /logout
+                target: /
+
 
     # with these settings you can restrict or allow access for different parts
     # of your application based on roles, ip, host or methods
