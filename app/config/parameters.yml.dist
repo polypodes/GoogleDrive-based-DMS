@@ -31,6 +31,14 @@ parameters:
     oauth_client_secret: demopass
     oauth_client_scope:
 
-    oauth_access_token_url: 'http://brentertainment.com/oauth2/lockdin/token'
-    oauth_authorization_url: 'http://brentertainment.com/oauth2/lockdin/authorize'
-    oauth_infos_url: 'http://brentertainment.com/oauth2/lockdin/resource'
+    sedap_o_access_token_url: 'http://brentertainment.com/oauth2/lockdin/token'
+    sedap_o_authorization_url: 'http://brentertainment.com/oauth2/lockdin/authorize'
+    sedap_o_infos_url: 'http://brentertainment.com/oauth2/lockdin/resource'
+
+    sedap_l_access_token_url: 'http://brentertainment.com/oauth2/lockdin/token'
+    sedap_l_authorization_url: 'http://brentertainment.com/oauth2/lockdin/authorize'
+    sedap_l_infos_url: 'http://brentertainment.com/oauth2/lockdin/resource'
+
+    lucid_access_token_url: 'http://brentertainment.com/oauth2/lockdin/token'
+    lucid_authorization_url: 'http://brentertainment.com/oauth2/lockdin/authorize'
+    lucid_infos_url: 'http://brentertainment.com/oauth2/lockdin/resource'

@@ -4,13 +4,13 @@ hwi_oauth:
     connect:
         confirmation: true
     resource_owners:
-        sedap:
+        sedap_o:
             type:                oauth2
             client_id:           %oauth_client_id%
             client_secret:       %oauth_client_secret%
-            access_token_url:    %oauth_access_token_url%
-            authorization_url:   %oauth_authorization_url%
-            infos_url:           %oauth_infos_url%
+            access_token_url:    %sedap_o_access_token_url%
+            authorization_url:   %sedap_o_authorization_url%
+            infos_url:           %sedap_o_infos_url%
             scope:               "%oauth_client_scope%"
             options:
                 csrf:            true
@@ -18,7 +18,37 @@ hwi_oauth:
             paths:
                 identifier: id
                 nickname:   sedap-dms
-                realname:   "Manager de documents Sedap"
+                realname:   "Manager de documents Sedap Ornements"
+        sedap_l:
+            type:                oauth2
+            client_id:           %oauth_client_id%
+            client_secret:       %oauth_client_secret%
+            access_token_url:    %sedap_l_access_token_url%
+            authorization_url:   %sedap_l_authorization_url%
+            infos_url:           %sedap_l_infos_url%
+            scope:               "%oauth_client_scope%"
+            options:
+                csrf:            true
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            paths:
+                identifier: id
+                nickname:   sedap-dms
+                realname:   "Manager de documents Sedap Lighting"
+        lucid:
+            type:                oauth2
+            client_id:           %oauth_client_id%
+            client_secret:       %oauth_client_secret%
+            access_token_url:    %lucid_access_token_url%
+            authorization_url:   %lucid_authorization_url%
+            infos_url:           %lucid_infos_url%
+            scope:               "%oauth_client_scope%"
+            options:
+                csrf:            true
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            paths:
+                identifier: id
+                nickname:   sedap-dms
+                realname:   "Manager de documents Lucid"
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
     # redirect the user to /my/destination after facebook authenticates them.  If this is not
@@ -87,7 +117,9 @@ security:
 #                default_target_path: /list
             oauth:
                 resource_owners:
-                    sedap:          /login/check-sedap
+                    sedap_o:          /login/check-sedap-ornements
+                    sedap_l:          /login/check-sedap-lighting
+                    lucid:          /login/check-lucid
                 login_path:         /login
                 use_forward:        false
                 failure_path:       /login

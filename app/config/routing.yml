@@ -9,8 +9,12 @@ hwi_oauth_connect:
     resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
     prefix:   /connect
 
-sedap_login:
-    pattern: /login/check-sedap
+sedap_o_login:
+    pattern: /login/check-sedap-ornements
+sedap_l_login:
+    pattern: /login/check-sedap-lighting
+lucid_login:
+    pattern: /login/check-lucid
 
 les_polypodes_simple_dms:
     resource: "@LesPolypodesSimpleDMSBundle/Resources/config/routing.yml"
