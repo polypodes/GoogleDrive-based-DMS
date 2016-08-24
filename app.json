@@ -1,5 +1,5 @@
 {
-  "name": "Google-Drive based DMS Symfony App",
+  "name": "DMS Symfony App",
   "description": "A proof of concept for a Google Drive based document management system (DMS)",
   "repository": "https://github.com/polypodes/GoogleDrive-based-DMS",
   "logo": "http://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Google_Drive_Logo.svg/200px-Google_Drive_Logo.svg.png",
